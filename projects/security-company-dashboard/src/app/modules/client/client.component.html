@@ -1,0 +1,121 @@
+<div class="h-100 py-3 container d-flex flex-column">
+  <div class="flex-grow-0">
+    <div class="d-flex justify-content-between align-items-center">
+      <h4 class="m-0 fw-600" [translate]="(title | async)!"></h4>
+      <button (click)="onAdd()" type="button"
+        class="btn d-flex align-items-center gap-2 btn-primary py-2 px-4 rounded-8">
+        <ion-icon name="add" class="add"></ion-icon>
+        {{ "clients.add_client" | translate }}
+      </button>
+    </div>
+  </div>
+
+  <div class="mt-4 flex-grow-1 d-flex flex-column">
+    <ul class="nav sub-nav nav-tabs mb-3">
+      <ng-container *ngFor="let link of links">
+        <li *appRole="link.roles" class="nav-item">
+          <a [routerLink]="[link.link]" routerLinkActive="router-link-active" class="nav-link"
+            routerLinkActive="active">{{ "clients." + link.name | translate }}
+          </a>
+        </li>
+      </ng-container>
+    </ul>
+
+    <div class="flex-grow-1">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<public-api-canvas [id]="canvasId">
+  <div class="py-4">
+    <form [formGroup]="clientForm" #form="ngForm" (ngSubmit)="onSubmit(clientForm)"
+      (keydown.enter)="$event.preventDefault()">
+      <h5 class="fw-600 text-align-center text-primary mb-4 mt-2" translate="clients.add_client"></h5>
+
+
+
+      <!--? -------------------------------- logo --------------------------------- -->
+      <div class="mb-3">
+        <div class="file bg-info-o rounded-8 text-info" [style.backgroundImage]="'url('+ image +')'"
+          (change)="onImageUpload($event)" (click)="contractimage.click()">
+          <input type="file" #contractimage hidden accept="image/x-png,image/gif,image/jpeg" />
+
+          <div class="container row" *ngIf="!image">
+            <img src="assets/Group577.png" class="col-6" style="width:120px; height:100px;" />
+            <div class="fs-14 mt-3 col-6">
+              {{ "click_to_upload_contract_image" | translate }}
+            </div>
+          </div>
+        </div>
+
+        <div class="error-message"
+          *ngIf="clientForm.controls['oldContractFileId']?.errors?.['required'] && form.submitted"
+          [innerHtml]="'validation.contractImage_required' | translate"></div>
+      </div>
+
+
+      <div class="mb-3">
+        <label class="mt-1 text-muted">{{'clients.clientName'|translate}}</label>
+        <div class="form-floating">
+          <input type="text" class="form-control" id="clientCompanyName" formControlName="clientCompanyName" />
+          <div *ngIf="form.submitted && clientForm.controls['clientCompanyName'].invalid">
+            <div *ngIf="clientForm.controls['clientCompanyName']?.hasError('required')" class="error-message"
+              [innerHtml]="'validation.clientName_required' | translate"></div>
+            <div *ngIf="clientForm.controls['clientCompanyName']?.hasError('pattern')" class="error-message"
+              [innerHtml]="'validation.clientName_pattern'| translate">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label class="mt-1 text-muted">{{'clients.startDate'|translate}}</label>
+        <div class="form-floating">
+          <input type="date" class="form-control" id="" formControlName="startDate" />
+          <div class="error-message" *ngIf="clientForm.controls['startDate'].invalid && form.submitted"
+            [innerHtml]="'validation.birth_date_required' | translate"></div>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label class="mt-1 text-muted">{{'clients.endDate'|translate}}</label>
+        <div class="form-floating">
+          <input type="date" class="form-control" id="endDate" formControlName="endDate" />
+          <div class="error-message" *ngIf="clientForm.controls['endDate'].invalid && form.submitted"
+            [innerHtml]="'validation.birth_date_required' | translate"></div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="mt-1 text-muted">{{'clients.contract_type'|translate}}</label>
+        <div class="form-floating">
+          <select class="form-select form-select-lg mb-3 py-2" aria-label=".form-select-lg example"
+            formControlName="contractTypeId" id="contract">
+            <option disabled></option>
+            <option [value]="item.id" *ngFor="let item of contract">
+              <div *ngIf="!isAr">
+                {{ item?.nameEn}}
+              </div>
+              <div *ngIf="isAr">
+                {{ item?.nameAr}}
+              </div>
+            </option>
+          </select>
+
+        </div>
+        <div class="error-message" *ngIf="clientForm.controls['contractTypeId'].invalid && form.submitted"
+          [innerHtml]="'validation.select_contract' | translate"></div>
+
+
+      </div>
+      <div class="d-flex gap-2 justify-content-end mt-4">
+        <button type="reset" data-bs-dismiss="offcanvas" class="btn bg-info-o text-primary rounded-10"
+          translate="cancel" (click)="exit()"></button>
+        <button type="submit" class="btn btn-primary rounded-10" translate="add"></button>
+      </div>
+    </form>
+  </div>
+</public-api-canvas>

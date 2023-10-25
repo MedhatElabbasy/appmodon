@@ -1,0 +1,17 @@
+<!---->
+
+<public-api-modal classList="modal-dialog-centered myWidth" [id]="modalId">
+  <div class="d-flex gap-2">
+    <img src="assets/images/svg/molumen_red_square_error_warning_icon.svg" alt="" class="mb-3" srcset="" width="20"
+      height="20" />
+    <h5 class="fw-500 mt-1 fs-5" translate="error"></h5>
+  </div>
+  <p class="mt-2 myColor fw-400 fs-5 text-align-center">{{message}}</p>
+  <div class="d-flex justify-content-end gap-2">
+    <button type="button" data-bs-dismiss="modal" class="btn rounded-8 px-4 py-2 btn-danger"
+      translate="cancel"></button>
+  </div>
+</public-api-modal>
+<public-api-loader></public-api-loader>
+<router-outlet></router-outlet>
+

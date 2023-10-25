@@ -1,0 +1,173 @@
+<div class="container">
+  <span class="badge bg-info rounded-10 fs-6 py-2 fw-normal" [innerHtml]="
+      'step_number' | translate: { stepOrder: step.order, totalSteps: length }
+    "></span>
+  <h5 class="mt-3 fw-bold">{{ "steps." + step.title | translate }}</h5>
+  <p class="text-info">
+    {{ "company_details_step_info" | translate }}
+  </p>
+  <form [formGroup]="companyForm" (ngSubmit)="onSubmit()" #form="ngForm" class="mt-4">
+    <div>
+      <div class="row g-4">
+        <!-- ---------------------------- company logo and name ----------------------------- -->
+        <div class="col-12">
+          <div class="hstack gap-3 bg-info-o rounded-12">
+            <div class="file c-pointer" [style.backgroundImage]="'url(' + companyLogo + ')'" (click)="Logo.click()">
+              <div *ngIf="!companyLogo">
+                <img src="assets/images/icons/upload1.png" class="d-block mx-auto" alt="upload" />
+                <div class="fs-14 mt-3 text-info text-align-center">
+                  {{ "upload_company_logo" | translate }}
+                </div>
+              </div>
+
+              <input type="file" (change)="onImageLogoUpload($event)" #Logo hidden />
+            </div>
+            <div class="vr"></div>
+            <div class="form-floating w-100">
+              <input type="text" class="form-control" id="name" placeholder="data" formControlName="name" />
+              <label for="name">
+                {{ "company_name" | translate }}
+              </label>
+            </div>
+          </div>
+
+          <div class="error-message" *ngIf="controls['name'].invalid && form.submitted"
+            [innerHtml]="'validation.company_name_required' | translate"></div>
+
+          <div class="error-message" *ngIf="controls['companyLogoId'].invalid && form.submitted"
+            [innerHtml]="'validation.company_logo_required' | translate"></div>
+        </div>
+
+        <!-- ----------------------------- start date ------------------------------ -->
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="text" class="form-control px-4" id="date" formControlName="companyStartDate"
+              [maxDate]="maxDate" [minDate]="minDate" bsDatepicker [bsConfig]="{
+                containerClass: 'theme-red',
+                isAnimated: true,
+                showWeekNumbers: false
+              }" />
+            <label for="date">
+              {{ "start_data_of_company" | translate }}
+            </label>
+          </div>
+
+          <div class="error-message" *ngIf="controls['companyStartDate'].invalid && form.submitted"
+            [innerHtml]="'validation.company_start_date_required' | translate"></div>
+        </div>
+
+        <!-- ---------------------------- finical year ----------------------------- -->
+        <div class="col-md-6">
+          <p-dropdown [options]="finicalYears" styleClass="w-100"
+            placeholder="{{ 'security_dashboard.financial_year' | translate }}" [filter]="true" filterBy="name"
+            optionLabel="name" optionValue="id" formControlName="financeYearId">
+          </p-dropdown>
+          <div class="error-message" *ngIf="controls['financeYearId'].invalid && form.submitted"
+            [innerHtml]="'validation.financial_year_required' | translate"></div>
+        </div>
+
+        <!-- ------------------------------ time zone ------------------------------ -->
+        <div class="col-md-6">
+          <p-dropdown [options]="timeZone" styleClass="w-100"
+            placeholder="{{ 'security_dashboard.time_zone' | translate }}" [filter]="true" filterBy="name"
+            optionLabel="name" optionValue="id" formControlName="timeZoneLookupId">
+          </p-dropdown>
+          <div class="error-message" *ngIf="controls['timeZoneLookupId'].invalid && form.submitted"
+            [innerHtml]="'validation.time_zone_required' | translate"></div>
+        </div>
+
+        <!-- --------------------------- company number ---------------------------- -->
+        <div class="col-md-6">
+          <div class="form-floating">
+            <div class="form-control d-flex">
+              <select class="form-select py-0 w-fit" id="floatingSelect" [formControl]="code">
+                <option [value]="item.prefixCode" *ngFor="let item of codes">
+                  {{ item.ioS2 }}
+                </option>
+              </select>
+              <input type="text" id="phone" class="form-control rounded-0 col p-0"
+                formControlName="companyContactNumber" />
+            </div>
+            <label for="mobile">
+              {{ "company_contact_number" | translate }}
+            </label>
+          </div>
+
+          <div *ngIf="controls['companyContactNumber'].invalid && form.submitted">
+            <div class="error-message" *ngIf="controls['companyContactNumber'].errors?.required" [innerHtml]="
+                'validation.company_contact_number_required' | translate
+              "></div>
+            <div class="error-message" *ngIf="controls['companyContactNumber'].errors?.pattern" [innerHtml]="
+                'validation.company_contact_number_invalid' | translate
+              "></div>
+          </div>
+        </div>
+
+        <!-- ------------------------------- postal -------------------------------- -->
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="text" placeholder="data" class="form-control px-4" id="postal" formControlName="postalCode" />
+            <label for="postal">
+              {{ "postal_code" | translate }}
+            </label>
+          </div>
+          <div class="error-message" *ngIf="controls['postalCode'].invalid && form.submitted"
+            [innerHtml]="'validation.postal_code_required' | translate"></div>
+        </div>
+
+        <div class="col-md-6 d-none d-md-block"></div>
+
+        <!-- <div class="col-md-6">
+            <div class="file2 bg-info-o rounded-10" (click)="license.click()">
+              <div>
+                <input type="file" hidden #license />
+                <img
+                  src="assets/images/icons/upload2.png"
+                  class="d-block mx-auto"
+                  alt="file-upload"
+                />
+                <div class="mt-3 text-info text-align-center">
+                  Click here to License
+                </div>
+              </div>
+            </div>
+          </div> -->
+
+        <div class="col-md-6">
+          <div class="file2 bg-info-o rounded-10" (click)="registrationID.click()"
+            [style.backgroundImage]="'url(' + registerId + ')'">
+            <input type="file" (change)="onRegistrationId($event)" hidden #registrationID />
+            <div *ngIf="!registerId && !docLink">
+              <img src="assets/images/icons/upload2.png" class="d-block mx-auto" alt="file-upload" />
+              <div class="mt-3 text-info text-align-center">
+                {{ "commercial_registration_id" | translate }}
+              </div>
+            </div>
+            <div *ngIf="docLink" class="h-100 w-100 d-flex align-items-center justify-content-center">
+              <img src="assets/images/icons/file.png" width="60" height="60" class="obj-contain" />
+            </div>
+          </div>
+          <div class="error-message" *ngIf="controls['commercialRegisterId'].invalid && form.submitted" [innerHtml]="
+              'validation.commercial_registration_id_required' | translate
+            "></div>
+        </div>
+      </div>
+
+      <div class="d-flex gap-3 mt-5" [ngClass]="{
+          'justify-content-between': step.prev,
+          'justify-content-end': !step.prev
+        }">
+        <button *ngIf="step.prev" type="button" class="btn btn-light bg-info-o text-info rounded-8 px-4 py-2"
+          [routerLink]="['/' + module + '/' + step.prev]">
+          {{ "previous_step" | translate }}
+        </button>
+        <button *ngIf="step.next" type="submit" class="btn btn-primary rounded-8 px-4 py-2">
+          {{ "next_step" | translate }}
+        </button>
+        <button *ngIf="!step.next && step.order === length" type="button" class="btn btn-primary rounded-8 px-4 py-2">
+          {{ "submit" | translate }}
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

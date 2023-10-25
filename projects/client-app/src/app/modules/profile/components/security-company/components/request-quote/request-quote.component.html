@@ -1,0 +1,255 @@
+<div class="card rounded-12 border-0" *ngIf="!hidden">
+  <div class="card-body">
+    <form [formGroup]="requestForm" #form="ngForm" (ngSubmit)="createRequest()"
+      *ngIf="allowed">
+      <h5 class="card-title text-primary fw-600 mb-4"
+        translate="request_quotes"></h5>
+
+      <div class="mb-3">
+        <div class="form-floating">
+          <input type="email" class="form-control" id="email"
+            formControlName="email" placeholder="d" />
+          <label for="email" translate="emil"></label>
+        </div>
+
+        <div *ngIf="controls['email'].invalid && form.submitted">
+          <div class="error-message" *ngIf="controls['email'].errors.required"
+            [innerHtml]="'validation.email_required' | translate"></div>
+          <div class="error-message" *ngIf="controls['email'].errors.email"
+            [innerHtml]="'validation.email_invalid' | translate"></div>
+        </div>
+      </div>
+
+      <div style="height: 240px" class="mb-3">
+        <public-api-map-search [addressControl]="controls['location']"
+          [lngControl]="controls['longitude']"
+          [latControl]="controls['latitude']" class="map mb-3">
+        </public-api-map-search>
+      </div>
+      <div class="error-message mt-1" *ngIf="controls['location'].invalid &&
+        form.submitted"
+        [innerHtml]="'validation.company_address_required' | translate"></div>
+      <!-- ------------------------------- shift -------------------------------- -->
+      <app-line-add-button *ngIf="
+        !clientOrderGuardsShifts.controls.length"
+        (click)="addShift()">
+        {{ "addNewShift" | translate }}
+      </app-line-add-button>
+      <div formArrayName="clientOrderGuardsShifts" *ngFor="
+        let item of $any(clientOrderGuardsShifts.controls);
+        let i= index;
+        let e= last
+        ">
+        <form [formGroup]="item" #breakForm="ngForm" class="d-flex flex-column
+          gap-3">
+
+          <div class="form-floating mb-3">
+            <p-dropdown [options]="jobTypes" styleClass="w-100" placeholder="{{
+              'jobType' | translate }}" [filter]="true"
+              filterBy="name" optionLabel="name" optionValue="id"
+              formControlName="jobTypeId">
+            </p-dropdown>
+            <div class="error-message" *ngIf="item.get('jobTypeId')?.invalid
+              &&
+              form.submitted">
+              <i class="fa-solid fa-circle-exclamation"></i>
+              {{ "validation.field_required" | translate }}
+            </div>
+          </div>
+
+
+
+
+
+          <div class="form-floating mb-3">
+            <p-dropdown [options]="shifts" styleClass="w-100" placeholder="{{
+              'shift' | translate }}" [filter]="true"
+              filterBy="name" optionLabel="name" optionValue="id"
+              formControlName="shiftTypeId">
+            </p-dropdown>
+            <div class="error-message" *ngIf="item.get('shiftTypeId')?.invalid
+              &&
+              form.submitted">
+              <i class="fa-solid fa-circle-exclamation"></i>
+              {{ "validation.field_required" | translate }}
+            </div>
+          </div>
+          <div class="d-flex justify-content-between">
+            <div class="mb-3 mt-3">
+              <div class="form-floating">
+                <input type="number" class="form-control" id="numberOfGurads"
+                  placeholder="d"
+                  formControlName="number" min=1/>
+                <label for="numberOfGurads" translate="number"></label>
+              </div>
+              <div class="error-message"
+                *ngIf="item.get('number').hasError('required') &&
+                form.submitted">
+                <i class="fa-solid fa-circle-exclamation"></i>
+                {{ "validation.field_required" | translate }}
+              </div>
+              <div class="error-message"
+                *ngIf="item.get('number').hasError('min') &&
+                form.submitted">
+                <i class="fa-solid fa-circle-exclamation"></i>
+                {{ "validation.not_valid_to_use" | translate }}
+              </div>
+            </div>
+            <div class="mt-3"
+              *ngIf="clientOrderGuardsShifts.controls.length!=1">
+              <button (click)="removeShift(i)" type="button"
+                class="btn bg-info-o py-2 d-flex flex-column
+                justify-content-center align-items-center">
+                <ion-icon name="trash" class="text-danger"></ion-icon>
+                {{ "delete" | translate }}
+              </button>
+            </div>
+          </div>
+          <hr *ngIf="!e" />
+
+          <app-line-add-button *ngIf="e ||
+            !clientOrderGuardsShifts.controls.length"
+            (click)="addShift()">
+            {{ "addNewShift" | translate }}
+          </app-line-add-button>
+        </form>
+      </div>
+      <!-- <div class="mb-3">
+        <div class="form-floating">
+          <input type="number" class="form-control" id="numOfSupervisor"
+            placeholder="d"
+            formControlName="numberOfSupervisors" />
+          <label for="numOfSupervisor" translate="number_of_supervisor"></label>
+        </div>
+        <div class="error-message" *ngIf="
+          controls['numberOfSupervisors'].hasError('required') &&
+          form.submitted
+          ">
+          <i class="fa-solid fa-circle-exclamation"></i>
+          {{ "validation.field_required" | translate }}
+        </div>
+        <div class="error-message" *ngIf="
+          controls['numberOfSupervisors'].hasError('min') && form.submitted
+          ">
+          <i class="fa-solid fa-circle-exclamation"></i>
+          {{ "validation.not_valid_to_use" | translate }}
+        </div>
+      </div> -->
+      <div class="mb-3">
+        <div class="form-floating">
+          <input type="url" class="form-control" id="from" placeholder="d"
+            bsDatepicker autocomplete="off"
+            formControlName="startDate" [minDate]="minDate" [bsConfig]="{
+            containerClass: 'theme-red',
+            isAnimated: true,
+            showWeekNumbers: false,
+            adaptivePosition: true
+            }" />
+          <label for="from" translate="from"></label>
+        </div>
+
+        <div class="error-message" *ngIf="controls['startDate']?.invalid &&
+          form.submitted">
+          <i class="fa-solid fa-circle-exclamation"></i>
+          {{ "validation.field_required" | translate }}
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <div class="form-floating">
+          <input type="url" class="form-control" id="to" placeholder="d"
+            bsDatepicker autocomplete="off"
+            [minDate]="minDate2" [bsConfig]="{
+            containerClass: 'theme-red',
+            isAnimated: true,
+            showWeekNumbers: false,
+            adaptivePosition: true
+            }" formControlName="endDate" />
+          <label for="to" translate="to"></label>
+        </div>
+
+        <div class="error-message" *ngIf="controls['endDate']?.invalid &&
+          form.submitted">
+          <i class="fa-solid fa-circle-exclamation"></i>
+          {{ "validation.field_required" | translate }}
+        </div>
+      </div>
+
+
+
+      <div class="mb-3">
+        <p-dropdown [options]="contractTypes.optionSetItems"
+          styleClass="w-100"
+          [placeholder]="'contract_type' | translate" [filter]="true"
+          filterBy="name"
+          [optionLabel]="isAr ? 'nameAr' : 'nameEn'" optionValue="id"
+          formControlName="contractTypeId">
+        </p-dropdown>
+
+        <div class="error-message" *ngIf="controls['contractTypeId']?.invalid
+          &&
+          form.submitted">
+          <i class="fa-solid fa-circle-exclamation"></i>
+          {{ "validation.field_required" | translate }}
+        </div>
+      </div>
+
+      <div class="form-floating mb-3">
+        <textarea class="form-control" placeholder="Leave a comment here"
+          id="floatingTextarea2" style="height: 150px"
+          formControlName="details"></textarea>
+        <label for="floatingTextarea2" translate="description"></label>
+
+        <div class="error-message" *ngIf="controls['details']?.invalid &&
+          form.submitted">
+          <i class="fa-solid fa-circle-exclamation"></i>
+          {{ "validation.field_required" | translate }}
+        </div>
+      </div>
+
+      <button translate="submit" type="submit" class="btn mt-2 py-2 w-100
+        rounded-8 btn-primary"></button>
+    </form>
+
+    <div *ngIf="!allowed" class="vh-100 d-flex justify-content-center
+      align-items-center">
+      <div class="w-100">
+        <img src="assets/images/svg/lock.svg" alt="lock" class="mx-auto
+          d-block"
+          />
+        <h5 class="text-align-center mt-4" translate="plz_login_to_request"></h5>
+        <button [routerLink]="[login]" translate="login" type="button"
+          class="btn btn-warning text-white mx-auto d-block mt-4 px-5 py-2
+          rounded-10"></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<public-api-modal [id]="modalId" classList="modal-dialog-centered">
+  <img width="50" src="assets/images/icons/checked.png" alt="" class="mb-3" />
+  <h6 class="mt-3 fw-700">
+    {{ "details_submitted_successfully" | translate }}
+  </h6>
+  <p class="mt-3 fs-18 fw-500">
+    {{ "details_submitted_successfully_message" | translate }}
+  </p>
+  <button type="button" data-bs-dismiss="modal" (click)="clear()" class="btn
+    d-block mis-auto btn-primary px-4 py-2">
+    {{ "continue" | translate }}
+  </button>
+</public-api-modal>
+
+
+<public-api-modal [id]="modalcompleteID" classList="modal-dialog-centered">
+  <h4 class="fw-700" translate="completeData"></h4>
+  <p class="mt-2 text-info" translate="completeProfile"></p>
+  <div class="d-flex justify-content-end gap-2">
+    <button type="button" data-bs-dismiss="modal" class="btn rounded-8 px-4
+      py-2
+      btn-light" translate="cancel"></button>
+    <button translate="continue" (click)="completeProfileRouting()"
+      data-bs-dismiss="modal" type="button"
+      class="btn rounded-8 px-4 py-2 btn-primary text-white"></button>
+  </div>
+</public-api-modal>

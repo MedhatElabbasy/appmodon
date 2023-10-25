@@ -1,0 +1,11 @@
+.float-end {
+  float: right;
+}
+
+::ng-deep {
+  html:lang(ar) {
+    .float-end {
+      float: left !important;
+    }
+  }
+}

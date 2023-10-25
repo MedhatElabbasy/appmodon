@@ -1,0 +1,11 @@
+<div
+  class="container files bg-info-o rounded-10 py-3 d-flex flex-column h-100 align-items-center gap-3 justify-content-center"
+  (click)="images.click()"
+  [style.backgroundImage]="'url(' + link + ')'"
+>
+  <input type="file" #images hidden (change)="onFileUpload($event)" />
+  <ng-container *ngIf="!link">
+    <img [src]="image" width="50" height="50" class="obj-contain" alt="" />
+    <ng-content></ng-content>
+  </ng-container>
+</div>

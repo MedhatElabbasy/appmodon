@@ -1,0 +1,253 @@
+<div class="position-relative header">
+    <div class="bg-primary w-100">
+        <app-navbar>
+
+        </app-navbar>
+    </div>
+</div>
+<div class="main-container d-flex justify-content-center align-items-center min-vh-100 mt-5 pt-5">
+    <div class="innercontainer container-fluid d-flex py-5 mt-5">
+        <div class="row w-100 h-100">
+            <div class="col-md-3">
+                <div class="conversations bg-white rounded-4 w-100 h-100">
+                    <div class="conversations-container container p-4 h-100">
+                        <div class="search pb-3">
+                            <div class="search-container w-100">
+                                <form class="no-submit w-100 ">
+                                    <input class="no-submit px-2" type="search" placeholder="المحادثات">
+                                </form>
+                            </div>
+                        </div>
+                        <div class="chatCards pb-3">
+                            <div [ngClass]="{'selected-chat': selectedAgentId == agent.agent.id, 'bg-white':selectedAgentId != agent.agent.id}"
+                                class="chat-card container-fluid p-2 px-3 rounded-3 mb-2"
+                                *ngFor="let agent of allAgents;let i=index"
+                                (click)="selectAgent(agent); openChat(agent);">
+                                <div class="row align-items-center justify-content-center">
+                                    <div class="col-3">
+                                        <div class="userImg position-relative">
+                                            <img [height]="agentImg?.offsetWidth" #agentImg class="w-100 rounded-circle"
+                                                [src]="agent.agent.photo?.fullLink" alt="notification">
+                                            <div class="offline rounded-circle position-absolute bottom-0"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-9">
+                                        <div class="cardContent">
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <div class="content">
+                                                    <div class="userName">
+                                                        <h6 class="mb-0 pb-1">{{agent.agent.firstName +" "+
+                                                            agent.agent.lastName}}</h6>
+                                                    </div>
+                                                    <div class="lastMessage">
+                                                        <!-- <p class="mb-0">انا: {{lastMessage}}</p> -->
+                                                        <p class="mb-0">{{agent.agentChats[0].isFromAgent? "" : "انا:"}}
+                                                            {{ agent.agentChats[0].message}}</p>
+                                                    </div>
+                                                </div>
+                                                <div class="time-count">
+                                                    <span class="message-time">{{+agent.agentChats[0].created.split("
+                                                        ")[1].slice(0,2) > 12?
+                                                        (+agent.agentChats[0].created.split(" ")[1].slice(0,2)-12 < 10
+                                                            ? '0' +
+                                                            (+agent.agentChats[0].created.split(" ")[1].slice(0,2)-12) : +agent.agentChats[0].created.split(" ")[1].slice(0,2)-12) 
+                                                            + agent.agentChats[0].created.split(" ")[1].slice(2,5) : +agent.agentChats[0].created.split(" ")[1].slice(0,2)  
+                                                            + agent.agentChats[0].created.split(" ")[1].slice(2,5)}}</span>
+                                                    <!-- <div
+                                                        class=" message-count rounded-circle d-flex
+                                                            justify-content-center align-items-center text-white">
+                                                            3
+                                                </div> -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- <div class="chat-card container-fluid p-2 px-3 rounded-3 bg-white">
+                            <div class="row align-items-center justify-content-center">
+                                <div class="col-3">
+                                    <div class="userImg position-relative">
+                                        <img class="w-100 rounded-circle" src="../../../assets/chat/user2.webp" alt="">
+                                        <div class="online rounded-circle position-absolute bottom-0"></div>
+                                    </div>
+                                </div>
+                                <div class="col-9">
+                                    <div class="cardContent">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <div class="content">
+                                                <div class="userName">
+                                                    <h6 class="mb-0 pb-1">خالد فهد الدوسري</h6>
+                                                </div>
+                                                <div class="lastMessage">
+                                                    <p class="mb-0">انا: السلام على أهل السلام</p>
+                                                </div>
+                                            </div>
+                                            <div class="time-count">
+                                                <span class="message-time">08:05</span>
+                                                <div
+                                                        class="message-count rounded-circle d-flex justify-content-center align-items-center text-white">
+                                                        3</div>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> -->
+                        <!-- <div class="splitLine my-2">
+
+                        </div>
+                        <div class="chat-card container-fluid p-2 px-3 rounded-3 bg-white">
+                            <div class="row align-items-center justify-content-center">
+                                <div class="col-3">
+                                    <div class="userImg position-relative">
+                                        <img class="w-100 rounded-circle" src="../../../assets/chat/user2.webp" alt="">
+                                        <div class="offline rounded-circle position-absolute bottom-0"></div>
+                                    </div>
+                                </div>
+                                <div class="col-9">
+                                    <div class="cardContent">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <div class="content">
+                                                <div class="userName">
+                                                    <h6 class="mb-0 pb-1">خالد فهد الدوسري</h6>
+                                                </div>
+                                                <div class="lastMessage">
+                                                    <p class="mb-0">انا: السلام على أهل السلام</p>
+                                                </div>
+                                            </div>
+                                            <div class="time-count">
+                                                <span class="message-time">08:05</span>
+                                                <div
+                                                        class="message-count rounded-circle d-flex justify-content-center align-items-center text-white">
+                                                        3</div>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="splitLine my-2">
+
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9 h-100">
+            <div class="conversation-messages rounded-4 shadow-sm w-100 h-100">
+                <div *ngIf="!agentName" class="noMessages w-100 h-100 d-flex justify-content-center align-items-center">
+                    <div class="text-center d-flex flex-column align-items-center">
+                        <i class="fa-regular fa-comments fa-7x"></i>
+                        <p class="text-center py-4">أنقر للمحادثة</p>
+                    </div>
+                </div>
+
+                <div *ngIf="agentName" class="messages-container d-flex flex-column align-items-stretch h-100">
+                    <div class="conversation-head p-3 py-2 d-flex align-items-center bg-white">
+                        <div class="userImg position-relative">
+                            <img class="w-100 rounded-circle" #agentImg1 [src]="agentPhoto" alt=""
+                                [height]="agentImg1?.offsetWidth">
+                            <div class="online rounded-circle position-absolute bottom-0"></div>
+                        </div>
+                        <div class="userName">
+                            <h6 class="mb-0 mx-4">{{agentName}}</h6>
+                        </div>
+                    </div>
+                    <div class="messages-body">
+                        <div class="container-fluid p-2 h-100">
+                            <div #messagesScrollView [scrollWindow]="false" infiniteScroll
+                                [infiniteScrollDistance]="scrollDistance" [infiniteScrollUpDistance]="scrollUpDistance"
+                                [infiniteScrollThrottle]="throttle" (scroll)="onScroll($event)"
+                                class="d-flex flex-column h-100 overflow-auto px-2">
+
+                                <div *ngIf="messagesAreLoading"
+                                    class="loading d-flex justify-content-center align-items-center p-3">
+                                    <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
+                                </div>
+                                <div *ngFor="let message of chatMessages?.reverse(); let i = index"
+                                    [ngStyle]="{'direction': message?.isFromAgent? 'ltr' : 'rtl'}"
+                                    class="one-message d-flex">
+                                    <!-- *ngIf="chatMessages" -->
+                                    <div class="userImg">
+                                        <img #messageImg [height]="messageImg.offsetWidth" class="w-100 rounded-circle"
+                                            [src]="message?.isFromAgent? message.agent.photo.fullLink : user.photo.fullLink"
+                                            alt="">
+                                    </div>
+                                    <div class="message pt-1">
+                                        <div class="d-flex align-items-center">
+                                            <p [ngClass]="{'myMessage':!message?.isFromAgent, 'bg-white':message?.isFromAgent}"
+                                                class="mb-1 p-2 px-3 myMessage me-2 border-top-right-radius border-top-left-radius border-bottom-right-radius border-bottom-left-radius">
+                                                {{message.message}}
+                                            </p>
+                                            <span class="me-4">{{+message.created.split(" ")[1].slice(0,2) > 12?
+                                                (+message.created.split(" ")[1].slice(0,2)-12 < 10 ? '0' +
+                                                    (+message.created.split(" ")[1].slice(0,2)-12) : +message.created.split(" ")[1].slice(0,2)-12) 
+                                                        + message.created.split(" ")[1].slice(2,5) : +message.created.split(" ")[1].slice(0,2)  
+                                                        + message.created.split(" ")[1].slice(2,5)}}</span>
+                                            </div>
+                                            <!-- <div class=" d-flex align-items-center">
+                                                    <p [ngClass]="{'myMessage':!message?.isFromAgent, 'bg-white':message?.isFromAgent}"
+                                                        class="mb-1 p-2 px-3 myMessage me-2 border-top-right-radius border-top-left-radius border-bottom-right-radius border-bottom-left-radius">
+                                                        {{message.message}}</p>
+                                                    <span class="me-4">09:35</span>
+                                        </div> -->
+                                    </div>
+                                </div>
+                                <!-- <div class="one-message d-flex">
+                                        <div class="userImg">
+                                            <img class="w-100" src="../../../assets/chat/user2.webp" alt="">
+                                        </div>
+                                        <div class="message pt-1">
+                                            <div class="d-flex align-items-center">
+                                                <p
+
+                                                    class="mb-1 p-2 px-3 ms-2 border-top-right-radius border-top-left-radius border-bottom-right-radius border-bottom-left-radius">
+                                                    ما في مشكلة</p>
+                                                <span class="ms-4">09:35</span>
+                                            </div>
+                                            <div class="d-flex align-items-center">
+                                                <p
+                                                    class="mb-1 p-2 px-3 bg-white ms-2 border-top-right-radius border-top-left-radius border-bottom-right-radius border-bottom-left-radius">
+                                                    ما في مشكلةما في مشكلةما في مشكلة</p>
+                                                <span class="ms-4">09:35</span>
+                                            </div>
+                                        </div>
+                                    </div>  -->
+                                <div class="end" #end></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="message-input py-3">
+                        <div class="input-container position-relative">
+                            <input type="text" #chatTextarea matInput id="chat-textarea" [(ngModel)]="chatInputMessage"
+                                required (keyup.enter)="send()" class="form-control bg-white shadow-sm"
+                                placeholder="أكتب رسالتك هنا">
+                            <div (click)="send()"
+                                class="send-icon position-absolute d-flex align-items-center justify-content-center rounded-circle">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="28.017" height="27.577"
+                                    viewBox="0 0 28.017 27.577">
+                                    <g id="icon.send" transform="translate(26.956 13.789) rotate(135)">
+                                        <line id="Line_2" data-name="Line 2" x1="8.843" y1="8.843"
+                                            transform="translate(9.157 9.157)" fill="none" stroke="#fff"
+                                            stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" />
+                                        <path id="Path_76" data-name="Path 76" d="M18,18,14.293,0,9.157,9.157,0,14.293Z"
+                                            transform="translate(0 0)" fill="none" stroke="#fff" stroke-linecap="round"
+                                            stroke-linejoin="round" stroke-width="1.5" />
+                                    </g>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+</div>

@@ -1,0 +1,13 @@
+@import "libs/assets/styles/variables.scss";
+
+.border-warning {
+  border-color: rgba($color: $warning-color, $alpha: 0.2) !important;
+}
+
+.bg-efefef {
+  background-color: #efefef;
+  border: none;
+  & * {
+    color: $info-color;
+  }
+}

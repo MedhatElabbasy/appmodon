@@ -1,0 +1,48 @@
+<div class="card border-0 rounded-12 cursor-pointer" (click)="companyProfile()">
+  <div class="card-body">
+    <div class="d-flex flex-column flex-md-row gap-3 align-items-md-center">
+      <div class="flex-shrink-0">
+        <img
+          [src]="data.companyLogo.fullLink"
+          class="obj-cover obj-position-c company-logo rounded-10"
+        />
+      </div>
+      <div class="flex-grow-1 d-flex flex-column gap-3">
+        <h5 class="fw-bold m-0">{{ data.name }}</h5>
+        <div class="d-flex flex-wrap gap-2">
+          <ng-container
+            *ngFor="
+              let feature of data.securitCompanyAvailableServices;
+              let o = odd;
+              let e = even
+            "
+          >
+            <span
+              *ngIf="e"
+              class="badge px-3 py-2 fw-normal fw-500 bg-primary-o rounded-8 text-primary"
+            >
+              {{
+                isArabic
+                  ? feature.availableServices.name
+                  : feature.availableServices.nameEN
+              }}
+            </span>
+            <span
+              *ngIf="o"
+              class="badge px-3 py-2 fw-normal fw-500 bg-warning-o rounded-8 text-primary"
+            >
+              {{
+                isArabic
+                  ? feature.availableServices.name
+                  : feature.availableServices.nameEN
+              }}
+            </span>
+          </ng-container>
+        </div>
+        <h6 class="card-subtitle text-info">
+          <i class="fa-solid fa-location-dot mie-2"></i> {{ data.address }}
+        </h6>
+      </div>
+    </div>
+  </div>
+</div>

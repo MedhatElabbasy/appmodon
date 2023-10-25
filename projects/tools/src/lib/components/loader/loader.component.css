@@ -1,0 +1,74 @@
+.splash-logo {
+  left: 50%;
+  top: 50%;
+  margin-left: -26px;
+  margin-top: -26px;
+  z-index: 2;
+  position: absolute;
+  width: 54px;
+}
+
+.splash-loader,
+.splash-loader:before,
+.splash-loader:after {
+  left: 50%;
+  top: 50%;
+  margin-left: -45px;
+  margin-top: -45px;
+  position: absolute;
+  vertical-align: middle;
+  background: rgba(227, 33, 68, 0.4);
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.splash-loader {
+  background: transparent;
+}
+
+.splash-loader:before {
+  content: "";
+  -webkit-animation: bounce 1.5s infinite;
+          animation: bounce 1.5s infinite;
+}
+
+.splash-loader:after {
+  content: "";
+  -webkit-animation: bounce 1.5s -0.4s infinite;
+          animation: bounce 1.5s -0.4s infinite;
+}
+
+@keyframes bounce {
+  0% {
+    transform: scale(0.3);
+    -webkit-transform: scale(0.3);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2);
+    -webkit-transform: scale(2);
+    opacity: 0;
+  }
+}
+@-webkit-keyframes bounce {
+  0% {
+    transform: scale(0.3);
+    -webkit-transform: scale(0.3);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2);
+    -webkit-transform: scale(2);
+    opacity: 0;
+  }
+}
+.splash-screen {
+  background-color: rgba(18, 18, 60, 0.5);
+  height: 100%;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  z-index: 3000;
+}/*# sourceMappingURL=loader.component.css.map */

@@ -1,0 +1,92 @@
+<div class="mt-4">
+  <h6 class="fw-bold"> {{'jobDescription'|translate}}</h6>
+  <p class="mt-3 text-secondary">
+    {{
+    isArabic
+    ? data?.jobDescription
+    : data?.jobDescriptionEN
+    }}
+  </p>
+  <hr>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-lg-12  mt-2">
+      <div class="container">
+        <div class="row myBg px-1 py-3 rounded-10">
+          <div class="col-1">
+            <div class="bg-white p-2 rounded-10 d-inline-block">
+              <img src="assets/images/icons/list3.png" width='20' height="20" alt="">
+            </div>
+          </div>
+          <div class="col-11">
+            <div class="ps-1">
+              <p class="fw-bold">{{'jobRequirement'|translate}}</p>
+             
+              <p class="myFont">{{data?.jobReqiurement}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4  mt-2">
+      <div class="container">
+        <div class="row myBg px-1 py-3 rounded-10">
+          <div class="col-3">
+            <div class="bg-white p-2 rounded-10 d-inline-block">
+              <img src="assets/images/icons/user.png" width='20' height="20" alt="">
+            </div>
+          </div>
+          <div class="col-9">
+            <div class="ps-1">
+              <p class="fw-bold">{{'gender'|translate}}</p>
+             
+              <p class="myFont"> {{
+                isArabic
+                ? data?.gender?.name
+                : data?.gender?.nameEN
+                }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4  mt-2">
+      <div class="container">
+        <div class="row myBg px-1 py-3 rounded-10">
+          <div class="col-3">
+            <div class="bg-white p-2 rounded-10 d-inline-block">
+              <img src="assets/images/icons/vip.png" width='20' height="20" alt="">
+            </div>
+          </div>
+          <div class="col-9">
+            <div class="ps-1">
+              <p class="fw-bold">{{'experiance'|translate}}</p>
+             
+              <p class="myFont">{{data?.experinceReqiured}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4  mt-2">
+      <div class="container">
+        <div class="row myBg px-1 py-3 rounded-10">
+          <div class="col-3">
+            <div class="bg-white p-2 rounded-10 d-inline-block">
+              <img src="assets/images/icons/list3.png" width='20' height="20" alt="">
+            </div>
+          </div>
+          <div class="col-9">
+            <div class="ps-1">
+              <p class="fw-bold">{{'date_of_publication'|translate}}</p>
+             
+              <p class="myFont">{{data?.createdDateTime}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

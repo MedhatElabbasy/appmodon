@@ -1,0 +1,53 @@
+@import "libs/assets/styles/variables.scss";
+
+.social {
+  .nav-link {
+    padding: 0;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    justify-content: flex-start;
+    font-size: 1.5rem;
+    color: $white;
+
+    &:hover {
+      color: $white;
+    }
+  }
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+
+  li a {
+    text-transform: capitalize;
+    text-decoration: none;
+    color: $white;
+    transition: all 0.15s ease-in;
+
+    &:hover {
+      color: $white;
+    }
+  }
+}
+.active {
+  color: $warning-color !important;
+}
+
+
+p{
+  color: $white;
+}
+
+.btn-warning{
+  background-color: #17B8E0 !important;
+  border-color: #17B8E0 !important;
+}
+
+.placeholder-sm::placeholder{
+  color: rgba($color: $white, $alpha: .45);
+}

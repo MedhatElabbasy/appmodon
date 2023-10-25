@@ -1,0 +1,179 @@
+<div>
+    <div class="container">
+      <span class="badge bg-info rounded-10 fs-6 py-2 fw-normal" [innerHtml]="
+            'step_number' | translate: { stepOrder: step.order, totalSteps: length }
+          "></span>
+      <h5 class="mt-3 fw-bold">{{ "steps." + step.title | translate }}</h5>
+      <p class="text-info">
+        {{ "completeCompanyProfile.company_representative_step_info" | translate }}
+      </p>
+    </div>
+    <form [formGroup]="companyRepresesentativeForm" #form="ngForm" class="container" (ngSubmit)="onSubmit()">
+      <!--start identity type-->
+      <div class="mb-3">
+        <div class="form-floating">
+          <p-dropdown [filter]="true" filterBy="name" styleClass="w-100 " [optionLabel]="isAr ? 'name' : 'nameEn'"
+            optionValue="name" [options]="identity" [placeholder]="'completeCompanyProfile.DetermineIdentity' | translate"
+            formControlName="holderIdentityType" (onChange)="getData()"></p-dropdown>
+        </div>
+        <!--start holderIdentityType validation-->
+        <div class="mt-1" *ngIf="form.submitted && controls['holderIdentityType'].invalid">
+          <div *ngIf="controls['holderIdentityType'].errors.required" class="error-message">
+            <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+            {{ 'completeCompanyProfile.holderIdentityType_required' | translate }}
+          </div>
+        </div>
+        <!--end holderIdentityType-->
+      </div>
+      <!--end identity type-->
+      <!--start full name-->
+      <div class="mb-3">
+        <!--start holder FullName-->
+        <div class="form-floating">
+          <input type="text" class="form-control myForm" id="holderFullName" placeholder="data"
+            formControlName="holderFullName" />
+          <label for="holderFullName">
+            {{ "completeCompanyProfile.holderFullName" | translate }}
+          </label>
+  
+          <!--start holder FullName validation-->
+          <div class="mt-1" *ngIf="form.submitted && controls['holderFullName'].invalid">
+            <div *ngIf="controls['holderFullName'].errors.required" class="error-message">
+              <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+              {{ 'completeCompanyProfile.holderFullName_required' | translate }}
+            </div>
+            <div *ngIf="controls['holderFullName'].errors.pattern" class="error-message">
+              <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+              {{ 'completeCompanyProfile.commissionerFullName_invalid' | translate }}
+            </div>
+          </div>
+        </div>
+        <!--end holder FullName-->
+      </div>
+      <!--end full name-->
+      <!--start nationality-->
+      <div class="mb-3"  *ngIf="controls['holderIdentityType'].value!='وطنية'">
+        <div class="form-floating">
+          <p-dropdown [filter]="true" filterBy="name" styleClass="w-100" [optionLabel]="isAr ? 'name' : 'nameEN'"
+            optionValue="name" [options]="nationality" [placeholder]="'nationality' | translate"
+            formControlName="holderNationality" ></p-dropdown>
+        </div>
+        <!--start holderNationality validation-->
+        <div class="mt-1" *ngIf="form.submitted && controls['holderNationality'].invalid">
+          <div *ngIf="controls['holderNationality'].errors.required" class="error-message">
+            <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+            {{ 'completeCompanyProfile.holderNationality_required' | translate }}
+          </div>
+        </div>
+        <!--end holderNationality-->
+      </div>
+      <!--end nationality-->
+
+<!-------------------------------holderIdentityNumber--------------------------------------->
+<div class="mb-3">
+  <div class="form-floating">
+      <div class="form-floating mb-3">
+          <input type="number" class="form-control myForm" placeholder="data" id="holderIdentityNumber"
+            formControlName="holderIdentityNumber"/>
+          <label for="holderIdentityNumber">
+            {{ "completeCompanyProfile.IdentityNumber" | translate }}
+          </label>
+
+          <!--start holder identity Number validation-->
+          <div class="mt-1" *ngIf="form.submitted && controls['holderIdentityNumber'].invalid">
+            <div *ngIf="controls['holderIdentityNumber'].errors.required" class="error-message">
+              <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+              {{ 'completeCompanyProfile.IdentityNumber_required' | translate }}
+            </div>
+            <div *ngIf="controls['holderIdentityNumber'].errors.pattern" class="error-message">
+              <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+              {{ 'completeCompanyProfile.IdentityNumber_valid' | translate }}
+            </div>
+          </div>
+        </div>
+  </div>
+</div>  
+<!------------------------------------------------------------------------------------>
+
+      <div class="row ">
+        <div class="col-md mb-3">
+          <!--start mobile number-->
+          <div>
+            <div id="mobile" class="form-floating">
+              <div class="form-control d-flex">
+                <select class="form-select py-0 w-fit" id="floatingSelect" [formControl]="code">
+                  <option [value]="item.prefixCode" *ngFor="let item of codes">
+                    {{ item.ioS2 }}
+                  </option>
+                </select>
+                <input type="number" id="phone" formControlName="holderPhoneNumber"
+                  class="form-control rounded-0 col p-0" />
+              </div>
+  
+              <label for="phone">
+                {{ "completeCompanyProfile.holderPhoneNumber" | translate }}
+              </label>
+            </div>
+  
+            <div *ngIf="MobileNumber.invalid && form.submitted">
+              <div class="error-message" *ngIf="MobileNumber.errors.pattern && form.submitted"
+                [innerHtml]="'validation.phone_is_not_valid' | translate"></div>
+  
+              <div class="error-message" *ngIf="MobileNumber.errors.required && form.submitted"
+                [innerHtml]="'validation.phone_required' | translate"></div>
+            </div>
+          </div>
+          <!--end mobile number-->
+        </div>
+        <div class="col-md mb-3">
+          <!--start holder Responsibility-->
+          <div class="mb-3">
+            <div class="form-floating">
+              <p-dropdown [filter]="true" filterBy="name" styleClass="w-100" [optionLabel]="isAr ? 'nameAr' : 'nameEn'"
+                optionValue="id" [options]="optionSetItems"
+                [placeholder]="'completeCompanyProfile.holderResponsibility' | translate"
+                formControlName="holderResponsablity"></p-dropdown>
+            </div>
+            <!--start holder Responsibility validation-->
+            <div class="mt-1" *ngIf="form.submitted && controls['holderResponsablity'].invalid">
+              <div *ngIf="controls['holderResponsablity'].errors.required" class="error-message">
+                <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+                {{ 'completeCompanyProfile.holderResponsibility_required' | translate }}
+              </div>
+            </div>
+            <!--end holder Responsibility validation-->
+          </div>
+          <!--end holder Responsibility-->
+        </div>
+      </div>
+      <!--start email-->
+      <div class="form-floating mb-3">
+        <input type="email" class="form-control myForm" id="holderEmail" placeholder="data"
+          formControlName="holderEmail" />
+        <label for="holderEmail">
+          {{ "completeCompanyProfile.holderEmail" | translate }}
+        </label>
+  
+        <!--start email validation-->
+        <div class="mt-1" *ngIf="form.submitted && controls['holderEmail'].invalid">
+          <div *ngIf="controls['holderEmail'].errors.required" class="error-message">
+            <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+            {{ 'completeCompanyProfile.email_required' | translate }}
+          </div>
+          <div *ngIf="controls['holderEmail'].errors.pattern" class="error-message">
+            <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+            {{ 'completeCompanyProfile.email_valid' | translate }}
+          </div>
+        </div>
+      </div>
+      <!--end email-->
+      <div class="d-flex justify-content-between">
+        <button type="button" class="btn btn-light  bg-info-o text-info rounded-8 px-4 py-2" (click)="previous()">
+          {{ "previous_step" | translate }}
+        </button>
+        <button type="submit" class="btn btn-primary  rounded-8 px-4 py-2">
+          {{ "next_step" | translate }}
+        </button>
+      </div>
+    </form>
+  </div>

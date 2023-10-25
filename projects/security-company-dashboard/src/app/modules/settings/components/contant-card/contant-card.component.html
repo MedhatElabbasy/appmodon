@@ -1,0 +1,25 @@
+<div class="container mb-5">
+  <div class="row">
+    <div class="col-lg-4 col-md-6 my-3" *ngFor="let item of emergency">
+      <div class="card border-0 rounded-12">
+        <div class="card-body container-fluid">
+          <div class="d-flex flex-md-row">
+            <div>
+              <img [src]="item.photo?.fullLink!=null?item.photo?.fullLink:'assets/images/images/tower.jpg'"
+                class="rounded-10" height="80px" width="80px" />
+            </div>
+            <div class="flex-grow-1 d-flex flex-column ">
+              <h5 class="fw-500 mt-4 text-align-center">{{ item.number }}</h5>
+            </div>
+            <div>
+              <button type="button" (click)="update(item)" class="btn rounded-8 bg-primary-o text-primary edit">
+                <i class="fa-solid fa-pen"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,111 @@
+@import "~libs/assets/styles/variables.scss";
+
+.modal-content {
+  border-radius: 16px;
+  overflow: hidden;
+  border: none;
+
+  .modal-title {
+    margin: 0;
+  }
+
+  .btn-close {
+    margin: 0;
+  }
+
+  .modal-header {
+    padding: 0.8rem;
+  }
+}
+
+.offcanvas {
+  border-start-start-radius: 16px;
+  border-end-start-radius: 16px;
+
+  @media (max-width: 500px) {
+    border-radius: 0;
+  }
+}
+
+.offcanvas-body {
+  position: relative;
+  overflow: visible;
+}
+
+.canvas-btn {
+  width: 40px;
+  height: 40px;
+  background-color: white;
+  border: 3.5px solid rgba($color: $black, $alpha: 0.75);
+  border-radius: 50%;
+  font-size: 1.5rem;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 20px;
+  margin-inline-start: -20px;
+  z-index: 1001;
+
+  @media (max-width: 500px) {
+    margin-inline-start: 5px;
+    top: 10px;
+    border: none;
+    position: absolute;
+  }
+}
+
+/* ---------------------------------- toast --------------------------------- */
+
+@media (max-width: 500px) {
+  .p-toast {
+    width: 90% !important;
+  }
+}
+
+app-modal {
+  .btn-danger-close {
+    width: 40px;
+    height: 40px;
+    font-size: x-large;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    border-radius: 10px;
+  }
+}
+
+.pac-container {
+  z-index: 1051 !important;
+}
+
+/* ---------------------------------- tabs ---------------------------------- */
+.sub-nav.nav {
+  background-color: white;
+
+  padding: 0 1rem !important;
+  border-radius: 10px;
+
+  .nav-item {
+    height: 100%;
+  }
+
+  .nav-link {
+    color: $primary-color;
+    border: 0 !important;
+    padding-top: 0.6rem;
+    padding-bottom: 0.6rem;
+    height: 100%;
+    cursor: pointer;
+    &:hover {
+      border: 0;
+      color: $primary-color;
+    }
+
+    &.active {
+      border-bottom: 3px solid $warning-color !important;
+    }
+  }
+}

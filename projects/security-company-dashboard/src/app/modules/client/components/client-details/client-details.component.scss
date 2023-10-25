@@ -1,0 +1,16 @@
+.sub-nav {
+  overflow-y: hidden !important;
+}
+
+.wrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  gap: 0px 0px;
+  grid-auto-flow: row;
+  grid-template-areas: "wrapper";
+}
+
+.content {
+  grid-area: wrapper;
+}

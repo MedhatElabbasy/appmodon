@@ -1,0 +1,214 @@
+<table class="table table-striped table-borderless">
+  <thead>
+    <tr>
+      <th scope="col" translate="name"></th>
+      <th scope="col" translate="AgentModule.email"></th>
+      <th scope="col" translate="phone"></th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <ng-container *ngIf="agents">
+      <tr class="c-pointer" *ngFor="
+      let agent of agents
+        | filter: searchKey;let i=index
+    " (click)="details(agent,$event)">
+        <td>
+          <div class="d-flex align-items-center">
+            <div class="flex-shrink-0">
+              <img [src]="agent.photo?.fullLink" onerror="this.src = 'assets/images/icons/earth.png'" alt="" width="40"
+                height="40" class="rounded-10" />
+            </div>
+            <div class="flex-grow-1 mis-3">
+              <h6 class="mt-0 fw-500">{{ agent.firstName +" " +agent.lastName}}</h6>
+            </div>
+          </div>
+        </td>
+
+        <td>
+          {{agent.email}}
+        </td>
+        <td>
+          {{agent.appUser.userName}}
+        </td>
+        <td>
+          <div class="d-flex justify-content-end gap-4 align-items-center">
+            <div class="d-flex gap-3">
+              <label *ngIf="agent.isActive">
+                {{"AgentModule.active" | translate}}
+              </label>
+              <label *ngIf="!agent.isActive">
+                {{"AgentModule.deActive" | translate}}
+              </label>
+              <p-inputSwitch [(ngModel)]="agent.isActive" (click)="toggleState(agent, $event)">
+              </p-inputSwitch>
+            </div>
+          </div>
+        </td>
+        <td *ngIf="accepted">
+          <div class="d-flex gap-2 justify-content-end ">
+            <div class="customCursor rounded-4 px-3 py-1 bg-success text-light">
+              {{'AgentModule.accepted'|translate}}
+            </div>
+          </div>
+        </td>
+        <td *ngIf="all">
+          <div class="d-flex gap-2 justify-content-end " *ngIf="agent.isApproved">
+            <div class="customCursor rounded-4 px-3 py-1 bg-success text-light">
+              {{'AgentModule.accepted'|translate}}
+            </div>
+            <div class="customCursor rounded-4 px-3 py-1 bg-danger text-light" *ngIf="!agent.isApproved">
+              {{'AgentModule.rejected'|translate}}
+            </div>
+          </div>
+        </td>
+        <td *ngIf="waiting">
+          <div class="d-flex gap-2 justify-content-end ">
+            <button type="button" class="btn bg-success text-light" (click)="acceptedAgent(agent.id,i)">
+              {{'AgentModule.accept'|translate}}
+            </button>
+            <!-- <button type="button" class="btn bg-danger text-light" (click)="rejectAgent(agent.id,i)>
+              {{'AgentModule.rejected'|translate}}
+            </button>-->
+          </div>
+        </td>
+      </tr>
+    </ng-container>
+    <tr *ngIf="!agents.length">
+      <td colspan="6">
+        <h6 class="fw-500 text-danger text-align-center" translate="no_data_to_show"></h6>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+<!--------------------------------agentDetails---------------------------------->
+<public-api-canvas [id]="canvasId">
+  <div class="d-flex flex-column h-100">
+    <div class="flex-fill">
+      <h4 class="text-align-center fw-bold mt-3 mb-4" translate="agents.agent_details"></h4>
+
+      <div class="card rounded-10 bg-primary-o border-0 mb-3">
+        <div class="card-body">
+          <div class="d-flex">
+            <div class="flex-shrink-0">
+              <img width="60" height="60" class="obj-cover rounded-10 obj-position-c"
+                [src]="agentDetails?.photo?.fullLink" [title]="" />
+            </div>
+            <div class="flex-grow-1 mis-3">
+              <h5 class="mt-0">
+                {{ agentDetails?.firstName }} {{agentDetails?.middleName}} {{agentDetails?.lastName}}
+              </h5>
+              <p class="limit-3">
+                {{agentDetails?.email}}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="card bg-warning-o rounded-10 border-0 my-3">
+        <div class="card-body">
+          <h6 class="text-info" translate="agents.agent_birthdate"></h6>
+          <div class="d-flex text-primary">
+            <div class="flex-grow-1">
+              <p *ngIf="agentDetails?.birthDate" class="limit-3 m-0">
+                {{agentDetails?.birthDate!.substring(0,10) }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card bg-warning-o rounded-10 border-0 my-3">
+        <div class="card-body">
+          <h6 class="text-info" translate="agents.agent_mobileNumber"></h6>
+          <div class="d-flex text-primary">
+            <p class="limit-3 m-0">
+              {{agentDetails?.mobileNumber}}
+            </p>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="card bg-warning-o rounded-10 border-0 my-3">
+        <div class="card-body">
+          <h6 class="text-info" translate="agents.agent_nationalityID"></h6>
+          <div class="d-flex text-primary">
+            <p class="limit-3 m-0">
+              {{agentDetails?.nationalityId}}
+            </p>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="card bg-warning-o rounded-10 border-0 my-3">
+        <div class="card-body">
+          <h6 class="text-info" translate="agents.agent_bloodType"></h6>
+          <div class="d-flex text-primary">
+            <p class="limit-3 m-0">
+              {{
+              (lang.isAr | async)
+              ? agentDetails?.bloodType?.name
+              : agentDetails?.bloodType?.nameEN
+              }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card bg-warning-o rounded-10 border-0 my-3">
+        <div class="card-body">
+          <h6 class="text-info" translate="agents.agent_nationality"></h6>
+          <div class="d-flex text-primary">
+            <p class="limit-3 m-0">
+              {{
+              (lang.isAr | async)
+              ? agentDetails?.nationality?.name
+              : agentDetails?.nationality?.nameEN
+              }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card bg-warning-o rounded-10 border-0 my-3">
+        <div class="card-body">
+          <h6 class="text-info" translate="agents.agent_gender"></h6>
+          <div class="d-flex text-primary">
+            <p class="limit-3 m-0">
+              {{
+              (lang.isAr | async)
+              ? agentDetails?.gender?.name
+              : agentDetails?.gender?.nameEN
+              }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card bg-warning-o rounded-10 border-0 my-3">
+        <div class="card-body">
+          <h6 class="text-info" translate="agents.agent_city"></h6>
+          <div class="d-flex text-primary">
+            <p class="limit-3 m-0">
+              {{
+              (lang.isAr | async)
+              ? agentDetails?.city?.name
+              : agentDetails?.city?.nameEN
+              }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+
+
+    </div>
+  </div>
+</public-api-canvas>

@@ -1,0 +1,15 @@
+@import "libs/assets/styles/mixins.scss";
+
+.controls {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 5;
+  width: 100%;
+  padding: 0.5rem;
+}
+
+.description {
+  @include line-limit(3);
+}
+

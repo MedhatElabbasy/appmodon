@@ -1,0 +1,7 @@
+:host ::ng-deep .p-image img {
+  -o-object-fit: cover;
+     object-fit: cover;
+  -o-object-position: center;
+     object-position: center;
+  border-radius: 8px;
+}/*# sourceMappingURL=visitors.component.css.map */

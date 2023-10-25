@@ -1,0 +1,127 @@
+<div class="h-100 ps-md-5 py-5  ">
+  <div class="container">
+    <form [formGroup]="accountTypeForm" #form="ngForm" (ngSubmit)="onSubmit()">
+      <div>
+        <div class="d-flex gap-3 align-items-center mb-4">
+          <button
+            [routerLink]="['/']"
+            type="button"
+            class="btn bg-info-o rounded-8 rtl-flip"
+          >
+            <img src="assets/images/icons/dark_arrow.png" width="20" class="" />
+          </button>
+          <div class="text-info">
+            {{ "back_home" | translate }}
+          </div>
+        </div>
+
+        <div class="mb-3 red">
+          <h4 class="fw-700 text-primary">
+            {{ "choose_account_type" | translate }}
+          </h4>
+          <p class="text-info">
+            {{ "choose_account_type_info" | translate }}
+          </p>
+        </div>
+
+        <div class="d-flex flex-column gap-3 mt-4">
+          <div class="form-check">
+            <input
+              type="radio"
+              class="form-check-input"
+              id="company"
+              formControlName="type"
+              [value]="registerType.registerSecurityCompany"
+            />
+            <label class="form-check-label w-100" for="company">
+              <div class="card w-100 rounded-16 bg-light border-0">
+                <div class="card-body">
+                  <div class="d-flex align-items-center gap-4">
+                    <div class="icon">
+                      <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <h5 class="fw-600">
+                      {{ "security_company" | translate }}
+                    </h5>
+                  </div>
+                </div>
+              </div>
+            </label>
+          </div>
+          <div class="form-check">
+            <input
+              type="radio"
+              class="form-check-input"
+              id="user"
+              formControlName="type"
+              [value]="registerType.securityGuard"
+            />
+            <label class="form-check-label w-100" for="user">
+              <div class="card w-100 rounded-16 bg-light border-0">
+                <div class="card-body">
+                  <div class="d-flex align-items-center gap-4">
+                    <div class="icon">
+                      <i class="fa-solid fa-user"></i>
+                    </div>
+                    <h5 class="fw-600">
+                      {{ "individual_account" | translate }}
+                    </h5>
+                  </div>
+                </div>
+              </div>
+            </label>
+          </div>
+          <div class="form-check">
+            <input
+              type="radio"
+              class="form-check-input"
+              id="Facility"
+              formControlName="type"
+              [value]="registerType.registerClient"
+            />
+            <label class="form-check-label w-100" for="Facility">
+              <div class="card w-100 rounded-16 bg-light border-0">
+                <div class="card-body">
+                  <div class="d-flex align-items-center gap-4">
+                    <div class="icon">
+                      <i class="fa-solid fa-building"></i>
+                    </div>
+                    <h5 class="fw-600">
+                      {{ "facility_account" | translate }}
+                    </h5>
+                  </div>
+                </div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div
+          *ngIf="type.invalid && form.submitted"
+          class="text-danger d-flex gap-2 mt-4 fw-500"
+        >
+          <i class="fa-solid mt-1 fa-circle-exclamation"></i>
+          <span>
+            {{ "validation.choose_account_to_continue" | translate }}
+          </span>
+        </div>
+
+        <div>
+          <button
+            type="submit"
+            class="btn btn-primary mt-4 py-2 d-flex align-items-center gap-4 rounded-8"
+          >
+            <span>
+              {{ "continue" | translate }}
+            </span>
+            <img
+              src="assets/images/icons/arrow.png"
+              class="img-fluid d-block rtl-flip"
+              alt="arrow"
+            />
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

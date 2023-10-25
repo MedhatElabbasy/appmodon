@@ -1,0 +1,36 @@
+@media (min-width: 768px) {
+  .hstack {
+    height: 150px;
+    padding: 1.5em;
+  }
+  .hstack .file {
+    height: 100%;
+    width: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-size: cover;
+    background-position: center;
+  }
+}
+@media (max-width: 500px) {
+  .hstack {
+    height: 160px;
+  }
+  .hstack .file {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 240px;
+    font-size: 6px;
+  }
+}
+.file2 {
+  padding: 1em;
+  height: 160px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-size: cover;
+  background-position: center;
+}/*# sourceMappingURL=company-details.component.css.map */

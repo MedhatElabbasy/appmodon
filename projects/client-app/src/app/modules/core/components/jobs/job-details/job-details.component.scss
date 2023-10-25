@@ -1,0 +1,48 @@
+@import "libs/assets/styles/variables.scss";
+
+.header {
+  //height: 240px;
+  z-index: 1000;
+}
+
+.form-check-input {
+  width: 24px;
+  height: 24px;
+  border: none;
+  box-shadow: none;
+
+  &:checked {
+    background-color: $primary-color;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6 10l3 3l6-6'/%3e%3c/svg%3e");
+  }
+}
+
+.form-check-label {
+  margin-top: 2px;
+}
+
+@media (max-width: 500px) {
+}
+select {
+  cursor: pointer;
+}
+h2 {
+  text-align: center !important;
+  margin-top: 20px;
+}
+
+.container-btn {
+  background-color: rgb(138, 138, 165, 0.5);
+}
+
+.upload {
+  border: 2px dashed orangered;
+}
+textarea {
+  height: 200px !important;
+}
+.mySize {
+  font-size: 12px;
+  cursor: pointer;
+
+}

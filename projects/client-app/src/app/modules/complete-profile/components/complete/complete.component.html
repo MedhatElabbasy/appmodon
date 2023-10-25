@@ -1,0 +1,62 @@
+<div class="position-relative header">
+  <div class="bg-primary fixed-top w-100">
+    <app-navbar> </app-navbar>
+  </div>
+</div>
+
+<div class="h-100 bg-info-o pt-5">
+
+
+<div class="container-fluid px-lg-4 px-xl-5 flex-grow-1   bg-white   mt-4">
+    <div id="layout" class="d-flex flex-wrap h-100">
+      <div id="side" class="col-lg-4 col-xl-3 col-12 py-4 py-lg-5 px-3">
+        <!-- ------------------------------- hr view ------------------------------- -->
+        <div class="d-none d-lg-block">
+          <div [class.active]="stepIndex >= item.order" *ngFor="let item of FormConfig; let s = first; let i = index">
+            <div class="line" *ngIf="!s">
+              <div></div>
+            </div>
+            <div class="d-flex justify-content-end align-items-center gap-4">
+              <div class="media-body col text-align-end">
+                <h6 class="fw-bold fs-5">
+                  {{ "steps." + item.title | translate }}
+                </h6>
+                <span class="fs-14 fw-500">
+                  {{ "steps." + item.description | translate }}</span>
+              </div>
+              <div class="icon">
+                <svg-icon svgClass="step-icon" [src]="item.icon"></svg-icon>
+              </div>
+            </div>
+          </div>
+        </div>
+  
+        <div class="d-block d-lg-none">
+          <div class="d-flex">
+            <div class="d-flex align-items-center col gap-2" [class.active]="stepIndex >= item.order" *ngFor="
+                    let item of FormConfig;
+                    let s = first;
+                    let e = last;
+                    let i = index
+                  ">
+              <div class="hr flex-grow-1" [class.bg-transparent]="s"></div>
+              <div class="icon-wrapper flex-grow-0">
+                <svg-icon svgClass="step-icon" [src]="item.icon"></svg-icon>
+              </div>
+              <div class="hr flex-grow-1" [class.bg-transparent]="e"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <!-- --------------------------------- vr ---------------------------------- -->
+      <div class="col-lg-8 col-xl-9 col-12 px-md-4 py-5 overflow-auto">
+         <app-company-details *ngIf="stepIndex==1">
+        </app-company-details>
+        <app-company-representative [nationalities]="nationalities" 
+          [optionSetItems]="optionSetItems" *ngIf="stepIndex==2"></app-company-representative>
+        <app-commissioner-representative  [nationalities]="nationalities" [identity]="identity"
+          [optionSetItems]="optionSetItemsComissioner" *ngIf="stepIndex==3"></app-commissioner-representative>
+      </div>
+    </div>
+  </div>

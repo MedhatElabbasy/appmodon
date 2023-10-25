@@ -1,0 +1,76 @@
+@import "libs/assets/styles/variables.scss";
+@import "libs/assets/styles/mixins.scss";
+
+.controls {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 5;
+  width: 100%;
+  padding: 0.5rem;
+}
+
+.description {
+  @include line-limit(3);
+}
+
+::ng-deep {
+  .map-container {
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 0px;
+    border-start-start-radius: 10px;
+    border-start-end-radius: 10px;
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr auto;
+  gap: 0px 0px;
+  grid-auto-flow: row;
+  grid-template-areas:
+    "table"
+    "pagination";
+}
+
+.table-grid {
+  grid-area: table;
+}
+
+.pagination {
+  grid-area: pagination;
+}
+
+@media (min-width: 500px) {
+  .file,
+  p-image {
+    background-color: $bg-light;
+    height: 150px;
+    width: 220px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    background-size: cover;
+    background-position: center;
+  }
+}
+
+@media (max-width: 500px) {
+  .file,
+  p-image {
+    background-color: $bg-light;
+    height: 100px;
+    width: 100%;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    background-size: cover;
+    background-position: center;
+  }
+}

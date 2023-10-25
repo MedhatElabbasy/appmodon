@@ -1,0 +1,10 @@
+#edit-location {
+  top: 0.5rem;
+  left: auto;
+  right: 0.5rem;
+}
+
+:host :host-context(.ar) #edit-location {
+  left: 0.5rem !important;
+  right: auto !important;
+}/*# sourceMappingURL=location-card.component.css.map */

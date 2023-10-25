@@ -1,0 +1,161 @@
+<div class="py-3 h-100 d-flex flex-column">
+  <header
+    class="d-flex gap-3 flex-wrap justify-content-between align-items-center mb-3"
+  >
+    <div class="col-12 col-sm-4">
+      <div class="input-group">
+        <span class="input-group-text border-0 bg-transparent" id="search">
+          <ion-icon name="search"></ion-icon>
+        </span>
+        <input
+          type="text"
+          class="form-control"
+          [placeholder]="'search' | translate"
+          aria-label="search"
+          aria-describedby="search"
+          [(ngModel)]="searchKey"
+        />
+      </div>
+    </div>
+
+    <div
+      *ngIf="false"
+      class="d-flex col-12 col-sm justify-content-between justify-content-sm-end gap-3"
+    >
+      <button
+        type="button"
+        class="btn d-flex text-info gap-2 align-items-center rounded-m rounded-8 bg-info-o"
+      >
+        {{ "order_by" | translate }}
+        <ion-icon name="caret-down-outline"></ion-icon>
+      </button>
+      <button
+        type="button"
+        class="btn d-flex text-info gap-2 align-items-center rounded-m rounded-8 bg-info-o"
+      >
+        <i class="fa-solid fa-sliders"></i>
+        {{ "filtration" | translate }}
+      </button>
+    </div>
+  </header>
+
+  <button
+    *ngIf="!(guards.length >= noOfGuards)"
+    (click)="addGuard()"
+    type="button"
+    class="btn btn-primary rounded-10 px-4 mb-3 d-block mis-auto"
+    translate="clients.assign_guard"
+  ></button>
+
+  <div class="flex-fill gap-3 d-flex flex-column">
+    <div class="flex-fill" *ngIf="guards?.length">
+      <div class="row g-3 row-cols-md-2 row-cols-xl-3">
+        <app-guard-card
+          (update)="update()"
+          [guard]="item"
+          *ngFor="
+            let item of guards
+              | filter: searchKey
+              | paginate
+                : {
+                    itemsPerPage: pageSize,
+                    currentPage: pageNumber,
+                    totalItems: total,
+                    id: 'guards'
+                  }
+          "
+        ></app-guard-card>
+      </div>
+    </div>
+
+    <div
+      class="flex-fill d-flex justify-content-center align-items-center"
+      *ngIf="!guards?.length"
+    >
+      <div class="card dashed bg-transparent">
+        <div class="card-body">
+          <div
+            class="d-flex gap-3 align-items-center"
+            translate="clients.no_guards_on_location"
+          ></div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      *ngIf="guards?.length"
+      class="d-flex flex-wrap align-items-center justify-content-between gap-3"
+    >
+      <div class="text-info d-flex gap-3 align-items-center">
+        <label class="fw-500" translate="for_page"></label>
+        <div>
+          <select class="form-select" (change)="onPageSizeChange($event)">
+            <option *ngFor="let size of sizes" [selected]="size == pageSize">
+              {{ size }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <pagination-controls
+        id="guards"
+        (pageChange)="onPageNumberChange($event)"
+        (pageBoundsCorrection)="onPageNumberChange($event)"
+        [maxSize]="3"
+        [responsive]="true"
+        [previousLabel]="''"
+        [nextLabel]="''"
+        screenReaderPaginationLabel="Pagination"
+        screenReaderPageLabel="page"
+        screenReaderCurrentLabel="You're on page"
+      >
+      </pagination-controls>
+    </div>
+  </div>
+</div>
+
+<public-api-canvas [id]="addGuardCanvas">
+  <form
+    [formGroup]="guardForm"
+    #form="ngForm"
+    class="h-100 px-2 d-flex flex-column gap-3"
+    (ngSubmit)="onSubmit()"
+  >
+    <div class="flex-fill">
+      <h5
+        class="fw-600 mt-2 text-primary mb-4 text-align-center"
+        translate="clients.assign_guard"
+      ></h5>
+      <p-dropdown
+        [options]="availableGuards"
+        placeholder="{{ 'choose' | translate }}"
+        optionLabel="username"
+        styleClass="w-100"
+        optionValue="id"
+        formControlName="companySecurityGuardId"
+      ></p-dropdown>
+
+      <div
+        class="error-message"
+        *ngIf="CompanySecurityGuardId.errors?.['required'] && form.submitted"
+      >
+        <i class="fa-solid fa-circle-exclamation"></i>
+        {{ "validation.field_required" | translate }}
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-end gap-2">
+      <button
+        type="reset"
+        class="btn bg-info-o rounded-10 px-4"
+        translate="cancel"
+        data-bs-dismiss="offcanvas"
+      ></button>
+      <button
+        type="submit"
+        class="btn btn-primary px-4 rounded-10"
+        translate="assign"
+      ></button>
+    </div>
+  </form>
+</public-api-canvas>

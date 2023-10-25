@@ -1,0 +1,27 @@
+.reasons {
+  list-style-image: url("/assets/images/icons/list.png");
+  padding: 0;
+  list-style-position: inside;
+}
+.reasons li {
+  font-size: 18px;
+}
+.reasons li:not(:nth-child(1)) {
+  margin-top: 0.8rem;
+}
+
+.bg-logo-white {
+  background: url("/assets/images/bgs/reject-bg.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  position: relative;
+}
+
+:host-context(.ar) .bg-logo-white {
+  background: url("/assets/images/bgs/reject-bg-ar.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  position: relative;
+}/*# sourceMappingURL=rejected.component.css.map */

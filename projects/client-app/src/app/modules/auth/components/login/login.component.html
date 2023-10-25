@@ -1,0 +1,120 @@
+<div class="h-100 ps-md-5 py-5 ">
+  <div class="container h-75">
+    <form class="h-100 pt-5" [formGroup]="loginForm" #form="ngForm" (ngSubmit)="onSubmit()">
+      <div class="d-flex gap-3 align-items-center mb-4">
+        <button [routerLink]="['/']" type="button" class="btn bg-info-o rounded-8">
+          <img src="assets/images/icons/dark_arrow.png" width="20" class="rtl-flip" alt="" />
+        </button>
+        <div class="text-info">
+          {{ "back_to_home" | translate }}
+        </div>
+      </div>
+
+      <div class="d-flex flex-column c-gap-2_5 mt-5 h-100">
+        <div>
+          <h2 class="text-primary fw-bold">
+            {{ "welcome_back" | translate }}
+          </h2>
+          <p class="text-info mb-0">
+            {{ "please_login" | translate }}
+          </p>
+        </div>
+        <div>
+          <div id="mobile" class="form-floating">
+            <div class="form-control d-flex">
+              <select class="form-select py-0 w-fit" id="floatingSelect" [formControl]="code">
+                <option [value]="item.prefixCode" *ngFor="let item of codes">
+                  {{ item.ioS2 }}
+                </option>
+              </select>
+              <input type="text" id="phone" class="form-control rounded-0 col p-0" formControlName="mobileNumber" />
+            </div>
+
+            <label for="phone">
+              {{ "mobile_number" | translate }}
+            </label>
+          </div>
+
+          <div *ngIf="MobileNumber.invalid && form.submitted">
+            <div class="error-message" *ngIf="MobileNumber.errors.pattern && form.submitted"
+              [innerHtml]="'validation.phone_is_not_valid' | translate"></div>
+
+            <div class="error-message" *ngIf="MobileNumber.errors.required && form.submitted"
+              [innerHtml]="'validation.phone_required' | translate"></div>
+          </div>
+        </div>
+
+        <div>
+          <button type="submit" class="btn btn-primary py-2 d-flex align-items-center gap-4 rounded-8">
+            <span>
+              {{ "send_otp" | translate }}
+            </span>
+            <img src="assets/images/icons/arrow.png" class="img-fluid d-block rtl-flip" alt="arrow" />
+          </button>
+        </div>
+
+        <div class="fs-6 text-info" [routerLink]="[register]" [innerHtml]="'new_to_takid' | translate"></div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<public-api-modal [id]="canvasID" classList="modal-dialog-centered">
+  <img src="assets/images/icons/account.png" class="mb-2" width="35" />
+  <h4 class="fw-700" translate="choose_account_type"></h4>
+  <p translate="choose_account_type_info" class="mt-2 text-info"></p>
+
+  <div class="d-flex flex-column gap-3 align-items-center mt-4 mb-3">
+    <a [href]="link" class="card text-decoration-none text-primary cursor-pointer w-100 rounded-16 bg-info-o border-0">
+      <div class="card-body">
+        <div class="d-flex flex-column align-items-center gap-3">
+          <div class="icon">
+            <i class="fa-solid fa-shield-halved fs-2"></i>
+          </div>
+          <h5 class="fw-600">
+            {{ "security_company" | translate }}
+          </h5>
+        </div>
+      </div>
+    </a>
+    <div data-bs-dismiss="modal" class="card cursor-pointer w-100 rounded-16 bg-info-o border-0">
+      <div class="card-body">
+        <div class="d-flex flex-column align-items-center gap-3">
+          <div class="icon">
+            <i class="fa-solid fa-user fs-2"></i>
+          </div>
+          <h5 class="fw-600">
+            {{ "individual_account" | translate }}
+          </h5>
+        </div>
+      </div>
+    </div>
+    <div data-bs-dismiss="modal" class="card cursor-pointer w-100 rounded-16 bg-info-o border-0">
+      <div class="card-body">
+        <div class="d-flex flex-column align-items-center gap-3">
+          <div class="icon">
+            <i class="fa-solid fa-building fs-2"></i>
+          </div>
+          <h5 class="fw-600">
+            {{ "facility_account" | translate }}
+          </h5>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button data-bs-dismiss="modal" translate="cancel" type="button"
+    class="btn mx-auto btn-primary px-4 py-2 d-flex align-items-center gap-4 rounded-8"></button>
+</public-api-modal>
+
+<public-api-modal [id]="validModal" classList="modal-dialog-centered">
+  <img src="assets/images/icons/otp.png" alt="email" height="50" class="d-block" />
+  <h5 class="mt-3 fw-700 mb-0">{{ errorMessage }}</h5>
+  <p class="mt-3 fs-18 fw-500 mb-4" translate="validation.plz_enter_a_valid_number"></p>
+  <div class="d-flex gap-2 justify-content-end">
+    <button (click)="resetForm()" type="button" data-bs-dismiss="modal"
+      class="btn bg-primary py-2 px-4 text-white rounded-8">
+      <span translate="continue"></span>
+    </button>
+  </div>
+</public-api-modal>

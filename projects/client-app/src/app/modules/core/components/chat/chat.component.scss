@@ -1,0 +1,287 @@
+@import "libs/assets/styles/variables.scss";
+
+.fab-container {
+
+  position: fixed;
+
+  bottom: 50px;
+
+  right: 50px;
+
+  cursor: pointer;
+
+  z-index: 999;
+}
+
+
+.iconbutton {
+
+  width: 50px;
+
+  height: 50px;
+
+  border-radius: 100%;
+
+  background: #FF4F79;
+
+  box-shadow: 3px 5px 10px #aaaaaaa7;
+
+}
+
+.button {
+
+  width: 60px;
+
+  height: 60px;
+
+  background: $primary-color;
+
+}
+
+
+.iconbutton i {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  height: 100%;
+
+  color: white;
+
+}
+
+
+.dropdown {
+  position: static !important;
+  border: none;
+}
+
+
+.search-results-container {
+
+  // height: 420px;
+  // width: 320px;
+  overflow: auto;
+  background-color: #F7F7FA;
+  border-radius: 12px;
+}
+
+.main {
+  height: 500px;
+  width: 330px;
+  background-color: #F7F7FA;
+  border-radius: 12px;
+  z-index: 999999;
+}
+
+
+.dropdown-menu {
+  min-width: 200px;
+  background-color: #F7F7FA;
+  ;
+  text-align: justify !important;
+  //inset:1px auto auto -170px !important;
+}
+
+.message {
+  border-radius: 50px;
+  margin: 0 15px 20px;
+  padding: 10px 20px;
+  position: relative;
+  font-size: 20px;
+}
+
+.message.to {
+  background-color: #2095FE;
+  color: #fff;
+  margin-left: 100px;
+  text-align: right;
+}
+
+.message.from {
+  background-color: #E5E4E9;
+  color: #363636;
+  margin-right: 100px;
+}
+
+.message.to+.message.to,
+.message.from+.message.from {
+  margin-top: -10px;
+}
+
+.chat {
+  padding: 20px;
+  width: 400px;
+  height: 400px;
+  border: #363636 1px solid;
+  overflow: scroll;
+}
+
+.chatInput {
+  /* width: 320px; */
+  height: 20px;
+  padding-right: 50px;
+
+}
+
+.send {
+  margin-left: -50px;
+  height: 25px;
+  width: 50px;
+  background: blue;
+  color: white;
+  border: 0;
+  -webkit-appearance: none;
+}
+
+
+
+$background: white;
+$primary: #6c46bd;
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 18px;
+  margin-right: 18px;
+}
+
+.caption {
+  padding: 30px;
+  text-align: center;
+  color: #12123c;
+}
+
+#thumbnail {
+  height: 130px;
+  width: 130px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.card {
+  position: fixed;
+  bottom: 5px;
+  right: 120px;
+  background: $background;
+  height: 550px;
+  width: 280px;
+  display: flex;
+  flex-direction: column;
+  filter: drop-shadow(0px 0px 5px black);
+  border-radius: 15px;
+  padding: 16px;
+  z-index: 99999;
+
+}
+
+.chat-list {
+  min-height: 100%;
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 10px;
+  overflow-y: scroll;
+  padding-top: 10px;
+  position: relative;
+  bottom: 0;
+
+  .chat-item {
+    width: 100%;
+    margin: 8px 0px;
+    display: flex;
+    flex-direction: row;
+
+    #message-body {
+      margin: auto 8px;
+      padding: 12px 24px;
+      border-radius: 30px;
+      color: black;
+      display: flex;
+      flex-direction: row;
+    }
+
+
+  }
+
+  //  .dina{
+  //   height: 44px!important;
+  //   width: 44px!important;
+  //   object-fit: cover!important;
+  //   border-radius: 50%!important;
+  //   z-index: 99!important;
+  //   border: 3px solid $background!important;
+  // }
+
+  .left {
+
+    margin-right: auto;
+    margin-left: 8px;
+
+    #message-body {
+      background: rgba(18, 18, 60, 0.1);
+      margin-left: -10px;
+    }
+  }
+
+  .right {
+
+    margin-right: 8px;
+    margin-left: auto;
+    flex-direction: row-reverse;
+
+    #message-body {
+      background: #f36e32;
+      margin-right: -10px;
+      width: 250px;
+      ;
+    }
+  }
+}
+
+.chat-footer {
+  display: flex;
+  flex-direction: row;
+  padding: 3px;
+  //background:#12123c;
+  border-radius: 20px;
+  position: relative;
+  bottom: 0;
+
+  #chat-textarea {
+    flex: 1;
+    margin: 0 1px;
+    border: 0px;
+    box-shadow: 0 0 16px rgba(0, 0, 0, 0.5);
+    padding: 4px;
+  }
+
+  #send-button {
+    border: 0;
+    box-shadow: 0 0 16px rgba(0, 0, 0, 0.5);
+    background: white;
+    padding: 10px 10px;
+    border-radius: 50%;
+  }
+
+}
+
+
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+.end{
+  border: 1px solid transparent;
+  
+}
+
+.line{
+  height: 1px;
+  background-color: #2095FE;
+}

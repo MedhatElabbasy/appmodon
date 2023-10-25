@@ -1,0 +1,209 @@
+<div class="h-100 py-4 container d-flex flex-column">
+  <div class="flex-grow-0">
+    <div class="d-flex justify-content-between align-items-center">
+      <h4 class="m-0 fw-600" translate="branches.manage_branches"></h4>
+      <button (click)="onAdd()" type="button"
+        class="btn d-flex align-items-center gap-2 btn-primary py-2 px-4 rounded-8">
+        <ion-icon name="add" class="add"></ion-icon>
+        <span translate="branches.add_new_branch"></span>
+      </button>
+    </div>
+  </div>
+  <div class="flex-grow-1 d-flex flex-column mt-3">
+    <!-- -------------------------- search and filter -------------------------- -->
+    <div class="card border-0 rounded-10">
+      <div class="card-body">
+        <header class="d-flex gap-3 flex-wrap justify-content-between align-items-center">
+          <div class="col-12 col-sm-4">
+            <div class="input-group">
+              <span class="input-group-text border-0 bg-transparent" id="search">
+                <ion-icon name="search"></ion-icon>
+              </span>
+              <input type="text" class="form-control" [placeholder]="'search' | translate" aria-label="search"
+                aria-describedby="search" [(ngModel)]="searchKey" />
+            </div>
+          </div>
+
+          <div *ngIf="false" class="d-flex col-12 col-sm justify-content-between justify-content-sm-end gap-3">
+            <button type="button" class="btn d-flex text-info gap-2 align-items-center rounded-m rounded-8 bg-info-o">
+              {{ "order_by" | translate }}
+              <ion-icon name="caret-down-outline"></ion-icon>
+            </button>
+            <button type="button" class="btn d-flex text-info gap-2 align-items-center rounded-m rounded-8 bg-info-o">
+              <i class="fa-solid fa-sliders"></i>
+              {{ "filtration" | translate }}
+            </button>
+          </div>
+        </header>
+      </div>
+    </div>
+
+    <!-- -------------------------------- data --------------------------------- -->
+    <div class="flex-grow-1 my-4">
+      <div class="row row-cols-xl-3 g-4 row-cols-md-2 row-cols-1">
+        <app-branch-card *ngFor="
+            let branch of branches
+              | filter: searchKey
+              | paginate
+                : {
+                    itemsPerPage: pageSize,
+                    currentPage: pageNumber,
+                    totalItems: total,
+                    id: 'branch_list'
+                  }
+          " [branch]="branch" (update)="onUpdate($event)" (delete)="onDelete($event)"></app-branch-card>
+      </div>
+    </div>
+
+    <!-- ----------------------------- pagination ------------------------------ -->
+    <div class="card border-0 rounded-10">
+      <div class="card-body">
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+          <div class="text-info d-flex gap-3 align-items-center">
+            <label class="fw-500" translate="for_page"></label>
+            <div>
+              <select class="form-select" (change)="onPageSizeChange($event)">
+                <option *ngFor="let size of sizes" [selected]="size == pageSize">
+                  {{ size }}
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <pagination-controls id="branch_list" (pageChange)="pageNumber = $event"
+            (pageBoundsCorrection)="pageNumber = $event" [maxSize]="3" [responsive]="true" [previousLabel]="''"
+            [nextLabel]="''" screenReaderPaginationLabel="Pagination" screenReaderPageLabel="page"
+            screenReaderCurrentLabel="You're on page">
+          </pagination-controls>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- --------------------------- no data add one --------------------------- -->
+  <div *ngIf="!branches" class="d-flex bg-white rounded-10 h-100 align-items-center justify-content-center flex-grow-1">
+    <app-add-button (click)="onAdd()">
+      <div class="text-align-center" translate="branches.add_new_branch"></div>
+    </app-add-button>
+  </div>
+</div>
+
+<!-- ----------------------------------------------------------------------- -->
+<!-- ----------------------------------------------------------------------- -->
+<!-- -------------------------------- curd --------------------------------- -->
+
+<public-api-canvas [id]="canvasId">
+  <div class="py-4">
+    <form [formGroup]="branchForm" #form="ngForm" (ngSubmit)="onSubmit()" (keydown.enter)="$event.preventDefault()">
+      <h5 class="fw-600 text-align-center text-primary mb-4 mt-2" translate="branches.add_new_branch"
+        *ngIf="!selectedBranch"></h5>
+      <h5 class="fw-600 text-align-center text-primary mb-4 mt-2" translate="branches.edit_branch"
+        *ngIf="selectedBranch"></h5>
+
+      <!--? -------------------------------- logo --------------------------------- -->
+      <div class="my-4">
+        <div class="file bg-info-o col-12 mx-auto rounded-8 text-info" [style.backgroundImage]="'url(' + photo + ')'"
+          (change)="onImageUpload($event)" (click)="personImage.click()">
+          <input type="file" #personImage hidden accept="image/x-png,image/gif,image/jpeg" />
+          <div class="container" *ngIf="!photo">
+            <img src="assets/images/icons/upload1.png" class="d-block mx-auto" alt="upload" />
+            <div class="fs-14 mt-3" translate="upload_company_logo"></div>
+          </div>
+        </div>
+
+        <!--! ----------------------------- logo error ------------------------------ -->
+
+
+      </div>
+
+      <div class="error-message" *ngIf="controls['photoId']?.invalid && form.submitted"
+        [innerHtml]="'validation.company_logo_required' | translate"></div>
+      <!--? ------------------------------- status -------------------------------- -->
+      <div class="bg-info-o d-flex justify-content-between align-items-center p-2 mb-3 rounded-3">
+        <label class="text-info" translate="branches.status"></label>
+        <p-inputSwitch formControlName="stauts"></p-inputSwitch>
+      </div>
+
+      <!--? -------------------------------- name --------------------------------- -->
+      <div class="mb-3">
+        <div class="form-floating">
+          <input type="text" class="form-control" id="nameAr" placeholder="nameAr" formControlName="name" />
+          <label for="nameAr" translate="branches.arabic_name"></label>
+        </div>
+
+        <div class="error-message" *ngIf="controls['name']?.invalid && form.submitted">
+          <i class="fa-solid fa-circle-exclamation"></i>
+          {{ "validation.field_required" | translate }}
+        </div>
+      </div>
+
+      <!--? ------------------------------- name en ------------------------------- -->
+      <div class="mb-3">
+        <div class="form-floating">
+          <input type="text" class="form-control" id="nameEn" placeholder="nameEn" formControlName="nameEn" />
+          <label for="nameEn" translate="branches.english_name"></label>
+          <div class="error-message" *ngIf="controls['nameEn']?.invalid && form.submitted">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            {{ "validation.field_required" | translate }}
+          </div>
+        </div>
+      </div>
+
+      <!--? ------------------------------- address ------------------------------- -->
+      <div class="mb-3">
+        <div style="height: 250px">
+          <public-api-map-search class="map" (coordinates)="onLocationListener($event)"></public-api-map-search>
+        </div>
+        <div class="error-message" *ngIf="controls['address']?.invalid && form.submitted">
+          <i class="fa-solid fa-circle-exclamation"></i>
+          {{ "validation.field_required" | translate }}
+        </div>
+      </div>
+
+      <!--? ------------------------------ overview ------------------------------- -->
+      <div class="mb-3">
+        <div class="form-floating">
+          <textarea class="form-control" placeholder="overview" id="overview" style="height: 120px"
+            formControlName="overview"></textarea>
+          <label for="overview" translate="branches.overview_ar"></label>
+        </div>
+        <div class="error-message" *ngIf="controls['overview']?.invalid && form.submitted">
+          <i class="fa-solid fa-circle-exclamation"></i>
+          {{ "validation.field_required" | translate }}
+        </div>
+      </div>
+
+      <!--? ----------------------------- overview en ----------------------------- -->
+      <div class="mb-3">
+        <div class="form-floating">
+          <textarea class="form-control" placeholder="overviewEN" id="floatingTextarea2" style="height: 120px"
+            formControlName="overviewEn"></textarea>
+          <label for="overviewEN" translate="branches.overview_en"></label>
+        </div>
+        <div class="error-message" *ngIf="controls['overviewEn']?.invalid && form.submitted">
+          <i class="fa-solid fa-circle-exclamation"></i>
+          {{ "validation.field_required" | translate }}
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-end mt-4 gap-2">
+        <button (click)="reset()" translate="cancel" type="button" data-bs-dismiss="offzcanvas"
+          class="btn bg-info-o rounded-10 px-4 text-primary"></button>
+        <button type="submit" class="btn btn-primary rounded-10 px-4" [translate]="selectedBranch?'edit':'add'"></button>
+      </div>
+    </form>
+  </div>
+</public-api-canvas>
+
+<!-- ------------------------------- delete -------------------------------- -->
+<public-api-modal classList="modal-dialog-centered" [id]="modalId">
+  <img src="assets/images/svg/delete.svg" alt="" class="mb-3" srcset="" />
+  <h4 class="fw-700" translate="branches.delete_branch_confirm"></h4>
+  <p class="mt-2 text-info" translate="branches.delete_branch_confirm_desc"></p>
+
+  <div class="d-flex justify-content-end gap-2">
+    <button type="button" data-bs-dismiss="modal" class="btn rounded-8 px-4 py-2 btn-light" translate="cancel"
+      (click)="deleteId = null"></button>
+    <button translate="yes_delete" type="button" data-bs-dismiss="modal" class="btn rounded-8 px-4 py-2 btn-danger"
+      (click)="delete()"></button>
+  </div>
+</public-api-modal>

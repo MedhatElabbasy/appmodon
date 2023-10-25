@@ -1,0 +1,34 @@
+<div class="position-relative header">
+  <div class="bg-primary fixed-top w-100">
+    <app-navbar>
+
+    </app-navbar>
+  </div>
+</div>
+<div class="h-100 bg-info-o" [class]="user? 'py-5':'py-0'">
+
+  <div class="container py-5 " [class]="user? 'mt-5':'mt-0'">
+
+    <div class="row mt-4 pt-5">
+      <div class="d-flex mb-4 flex-wrap flex-row-reverse flex-md-row justify-content-center align-items-center gap-3">
+
+        <div class="col-12 col-md-6">
+          <div class="input-group bg-info-o">
+            <input type="text"  class="form-control placeholder-sm" aria-label="Enter your email address"
+              aria-describedby="button-search" placeholder="{{ 'search_client_companies' | translate }}"
+              [(ngModel)]="searchKey" />
+            <button class="btn btn-warning text-white rounded-8" type="button" id="button-search">
+              <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    
+
+        <app-client-companies-card ></app-client-companies-card>
+     
+      
+    </div>
+  </div>
+</div>

@@ -1,0 +1,25 @@
+@import "libs/assets/styles/variables";
+
+.sidebar {
+  .nav-link {
+    color: $primary-color;
+  }
+
+  .nav-item {
+    padding: 0 0.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+  }
+}
+
+.active {
+  background-color: rgba($color: $info-color, $alpha: 0.1);
+  border-radius: 5px;
+}
+
+@media (max-width: 992px) {
+  .nav {
+    flex-direction: row !important;
+  }
+}

@@ -1,0 +1,48 @@
+<div class="container cursor-pointer">
+  <div class="row">
+    <div class="col-6" (click)="getCard(item.companyJob.id)" *ngFor="
+    let item of allData?.data
+      | paginate
+        : {
+            itemsPerPage: pageSize,
+            currentPage: pageNumber,
+            totalItems: allData?.totalCount,
+            id: 'item'
+          }">
+      <div class=" p-2">
+        <div class="bg-primary-o rounded-12">
+          <div class="p-3">
+            {{item?.companyJob?.companyLogo?.fullLink}}
+            <img width="90px" height="90px" [src]="item?.companyJob?.securityCompany?.companyLogo?.fullLink">
+            <h5 class="fw-500 mt-3">{{item?.companyJob?.securityCompany?.name}}</h5>
+            <p>
+              {{
+                isArabic
+                ? item?.companyJob?.jobDescription
+                : item?.companyJob?.jobDescriptionEN
+                }}
+              </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="d-flex mt-3 align-items-center justify-content-between gap-3">
+    <div class="text-info d-flex gap-3 align-items-center">
+      <label class="fw-500" verify="global.for_page"></label>
+      <div>
+        <select class="form-select bg-white" (change)="onPageSizeChange($event)">
+          <option *ngFor="let size of sizes" [selected]="size == pageSize">
+            {{ size }}
+          </option>
+        </select>
+      </div>
+    </div>
+    <pagination-controls id="item" (pageChange)="onPageNumberChange($event)"
+      (pageBoundsCorrection)="onPageNumberChange($event)" [maxSize]="3" [responsive]="true" [previousLabel]="''"
+      [nextLabel]="''" screenReaderPaginationLabel="Pagination" screenReaderPageLabel="page"
+      screenReaderCurrentLabel="You're on page">
+    </pagination-controls>
+  </div>
+</div>

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="92.5" height="107.339" viewBox="0 0 92.5 107.339">
+  <g id="Group_3156" data-name="Group 3156" transform="translate(-1238.5 -639.661)">
+    <g id="Group_3134" data-name="Group 3134" transform="translate(1238.5 639.661)">
+      <circle id="Ellipse_90" data-name="Ellipse 90" cx="22.903" cy="22.903" r="22.903" transform="translate(54.831 59.896) rotate(-157.39)" fill="#12123c"/>
+      <path id="Path_3922" data-name="Path 3922" d="M54.13,50h0c23.485,0,42.518,14.954,42.5,33.391h0c0,4.836-4.994,8.757-11.154,8.757H22.784c-6.16,0-11.154-3.92-11.154-8.757h0C11.612,64.954,30.645,50,54.13,50Z" transform="translate(-11.629 10.652)" fill="#12123c"/>
+    </g>
+    <g id="Ellipse_91" data-name="Ellipse 91" transform="translate(1286 700)" fill="#449c50" stroke="#fff" stroke-width="2">
+      <circle cx="22.5" cy="22.5" r="22.5" stroke="none"/>
+      <circle cx="22.5" cy="22.5" r="21.5" fill="none"/>
+    </g>
+    <text id="_" data-name="+" transform="translate(1325 736)" fill="#fff" font-size="45" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.008em"><tspan x="-31.816" y="0">+</tspan></text>
+  </g>
+</svg>

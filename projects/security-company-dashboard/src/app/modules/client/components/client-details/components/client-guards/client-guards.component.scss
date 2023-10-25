@@ -1,0 +1,64 @@
+@import "libs/assets/styles/variables.scss";
+
+$custom-border-color: rgba(
+  $color: $info-color,
+  $alpha: 0.2,
+);
+
+.border-inline-start {
+  border-inline-start: 3px solid transparent !important;
+  outline: none;
+}
+
+.border-inline-end {
+  border-inline-end: 1.5px solid $custom-border-color;
+}
+
+.accordion-item {
+  border-radius: 0;
+
+  button {
+    border-radius: 0;
+    box-shadow: none;
+  }
+}
+
+:host-context(.ar) {
+  .accordion-button::after {
+    margin: 0;
+    margin-inline-start: auto;
+  }
+}
+
+.accordion-item {
+  border: 0;
+  border-bottom: 1px solid $custom-border-color;
+}
+
+.list-group-item {
+  border-radius: 0;
+  border: none;
+  width: calc(100% - 20px);
+  margin-inline-start: 20px;
+  cursor: pointer;
+  border-inline-start: 3.5px solid transparent;
+
+  &:not(:last-of-type) {
+    border-bottom: 1px solid $custom-border-color;
+  }
+
+  &.active {
+    border-inline-start-color: $warning-color;
+    background-color: transparent;
+
+    .location-name {
+      color: $primary-color !important;
+      font-weight: 700 !important;
+    }
+  }
+}
+
+.accordion-button:not(.collapsed) {
+  border-inline-start: 4px solid $primary-color;
+  color: $primary-color;
+}

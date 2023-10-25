@@ -1,0 +1,139 @@
+<div class="card rounded-10 border-0 c-pointer" *ngIf="schedule">
+  <div class="card-body">
+    <h5 class="d-flex justify-content-end rounded-circle text-danger"><span (click)="modal.open('modal')">x</span></h5>
+    <div (click)="canvas.open(id)">
+      <h5 class="card-title m-0 mb-3">
+        {{ (lang.isAr | async) ? schedule.name : schedule.nameEn }}
+      </h5>
+
+      <div class="d-flex flex-wrap gap-3">
+        <span class="rounded-3 fw-600 py-2 px-3 fs-14 rounded-3 bg-primary-o text-primary">
+          {{ getScheduleDay(schedule) }}
+          {{ "shifts.working_days" | translate }}
+        </span>
+        <span class="rounded-3 fw-600 py-2 px-3 fs-14 rounded-3 bg-danger-o text-primary">
+          {{ schedule.breakScheduling.length }}
+          {{ "shifts.break" | translate }}
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<public-api-canvas [id]="id">
+  <ng-container *ngIf="schedule">
+    <h5 class="fw-600 text-align-center mb-3" translate="shifts.schedule_details"></h5>
+
+    <h5 class="fw-600 mb-4">
+      {{ (lang.isAr | async) ? schedule.name : schedule.nameEn }}
+    </h5>
+
+    <div class="row row-cols-2 g-3">
+      <div *ngFor="let item of extractDays(schedule)">
+        <div class="card rounded-10" [class.border-warning.border-1]="item.value" [class.bg-efefef]="!item.value">
+          <div class="card-body">
+            <h6 class="card-title" [translate]="'dayNames.' + item.name"></h6>
+            <p *ngIf="item.value" class="card-text text-info d-flex align-items-center fs-14 justify-content-between">
+              <span>{{
+                shift.shiftStartTime | time: (lang.isAr | async)
+                }}</span>
+              -
+              <span> {{ shift.shiftEndTime | time: (lang.isAr | async) }}</span>
+            </p>
+            <div *ngIf="!item.value" translate="shifts.rest_day"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr />
+    <h6 translate="shifts.breaks" class="fw-400 fs-14 text-info"></h6>
+    <div class="row row-cols-1 g-3">
+      <div *ngFor="let item of schedule.breakScheduling">
+        <div class="card border-warning rounded-10">
+          <div class="card-body">
+            <h6 class="card-title fw-500">
+              {{ (lang.isAr | async) ? item.name : item.nameEn }}
+            </h6>
+            <div class="d-flex text-info justify-content-between align-items-center mb-2">
+              <h6 class="m-0 mt-1">
+                {{ item.breakTime | timeDetails: (lang.isAr | async) }}
+              </h6>
+
+              <public-api-status-badge *ngIf="item.restPaymentType" [status]="item.restPaymentType">
+              </public-api-status-badge>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <h5 *ngIf="!schedule.breakScheduling.length" class="fw-500 text-info text-align-center"
+      translate="shifts.no_breaks_exist"></h5>
+
+    <hr />
+
+    <h6 translate="shifts.overtime_rules" class="fw-400 mb-3 fs-14 text-info"></h6>
+    <div class="row row-cols-2 g-3">
+      <div *ngIf="schedule.isPerDayExtraTimeEnabled">
+        <div class="card border-warning rounded-10">
+          <div class="card-body">
+            <h6 translate="shifts.daily_overtime" class="card-title fw-500"></h6>
+            <div class="d-flex text-info justify-content-between align-items-center">
+              <h6 class="m-0 mt-1">
+                {{ schedule.perDayExtraTime | timeDetails }}
+              </h6>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="schedule.isPerWeekExtraTimeEnabled">
+        <div class="card border-warning rounded-10">
+          <div class="card-body">
+            <h6 class="card-title fw-500" translate="shifts.weekly_overtime"></h6>
+            <div class="d-flex text-info justify-content-between align-items-center">
+              <h6 class="m-0 mt-1">
+                {{
+                schedule.perWeekExtraTime | timeDetails: (lang.isAr | async)
+                }}
+              </h6>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="schedule.timeForRest">
+        <div class="card border-warning rounded-10">
+          <div class="card-body">
+            <h6 class="card-title fw-500" translate="shifts.rest_day_overtime"></h6>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="schedule.extraTimeForVacations">
+        <div class="card border-warning rounded-10">
+          <div class="card-body">
+            <h6 class="card-title fw-500" translate="shifts.holiday_overtime"></h6>
+          </div>
+        </div>
+      </div>
+
+      <h5 *ngIf="
+          !schedule.isPerDayExtraTimeEnabled &&
+          !schedule.extraTimeForVacations &&
+          !schedule.timeForRest &&
+          !schedule.isPerWeekExtraTimeEnabled
+        " class="fw-500 text-info text-align-center" translate="shifts.no_breaks_exist"></h5>
+    </div>
+
+    <button (click)="onEdit()" type="button" class="btn d-block px-4 rounded-10 mis-auto btn-primary mt-4"
+      translate="update"></button>
+  </ng-container>
+</public-api-canvas>
+<!-- ------------------------------- delete -------------------------------- -->
+<public-api-modal classList="modal-dialog-centered" id="modal">
+  <img src="assets/images/svg/delete.svg" alt="" class="mb-3" srcset="" />
+  <h4 class="fw-700" translate="security_dashboard.dash.DeleteSchedule"></h4>
+  <div class="d-flex justify-content-end gap-2">
+    <button type="button" data-bs-dismiss="modal" class="btn rounded-8 px-4 py-2 btn-light" translate="cancel"></button>
+    <button translate="yes_delete" type="button" data-bs-dismiss="modal"
+      class="btn rounded-8 px-4 py-2 btn-danger" (click)="onDelete()"></button>
+  </div>
+</public-api-modal>

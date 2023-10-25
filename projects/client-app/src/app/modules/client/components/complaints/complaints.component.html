@@ -1,0 +1,122 @@
+<div class="container">
+  <div class=" card rounded-12 border-0 mt-4 mb-3">
+    <div class="card-body">
+      <header class="d-flex  gap-3 flex-wrap justify-content-between align-items-center">
+        <div class="col-12 col-sm-4">
+
+        </div>
+        <div class="d-flex col-12 col-sm justify-content-between justify-content-sm-end gap-3">
+          <div class="dropdown">
+            <button class="btn d-flex text-info gap-2 align-items-center rounded-m rounded-8 bg-info-o  dropdown-toggle"
+              type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+              {{ "order_by" | translate }}
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+              <li class="dropdown-item" (click)="ascending()">{{"RasdComplaints.ascending"|translate}}</li>
+              <li class="dropdown-item" (click)="descending()">{{"RasdComplaints.descending"|translate}}</li>
+            </ul>
+          </div>
+          <div class="dropdown menue2 ">
+            <button class="btn  rounded-m rounded-8 btn-primary d-flex gap-2 align-items-center  dropdown-toggle "
+              type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fa-solid fa-sliders"></i>
+              {{ "filtration" | translate }}
+            </button>
+            <ul class="dropdown-menu " aria-labelledby="dropdownMenuButton2">
+              <li class="dropdown-item" (click)="filter1()">{{"RasdComplaints.accepted_complaints" |translate}}</li>
+              <li class="dropdown-item" (click)="filter2()">{{"RasdComplaints.rejected_complaints" |translate}}</li>
+              <li class="dropdown-item" (click)="filter3()">{{"RasdComplaints.under_review" |translate}}</li>
+            </ul>
+          </div>
+        </div>
+      </header>
+
+      <hr />
+
+      <div class="table-responsive">
+        <table class="table table-striped table-borderless">
+          <thead>
+            <tr>
+              <th scope="col" translate="RasdComplaints.name"></th>
+              <th scope="col" translate="RasdComplaints.complaint"></th>
+              <th scope="col" translate="RasdComplaints.date"></th>
+              <th scope="col" translate="RasdComplaints.status"></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngIf="total">
+              <tr class="cursor-pointer" *ngFor="
+                let Complaint of allComplaints
+                  | filter: searchKey
+                  | paginate
+                    : {
+                        itemsPerPage: pageSize,
+                        currentPage: pageNumber,
+                        totalItems: total,
+                        id: 'users'
+                      }
+              " [routerLink]="['/infraction-Details']" [queryParams]="{id:Complaint.id}">
+                <td class="td-photo">
+                  <div class="d-flex gap-3 align-items-center">
+                    <img [src]="Complaint?.securityCompanyClient?.securityCompany?.companyLogo?.fullLink! | sanitizer"
+                      alt="logo" height="40" width="40" class="d-block obj-cover obj-position-c rounded-8"
+                      onerror="this.src='assets/images/icons/person.png'" />
+                    <div class="fw-bold">
+                      {{ Complaint.securityCompanyClient.securityCompany.name }}
+                    </div>
+                  </div>
+                </td>
+
+
+                <td>
+                  <div class="text-nowrap">
+                    {{ Complaint.infractionTitle}}
+                  </div>
+                </td>
+                <td>
+                  <div class="text-nowrap">
+                    {{ Complaint.created.split(" ")[0] }}
+                  </div>
+                </td>
+                <td>
+                  <div *ngIf="Complaint.infractionStatus" class="status rounded-8 px-2 py-2 "
+                    [style.background-color]="Complaint.infractionStatus.color">
+                    {{
+                    (lang.isAr | async)
+                    ? Complaint.infractionStatus.nameAr
+                    : Complaint.infractionStatus.nameEn
+                    }}
+                  </div>
+
+              </tr>
+            </ng-container>
+            <tr *ngIf="allComplaints?.lenght">
+              <td colspan="7">
+                <h6 translate="global.no_data_to_show" class="fw-600 text-danger text-align-center"></h6>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <hr />
+      <div class="d-flex align-items-center justify-content-between gap-3">
+        <div class="text-info d-flex gap-3 align-items-center">
+          <label class="fw-500" verify="global.for_page"></label>
+          <div>
+            <select class="form-select" (change)="onPageSizeChange($event)">
+              <option *ngFor="let size of sizes" [selected]="size == pageSize">
+                {{ size }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <pagination-controls id="users" (pageChange)="onPageChange($event)"
+          (pageBoundsCorrection)="onPageChange($event)" [maxSize]="5" [responsive]="true" [previousLabel]="''"
+          [nextLabel]="''" screenReaderPaginationLabel="Pagination" screenReaderPageLabel="page"
+          screenReaderCurrentLabel="You're on page">
+        </pagination-controls>
+      </div>
+    </div>
+  </div>
+</div>

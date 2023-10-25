@@ -1,0 +1,27 @@
+<div class="card border-0 rounded-0" *ngIf="site">
+  <div class="card-body p-1">
+    <div class="d-flex flex-wrap flex-md-row gap-3 align-items-start">
+      <img [src]="this.site.clientSite.sitePhoto?.fullLink" class="obj-contain rounded-10" style="object-position: center" width="200"
+        height="100" onerror="this.src='assets/images/icons/NoImage.png'" />
+      <div class="flex-fill">
+        <h5 class="fw-600 text-primary">{{ site.name }}</h5>
+        <p class="text-info">{{ site.locationAddress }}</p>
+        <div class="row row-cols-xl-4 row-cols-2">
+          <div>
+            <h6 class="text-info fs-14" translate="clients.location_height"></h6>
+            <p class="text-primary fw-700">
+              {{ site.locationHight }}
+              {{ "clients.meter" | translate }}
+            </p>
+          </div>
+          <div>
+            <h6 class="text-info fs-14" translate="number_of_guards"></h6>
+            <p class="text-primary fw-700">
+              {{ site.numberOfGuards }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

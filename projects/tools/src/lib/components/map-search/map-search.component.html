@@ -1,0 +1,11 @@
+<div class="d-flex h-100 w-100 justify-content-center flex-column align-items-center">
+  <google-map class="w-100 flex-grow-1" [zoom]="zoom" [center]="center">
+    <map-marker (mapDragend)="markerDragListener($event)" [options]="markerOptions" [position]="center">
+    </map-marker>
+  </google-map>
+  <div class="form-floating flex-grow-0 col-4 w-100">
+    <input #search type="text" class="form-control" [value]="searchTerm"
+    [placeholder]="lang == 'ar' ? 'العنوان': 'Address'" id="search" placeholder="data" (keydown)="onEventListener()" />
+    <label for="search" translate="search"></label>
+  </div>
+</div>

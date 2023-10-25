@@ -1,0 +1,61 @@
+@import "~libs/assets/styles/variables.scss";
+
+/* ---------------------------- pagination style ---------------------------- */
+.ngx-pagination {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  justify-content: center;
+  padding: 0;
+
+  * {
+    text-decoration: none !important;
+  }
+}
+
+.ngx-pagination li {
+  background-color: rgba($color: $info-color, $alpha: 0.1);
+  padding: 0.6ex;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px !important;
+}
+
+.ngx-pagination li a * {
+  text-decoration: none;
+  color: $info-color;
+}
+
+.ngx-pagination .disabled {
+  padding: 1ex 2.45ex !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: $bg-light;
+}
+
+.ngx-pagination .disabled:hover {
+  background-color: $bg-light !important;
+}
+
+.ngx-pagination .current {
+  background: $warning-color !important;
+  padding: 0.5rem 1rem !important;
+  color: $info-color;
+}
+
+.ngx-pagination a:hover,
+.ngx-pagination button:hover {
+  background-color: transparent !important;
+}
+
+.ngx-pagination .pagination-next a:after,
+.ngx-pagination .pagination-next.disabled:after {
+  margin: 0 !important;
+}
+
+.ngx-pagination .pagination-previous a:before,
+.ngx-pagination .pagination-previous.disabled:before {
+  margin: 0 !important;
+}

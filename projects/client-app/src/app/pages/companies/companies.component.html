@@ -1,0 +1,85 @@
+<div class="position-relative header">
+  <div class="bg-primary fixed-top w-100">
+    <app-navbar>
+
+    </app-navbar>
+  </div>
+</div>
+<div class="h-100 bg-info-o" [class]="user? 'py-5':'py-0'">
+  <div class="container py-5 " [class]="user? 'mt-5':'mt-0'">
+
+    <div class="row mt-4">
+      <div class="col-lg-4 col-xl-3 d-none d-lg-block pt-5">
+        <div class="card border-0 rounded-16">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center gap-3">
+              <h5 class="card-title text-primary fw-600 m-0" translate="filtration"></h5>
+              <a role="button" class="btn text-info btn-light" (click)="clear()">{{'clients.clear'|translate}}</a>
+            </div>
+
+            <div class="flex-column gap-2 d-flex">
+
+              <div class="mt-3">
+                <div class="form-check mb-3" *ngFor="let item of services; let i = index">
+                  <input type="radio" class="form-check-input" name="radio" [id]="'filterOP-' + item.id"
+                    [value]="item.id" class="non-checked" (click)="getValue($event)" />
+                  <label class="form-check-label">
+                    {{ (lang.isAr | async) ? item.name : item.nameEN }}
+                  </label>
+                </div>
+              </div>
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-8 col-xl-9 mt-5">
+        <div class="d-flex mb-4 flex-wrap flex-row-reverse flex-md-row justify-content-center align-items-center gap-3">
+
+          <div class="col-12 col-md-6">
+            <div class="input-group bg-info-o">
+              <input type="text" (keyup)="myFunction($event)" class="form-control placeholder-sm" aria-label="Enter your email address"
+                aria-describedby="button-search" placeholder="{{ 'search_security_companies' | translate }}"
+                [(ngModel)]="searchKey" />
+              <button class="btn btn-warning text-white rounded-8" type="button" id="button-search">
+                <i class="fa-solid fa-magnifying-glass"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="row g-3 p-0">
+          <app-company-card *ngFor="
+              let item of companies
+                | filter: searchKey
+                | paginate
+                  : {
+                      itemsPerPage: pageSize,
+                      currentPage: pageNumber,
+                      totalItems: total,
+                      id: 'companies'
+                    }
+            " [data]="item"></app-company-card>
+        </div>
+        <div class="d-flex mt-3 align-items-center justify-content-between gap-3">
+          <div class="text-info d-flex gap-3 align-items-center">
+            <label class="fw-500" verify="global.for_page"></label>
+            <div>
+              <select class="form-select bg-white" (change)="onPageSizeChange($event)">
+                <option *ngFor="let size of sizes" [selected]="size == pageSize">
+                  {{ size }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <pagination-controls id="companies" (pageChange)="onPageNumberChange($event)"
+            (pageBoundsCorrection)="onPageNumberChange($event)" [maxSize]="5" [responsive]="true" [previousLabel]="''"
+            [nextLabel]="''" screenReaderPaginationLabel="Pagination" screenReaderPageLabel="page"
+            screenReaderCurrentLabel="You're on page">
+          </pagination-controls>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

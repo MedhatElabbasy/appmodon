@@ -1,0 +1,457 @@
+<div>
+  <div class="container">
+    <span class="badge bg-info rounded-10 fs-6 py-2 fw-normal" [innerHtml]="
+            'step_number' | translate: { stepOrder: step.order, totalSteps: length }
+          "></span>
+    <h5 class="mt-3 fw-bold">{{ "steps." + step.title | translate }}</h5>
+    <p class="text-info">
+      {{ "company_details_step_info" | translate }}
+    </p>
+  </div>
+  <form [formGroup]="companyForm" #form="ngForm" class="container" (ngSubmit)="onSubmit()">
+
+    <!--------------------------------company type-------------------------->
+    <div class="mb-3">
+      <div class="form-floating">
+        <p-dropdown [filter]="true" filterBy="name" styleClass="w-100" [optionLabel]="isAr ? 'nameAr' : 'nameEn'"
+          optionValue="id" [options]="companyScales" [placeholder]="'completeCompanyProfile.companyScales' | translate"
+          formControlName="companyClass"></p-dropdown>
+      </div>
+      <!--start Company Type validation-->
+      <div class="mt-1" *ngIf="form.submitted && controls['companyClass'].invalid">
+        <div *ngIf="controls['companyClass'].errors.required" class="error-message">
+          <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+          {{ 'completeCompanyProfile.companyScale_required' | translate }}
+        </div>
+      </div>
+      <!--end Company Type-->
+    </div>
+
+
+    <!----------------------------------------company class--------------------->
+     <div class="mb-3">
+      <div class="form-floating">
+        <p-dropdown [filter]="true" filterBy="name" styleClass="w-100" [optionLabel]="isAr ? 'name' : 'nameEN'"
+          optionValue="name" [options]="companyTypes" [placeholder]="'completeCompanyProfile.companyTypes' | translate"
+          formControlName="companyType"></p-dropdown>
+      </div> 
+      <!--start Company Class validation-->
+       <div class="mt-1" *ngIf="form.submitted && controls['companyType'].invalid">
+        <div *ngIf="controls['companyType'].errors.required" class="error-message">
+          <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+          {{ 'completeCompanyProfile.companyTypes_required' | translate }}
+        </div>
+      </div>
+      <!--end Company Class-->
+    </div>  
+
+
+    <!----------------------------------commercial Number------------------------------------------>
+
+    <!--commercial Register Number input satrt -->
+    <div class="form-floating mb-3">
+      <input type="number" class="form-control myForm" placeholder="data" id="commercialRegisterNumber"
+        formControlName="commercialRegisterNumber" />
+      <label for="commercialRegisterNumber">
+        {{ "completeCompanyProfile.commercialRegisterNumber" | translate }}
+      </label>
+      <!--commercial Register Number input satrt validation-->
+      <div class="mt-1" *ngIf="form.submitted && controls['commercialRegisterNumber'].invalid">
+        <div *ngIf="controls['commercialRegisterNumber'].errors.required" class="error-message">
+          <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+          {{ 'completeCompanyProfile.commercialRegisterNumber_required' | translate }}
+        </div>
+        <div *ngIf="controls['commercialRegisterNumber'].errors.pattern" class="error-message">
+          <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+          {{ 'completeCompanyProfile.commercialRegisterNumber_valid' | translate }}
+        </div>
+      </div>
+    </div>
+    <!--commercial Register Number input end -->
+
+    <!----------------------------------------commercial number date----------------------------------------->
+
+    <div class="row">
+      <div class="col-md mb-3">
+        <!--start commercial Register Start Date-->
+        <div class="form-floating">
+          <input type="text" class="form-control myForm"  bsDatepicker [maxDate]="today"  #datepickerYMD="bsDatepicker" [bsConfig]="{
+            containerClass: 'theme-red',
+            showWeekNumbers: false,
+            dateInputFormat: 'YYYY-MM-DD'
+          }" id="commercialRegisterStartDate"
+            formControlName="commercialRegisterStartDate" />
+          <label for="commercialRegisterStartDate">
+            {{ "completeCompanyProfile.commercialRegisterStartDate" | translate }}
+          </label>
+
+          <!--satrt commercial Register Start Date validation-->
+          <div class="mt-1" *ngIf="form.submitted && controls['commercialRegisterStartDate'].invalid">
+            <div *ngIf="controls['commercialRegisterStartDate'].errors.required" class="error-message">
+              <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+              {{ 'completeCompanyProfile.commercialRegisterStartDate_required' | translate }}
+            </div>
+          </div>
+        </div>
+        <!--end commercial Register Start Date-->
+      </div>
+      <div class="col-md mb-3">
+        <!--start commercial Register End Date-->
+        <div class="form-floating">
+          <input type="text" class="form-control myForm" [minDate]="today" bsDatepicker  #datepickerYMD="bsDatepicker" [bsConfig]="{
+            containerClass: 'theme-red',
+            showWeekNumbers: false,
+            dateInputFormat: 'YYYY-MM-DD'
+          }" id="commercialRegisterEndDate"
+            formControlName="commercialRegisterEndDate" />
+          <label for="commercialRegisterEndDate">
+            {{ "completeCompanyProfile.commercialRegisterEndDate" | translate }}
+          </label>
+
+          <!--end commercial Register Start Date validation-->
+          <div class="mt-1" *ngIf="form.submitted && controls['commercialRegisterEndDate'].invalid">
+            <div *ngIf="controls['commercialRegisterEndDate'].errors.required" class="error-message">
+              <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+              {{ 'completeCompanyProfile.commercialRegisterEndDate_required' | translate }}
+            </div>
+          </div>
+        </div>
+        <!--end commercial Register End Date-->
+      </div>
+    </div>
+
+<!------------------------------------city of main branch------------------------------------------>
+
+    <!--start city of main branch-->
+    <div class="mb-3">
+      <div class="form-floating">
+        <p-dropdown [filter]="true" filterBy="name" styleClass="w-100" [optionLabel]="isAr ? 'name' : 'nameEN'"
+          optionValue="name" [options]="cities" [placeholder]="'completeCompanyProfile.city_main_branch' | translate"
+          formControlName="mianBranshCity"></p-dropdown>
+      </div>
+      <!--start city of main branch validation-->
+      <div class="mt-1" *ngIf="form.submitted && controls['mianBranshCity'].invalid">
+        <div *ngIf="controls['mianBranshCity'].errors.required" class="error-message">
+          <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+          {{ 'completeCompanyProfile.city_main_branch_required' | translate }}
+        </div>
+      </div>
+      <!--end city of main branch validation-->
+    </div>
+    <!--end city of main branch-->
+
+<!-----------------------------------License Number----------------------------------------->
+
+    <div class="row">
+      <div class="col-md mb-3">
+        <!--start security License Number-->
+        <div class="form-floating mb-3">
+          <input type="number" class="form-control myForm" placeholder="data" id="activityLicenseNumber"
+            formControlName="activityLicenseNumber" />
+          <label for="activityLicenseNumber">
+            {{ "completeCompanyProfile.securityLicenseNumber" | translate }}
+          </label>
+
+          <!--start security License Number validation-->
+          <div class="mt-1" *ngIf="form.submitted && controls['activityLicenseNumber'].invalid">
+            <div *ngIf="controls['activityLicenseNumber'].errors.required" class="error-message">
+              <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+              {{ 'completeCompanyProfile.securityLicenseNumber_required' | translate }}
+            </div>
+            <div *ngIf="controls['activityLicenseNumber'].errors.pattern" class="error-message">
+              <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+              {{ 'completeCompanyProfile.securityLicenseNumber_valid' | translate }}
+            </div>
+          </div>
+        </div>
+        <!--end security License Number-->
+      </div>
+
+            
+<!--------------------------License number end date----------------------------------------->
+
+
+
+      <div class="col-md mb-3">
+        <!--start security License End Date-->
+        <div class="form-floating">
+          <input type="text" class="form-control myForm"  [minDate]="today" bsDatepicker  #datepickerYMD="bsDatepicker" [bsConfig]="{
+            containerClass: 'theme-red',
+            showWeekNumbers: false,
+            dateInputFormat: 'YYYY-MM-DD'
+          }" id="activeEndDate"
+            formControlName="activeEndDate" />
+          <label for="activeEndDate">
+            {{ "completeCompanyProfile.securityLicenseEndDate" | translate }}
+          </label>
+
+          <!--start security License End Date validation-->
+          <div class="mt-1" *ngIf="form.submitted && controls['activeEndDate'].invalid">
+            <div *ngIf="controls['activeEndDate'].errors.required" class="error-message">
+              <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+              {{ 'completeCompanyProfile.securityLicenseEndDate_required' | translate }}
+            </div>
+          </div>
+        </div>
+        <!--end security License End Date-->
+      </div>
+    </div>
+
+
+  <!----------------------------------------part 2----------------------------------------------->
+<!-----------------------------------city & district-----------------------------------------------> 
+  
+<div class="row">
+
+  <div class="col-md mb-3">
+    <!--start City-->
+    <div class="form-floating">
+      <input type="text" class="form-control myForm" id="city" placeholder="data"
+        formControlName="city" />
+      <label for="city">
+        {{ "completeCompanyProfile.City" | translate }}
+      </label>
+
+      <!--start City validation-->
+      <div class="mt-1" *ngIf="form.submitted && controls['city'].invalid">
+        <div *ngIf="controls['city'].errors.required" class="error-message">
+          <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+          {{ 'completeCompanyProfile.City_required' | translate }}
+        </div>
+      </div>
+    </div>
+    <!--end City-->
+  </div>
+
+  <div class="col-md mb-3">
+    <!---start District-->
+    <div class="form-floating">
+      <input type="text" class="form-control myForm" id="district" placeholder="data" formControlName="district" />
+      <label for="district">
+        {{ "completeCompanyProfile.just_district" | translate }}
+      </label>
+
+      <!--start district validation-->
+      <div class="mt-1" *ngIf="form.submitted && controls['district'].invalid">
+        <div *ngIf="controls['district'].errors.required" class="error-message">
+          <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+          {{ 'completeCompanyProfile.just_district_required' | translate }}
+        </div>
+      </div>
+    </div>
+    <!--end district-->
+  </div>
+</div>
+
+  
+  <!----------------------------------------street & building number-------------------------------------------->
+  <div class="row">
+
+    <div class="col-md mb-3">
+      <!--start street-->
+      <div class="form-floating">
+        <input type="text" class="form-control myForm" id="street" placeholder="data" formControlName="street" />
+        <label for="street">
+          {{ "completeCompanyProfile.just_street" | translate }}
+        </label>
+
+        <!--start street validation-->
+        <div class="mt-1" *ngIf="form.submitted && controls['street'].invalid">
+          <div *ngIf="controls['street'].errors.required" class="error-message">
+            <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+            {{ 'completeCompanyProfile.just_street_required' | translate }}
+          </div>
+        </div>
+      </div>
+      <!--end street-->
+    </div>
+
+
+    <div class="col-md mb-3">
+      <!--start buildingNumber -->
+      <div class="form-floating">
+        <input type="text" class="form-control myForm" id="unitNumber" placeholder="data"
+          formControlName="unitNumber" />
+        <label for="unitNumber">
+          {{ "completeCompanyProfile.buildingNumber" | translate }}
+        </label>
+
+        <!--start buildingNumber validation-->
+        <div class="mt-1" *ngIf="form.submitted && controls['unitNumber'].invalid">
+          <div *ngIf="controls['unitNumber'].errors.required" class="error-message">
+            <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+            {{ 'completeCompanyProfile.buildingNumber_required' | translate }}
+          </div>
+          <div *ngIf="controls['unitNumber'].errors.pattern" class="error-message">
+            <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+            {{ 'completeCompanyProfile.buildingNumber_valid' | translate }}
+          </div>
+        </div>
+      </div>
+      <!--end buildingNumber Code-->
+    </div>
+
+  </div>
+  
+
+  <!---------------------------------------postal code & sadB------------------------------------------------->
+  <div class="row">
+
+      <div class="col-md mb-3">
+        <!--start postal Code-->
+        <div class="form-floating">
+          <input type="number" class="form-control myForm" id="postalCode" placeholder="data"
+            formControlName="postalCode" />
+          <label for="postalCode">
+            {{ "completeCompanyProfile.postalCode" | translate }}
+          </label>
+
+          <!--start postal Code validation-->
+          <div class="mt-1" *ngIf="form.submitted && controls['postalCode'].invalid">
+            <div *ngIf="controls['postalCode'].errors.required" class="error-message">
+              <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+              {{ 'completeCompanyProfile.postalCode_required' | translate }}
+            </div>
+            <div *ngIf="controls['postalCode'].errors.pattern" class="error-message">
+              <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+              {{ 'completeCompanyProfile.postalCode_valid' | translate }}
+            </div>
+          </div>
+        </div>
+        <!--end postal Code-->
+      </div>
+
+
+
+      <div class="col-md mb-3">
+        <!--start sadB-->
+        <div class="form-floating">
+          <input type="number" class="form-control myForm" id="sadB" placeholder="data"
+            formControlName="sadB" />
+          <label for="sadB">
+            {{ "completeCompanyProfile.sadB" | translate }}
+          </label>
+
+          <!--start sadB validation-->
+          <div class="mt-1" *ngIf="form.submitted && controls['sadB'].invalid">
+            <div *ngIf="controls['sadB'].errors.required" class="error-message">
+              <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+              {{ 'completeCompanyProfile.sadB_required' | translate }}
+            </div>
+            <div *ngIf="controls['sadB'].errors.pattern" class="error-message">
+              <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+              {{ 'completeCompanyProfile.sadB_valid' | translate }}
+            </div>
+          </div>
+        </div>
+        <!--end sadB-->
+      </div>
+    </div>
+
+    <!------------------------------------------start email------------------------------>
+    <div class="form-floating mb-3">
+      <input type="email" class="form-control myForm" id="email" placeholder="data" formControlName="email" />
+      <label for="email">
+        {{ "completeCompanyProfile.just_email" | translate }}
+      </label>
+
+      <!--start email validation-->
+      <div class="mt-1" *ngIf="form.submitted && controls['email'].invalid">
+        <div *ngIf="controls['email'].errors.required" class="error-message">
+          <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+          {{ 'completeCompanyProfile.just_email_required' | translate }}
+        </div>
+        <!-- <div *ngIf="controls['email'].errors.email" class="error-message">
+          <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+          {{ 'completeCompanyProfile.just_email_valid' | translate }}
+        </div> -->
+        <div *ngIf="controls['email'].errors.pattern" class="error-message">
+          <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+          {{ 'completeCompanyProfile.just_email_valid' | translate }}
+        </div>
+      </div>
+    </div>
+    <!----------------------------------------end email--------------------------------->
+
+    <!-----------------------mobile Number & activity type----------------------->
+<div class="row">
+
+  <div class="col-md mb-3">
+    <!--start MobileNumber -->
+    <div id="mobile" class="form-floating">
+      <div class="form-control d-flex">
+        <select class="form-select py-0 w-fit" id="floatingSelect" [formControl]="code">
+          <option [value]="item.prefixCode" *ngFor="let item of codes">
+            {{ item.ioS2 }}
+          </option>
+        </select>
+        <input type="number" id="phone" formControlName="phoneNumber"
+          class="form-control rounded-0 col p-0" />
+      </div>
+
+      <label for="phone">
+        {{ "completeCompanyProfile.MobileNumber" | translate }}
+      </label>
+    
+      <!--start MobileNumber validation-->
+      <div class="mt-1" *ngIf="form.submitted && controls['phoneNumber'].invalid">
+        <div *ngIf="controls['phoneNumber'].errors.required" class="error-message">
+          <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+          {{ 'completeCompanyProfile.MobileNumber_required' | translate }}
+        </div>
+        <div *ngIf="controls['phoneNumber'].errors.pattern" class="error-message">
+          <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+          {{ 'completeCompanyProfile.MobileNumber_valid' | translate }}
+        </div>
+      </div>
+    </div>
+    <!--end MobileNumber Code-->
+</div>
+
+   <div class="col-md mb-3">
+      <!--activity-->
+      <div class="form-floating">
+        <input type="text" class="form-control myForm" id="activityType" placeholder="data" formControlName="activityType" />
+        <label for="activityType">
+          {{ "completeCompanyProfile.activity" | translate }}
+        </label>
+
+        <!--activity validation-->
+        <div class="mt-1" *ngIf="form.submitted && controls['activityType'].invalid">
+          <div *ngIf="controls['activityType'].errors.required" class="error-message">
+            <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+            {{ 'completeCompanyProfile.activity_required' | translate }}
+          </div>
+        </div>
+      </div>
+      <!--end activity-->
+    </div>
+
+</div>
+
+<!-----------------------------------------Notes------------------------------------------->
+
+<div class="mb-3">
+  <div class="form-floating">
+    <textarea formControlName="others" class="form-control myForm" placeholder="data" id="others"
+      style=" height: 120px"></textarea>
+    <label for="others" translate="completeCompanyProfile.note"></label>
+  </div>
+
+  <div class="error-message" *ngIf="controls['others'].invalid && form.submitted">
+    <div *ngIf="controls['others'].errors.required" class="error-message">
+      <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+      {{ 'completeCompanyProfile.note_required' | translate }}
+    </div>
+  </div>
+</div>
+
+
+<!--------------------------------------------------------------------------------->
+
+    <button type="submit" class="btn btn-primary float-end rounded-8 px-4 mt-4 py-2">
+      {{ "next_step" | translate }}
+    </button>
+  </form>
+
+</div>

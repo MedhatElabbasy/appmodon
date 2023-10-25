@@ -1,0 +1,13 @@
+.id-card {
+  position: absolute;
+  right: 0;
+  left: auto;
+  margin: 0 1rem;
+}
+
+:host :host-context(.ar) {
+  .id-card {
+    right: auto !important;
+    left: 0 !important;
+  }
+}

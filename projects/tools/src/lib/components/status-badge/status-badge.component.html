@@ -1,0 +1,9 @@
+<span
+  [style.background]="addAlpha(status.color, 0.1)"
+  class="badge fw-500 d-flex w-fit p-2 fs-14 gap-2 align-items-center c-badge"
+>
+  <i class="fa-solid fa-square" [style.color]="status.color"></i>
+  <span [style.color]="status.color">{{
+    (lang.isAr | async) ? status.nameAr : status.nameEn
+  }}</span>
+</span>

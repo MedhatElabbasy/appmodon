@@ -1,0 +1,202 @@
+<div class="position-relative header pb-5">
+    <div class="bg-primary position-fixed w-100">
+        <app-navbar> </app-navbar>
+    </div>
+
+</div>
+<div class="h-100 container py-5">
+    <div class="py-5 mt-5" *ngIf="data.length">
+        <div class="d-flex justify-content-between">
+            <h2 class="pb-3 fw-bold" translate="DetailsOffer"></h2>
+            <public-api-status-badge [status]="data[0]?.offerStatus"
+                *ngIf="data[0]?.offerStatus"></public-api-status-badge>
+        </div>
+        <div class="card p-3 my-2 bg-light" *ngFor="let item of
+            data[0].offerPriceGuardsShifts">
+            <h2 class="text-align-center">
+                {{(lang.isAr | async)?
+                item?.clientOrderGuardsShifts?.shiftType?.name:item?.clientOrderGuardsShifts?.shiftType?.nameEN}}
+            </h2>
+            <div class="mt-2">
+                <div class="d-flex">
+                    <h5 class="px-2" translate="jobType"></h5>
+                    <p class="text-info fw-bold"> {{(lang.isAr | async)?
+                        item?.clientOrderGuardsShifts?.jobType?.name:item?.clientOrderGuardsShifts?.jobType?.nameEN}}</p>
+                </div>
+                <div class="d-flex">
+                    <h5 class="px-2" translate="number_required"></h5>
+                    <p class="text-info fw-bold">
+                        {{item?.clientOrderGuardsShifts?.number}}</p>
+                </div>
+                <div class="d-flex">
+                    <h5 class="px-2" translate="amount_for_each_person"></h5>
+                    <p class="text-info fw-bold">{{item?.price}}</p>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <h5 class="px-2" translate="total_amount_for_each_section"></h5>
+                    <p class="text-info fw-bold">{{item?.total}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="mt-2 p-3">
+            <div class="d-flex">
+                <h3 class="text-align-center" translate="total_price"></h3>
+                <p class="fs-4 fw-bold px-2 text-danger">{{data[0].totalOffer}}
+                    {{'riyal'|translate}}</p>
+            </div>
+
+
+            <div>
+                <div class="mx-2 my-4" *ngIf="messages?.length
+                    ||messages==null">
+                    <h3 translate="DetailsNegotiation"></h3>
+                    <div class="p-3 my-3 bg-light">
+                        <p class="m-0 text-align-center">{{messages[messageLength-1]?.message}}</p>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+            <div>
+                <button class="btn btn-primary float-end mx-2"
+                    translate="accept"
+                    (click)="accept(data[0].id)"
+                    *ngIf="data[0]?.offerStatus?.value==1
+                    ||data[0]?.offerStatusId==null||data[0]?.offerStatus?.value==6"></button>
+                <button
+                    *ngIf="data[0]?.offerStatus?.value==1
+                    ||data[0]?.offerStatusId==null"
+                    (click)="reject(data[0].id)" class="btn btn-danger
+                    float-end
+                    mx-2" translate="refuse"></button>
+                <div *ngIf="data[0]?.offerStatus?.value==5
+                    ||data[0]?.offerStatusId==null">
+                    <button class="btn btn-primary float-end mx-2"
+                        translate="negotiation"
+                        (click)="negotiation(data[0])"></button>
+                </div>
+                <button *ngIf="data[0]?.offerStatus?.value==1
+                    ||data[0]?.offerStatusId==null||data[0]?.offerStatus?.value==5||data[0]?.offerStatus?.value==6"
+                    (click)="FinalRejection(data[0].id)" class="btn
+                    btn-light
+                    float-end
+                    mx-2" translate="FinalRejection"></button>
+            </div>
+
+
+        </div>
+    </div>
+    <div class="py-5 my-5 " *ngIf="!data.length">
+        <div class="container bg-info-o py-3">
+            <h2 translate="notExistOffer" class="text-align-center my-5"></h2>
+        </div>
+    </div>
+</div>
+<!-- ------------------------------- success ------------------------------- -->
+<public-api-modal [id]="acceptModal" classList="modal-dialog-centered">
+    <img width="50" src="assets/images/icons/checked.png" alt="" class="mb-3" />
+    <h5 class="fw-600">{{'acceptOffer'|translate}}</h5>
+
+    <div class="d-flex justify-content-end gap-2">
+        <button translate="continue" (click)="continue()"
+            type="button"
+            class="btn rounded-8 px-4 py-2 btn-primary text-white"></button>
+    </div>
+</public-api-modal>
+
+
+<public-api-modal [id]="rejectModal" classList="modal-dialog-centered">
+    <h5
+        class="fw-700 pb-3 text-align-center"
+        translate="confirmReject">
+    </h5>
+    <form class="mb-3" [formGroup]="reasonForm"
+        (ngSubmit)="confirm(reasonForm)">
+        <div class="form-floating ">
+            <textarea class="form-control" id="exampleFormControlTextarea1"
+                placeholder="aaaaaaaaa" style="height: 100px"
+                formControlName="reson"></textarea>
+            <label for="floatingInput" translate="reject_reason"></label>
+            <div
+                *ngIf="reasonForm.controls['reson'].hasError('required')&&reasonForm.controls['reson'].touched">
+                <p class="text-danger"
+                    translate="clients.reason_of_reject_required"></p>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center gap-2 mt-3">
+            <button
+                type="button"
+                data-bs-dismiss="modal"
+                class="btn rounded-8 px-4 py-2 btn-light"
+                translate="cancel"></button>
+            <button
+                translate="reports.yes"
+                type="submit"
+                class="btn rounded-8 px-4 py-2 btn-danger"></button>
+        </div>
+    </form>
+
+</public-api-modal>
+
+
+
+<!-- ------------------------------- reject ------------------------------- -->
+<public-api-modal [id]="finalrejectModal" classList="modal-dialog-centered">
+    <img width="50" src="assets/images/icons/checked.png" alt="" class="mb-3" />
+    <h5 class="fw-600">{{'rejectOffer'|translate}}</h5>
+
+    <div class="d-flex justify-content-end gap-2">
+        <button translate="continue" (click)="done()"
+            type="button"
+            class="btn rounded-8 px-4 py-2 btn-primary text-white"></button>
+    </div>
+</public-api-modal>
+
+
+
+<public-api-canvas [id]="negotiationCanvas">
+    <ng-container *ngIf="offerDetails">
+        <h3 class="text-align-center mt-4" translate="negotiate"></h3>
+        <h5 translate="reject_reason" class="my-3"></h5>
+        <div class="container border border-4">
+            <p class="pt-3 px-2 text-align-center">{{offerDetails?.rejectReson}}</p>
+        </div>
+        <div *ngFor="let item of messages">
+            <div class="bg-light p-3 mt-2 rounded-3 w-75 me-auto"
+                *ngIf="item.messageFrom==0">
+                <p class="mb-0">{{item.message}}</p>
+            </div>
+            <div class="bg-light p-3 mt-2 rounded-3 w-75 ms-auto"
+                *ngIf="item.messageFrom==1">
+                <p class="mb-0">{{item.message}}</p>
+            </div>
+        </div>
+        <form class="my-3" [formGroup]="messageForm"
+            (ngSubmit)="sendMessage(messageForm)">
+            <div class="form-floating ">
+                <textarea class="form-control" id="exampleFormControlTextarea1"
+                    placeholder="aaaaaaaaa" style="height: 100px"
+                    formControlName="message"></textarea>
+                <label for="floatingInput" translate="sendMessage"></label>
+                <div
+                    *ngIf="messageForm.controls['message'].hasError('required')&&messageForm.controls['message'].touched">
+                    <p class="text-danger"
+                        translate="message_required"></p>
+                </div>
+            </div>
+            <button
+                translate="send"
+                type="submit"
+                class="btn rounded-8 px-4 py-2 mt-2 float-end btn-primary"></button>
+        </form>
+    </ng-container>
+</public-api-canvas>

@@ -1,0 +1,23 @@
+<button hidden [id]="id + '-canvas-open'" data-bs-toggle="offcanvas" [attr.data-bs-target]="'#' + id + '-canvas'"
+  [attr.aria-controls]="id"></button>
+
+<div class="offcanvas" [ngClass]="{
+    'horizontal offcanvas-bottom': horizontal,
+    'offcanvas-end': !horizontal && !isRtl,
+    'offcanvas-start': !horizontal && isRtl
+  }" [class.offcanvas-start]="isRtl" tabindex="-1" [id]="id + '-canvas'" [ngStyle]="{ height: height }">
+  <button *ngIf="!horizontal" type="button" class="canvas-btn text-reset" data-bs-dismiss="offcanvas" aria-label="Close"
+    [id]="id + '-canvas-close'" (click)="closeListener()">
+    <i class="fa-solid fa-xmark"></i>
+  </button>
+
+  <div *ngIf="horizontal" class="offcanvas-header">
+    <h5 class="offcanvas-title" [translate]="header"></h5>
+
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"
+      (click)="close"></button>
+  </div>
+  <div class="offcanvas-body px-3" [class.small]="horizontal">
+    <ng-content></ng-content>
+  </div>
+</div>

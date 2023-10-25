@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="104" height="90" viewBox="0 0 104 90">
+  <g id="Group_3139" data-name="Group 3139" transform="translate(-292 -34)">
+    <g id="Group_1538" data-name="Group 1538" transform="translate(292.072 33.658)">
+      <rect id="Rectangle_350" data-name="Rectangle 350" width="90" height="90" transform="translate(-0.072 0.342)" fill="none"/>
+      <path id="Subtraction_3" data-name="Subtraction 3" d="M20.23,88.394H83.868a4.417,4.417,0,0,0,0-8.833V21.355A21.688,21.688,0,0,0,78.284,5.637,21.467,21.467,0,0,0,62.636.024H25.641C12.152.024,4.414,7.8,4.414,21.355V79.521a4.417,4.417,0,0,0,0,8.833H17.8C18.539,88.381,19.343,88.394,20.23,88.394ZM44.141,53.022a13.246,13.246,0,0,1,13.242,13.25v13.25H30.9V66.272A13.246,13.246,0,0,1,44.141,53.022ZM35.313,35.356a4.417,4.417,0,0,1,0,8.833H30.9a4.417,4.417,0,0,1,0-8.833Zm22.07,0a4.417,4.417,0,0,1,0,8.833H52.969a4.417,4.417,0,0,1,0-8.833ZM35.313,17.69a4.417,4.417,0,0,1,0,8.833H30.9a4.417,4.417,0,0,1,0-8.833Zm22.07,0a4.417,4.417,0,0,1,0,8.833H52.969a4.417,4.417,0,0,1,0-8.833Z" transform="translate(0.589 0.592)" fill="#12123c"/>
+    </g>
+    <g id="Ellipse_98" data-name="Ellipse 98" transform="translate(351 79)" fill="#449c50" stroke="#fff" stroke-width="2">
+      <circle cx="22.5" cy="22.5" r="22.5" stroke="none"/>
+      <circle cx="22.5" cy="22.5" r="21.5" fill="none"/>
+    </g>
+    <text id="_" data-name="+" transform="translate(390 113)" fill="#fff" font-size="45" font-family="SegoeUI-Bold, Segoe UI" font-weight="700" letter-spacing="0.008em"><tspan x="-31.816" y="0">+</tspan></text>
+  </g>
+</svg>

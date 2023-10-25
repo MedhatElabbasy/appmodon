@@ -1,0 +1,219 @@
+<div class="container py-3 h-100 d-flex flex-column">
+  <!-- ------------------------- choose client view -------------------------- -->
+  <p-dropdown
+    styleClass="bg-white col-md-4 col-12"
+    [options]="clients"
+    placeholder="{{ 'clients.clients' | translate }}"
+    optionLabel="clientCompany.name"
+    [filter]="true"
+    (onChange)="getClientShifts($event.value)"
+  ></p-dropdown>
+
+  <!-- ------------------------- no client selected -------------------------- -->
+  <div
+    class="flex-fill d-flex justify-content-center align-items-center mt-3"
+    *ngIf="!client"
+  >
+    <ng-container *ngTemplateOutlet="noDataSelected"></ng-container>
+  </div>
+
+  <div *ngIf="client" class="d-flex flex-column mt-3 flex-fill">
+    <!-- ------------------------------- header -------------------------------- -->
+    <div class="flex-grow-0">
+      <div class="d-flex justify-content-between align-items-center">
+        <h4
+          class="m-0 fw-600"
+          translate="shifts.manage_shifts_and_schedules"
+        ></h4>
+        <button
+          (click)="canvas.open(addCanvas)"
+          type="button"
+          class="btn d-flex align-items-center gap-2 btn-primary py-2 px-4 rounded-8"
+        >
+          <ion-icon name="add" class="add"></ion-icon>
+          <span translate="shifts.add_shift"></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- -------------------------------- grid --------------------------------- -->
+    <div class="flex-grow-1 d-flex flex-column mt-3">
+      <!-- -------------------------- search and filter -------------------------- -->
+      <div class="card border-0 rounded-10">
+        <div class="card-body">
+          <header
+            class="d-flex gap-3 flex-wrap justify-content-between align-items-center"
+          >
+            <div class="col-12 col-sm-4">
+              <div class="input-group">
+                <span
+                  class="input-group-text border-0 bg-transparent"
+                  id="search"
+                >
+                  <ion-icon name="search"></ion-icon>
+                </span>
+                <input
+                  type="text"
+                  class="form-control"
+                  [placeholder]="'search' | translate"
+                  aria-label="search"
+                  aria-describedby="search"
+                  [(ngModel)]="searchKey"
+                />
+              </div>
+            </div>
+
+            <div
+              *ngIf="false"
+              class="d-flex col-12 col-sm justify-content-between justify-content-sm-end gap-3"
+            >
+              <button
+                type="button"
+                class="btn d-flex text-info gap-2 align-items-center rounded-m rounded-8 bg-info-o"
+              >
+                {{ "order_by" | translate }}
+                <ion-icon name="caret-down-outline"></ion-icon>
+              </button>
+              <button
+                type="button"
+                class="btn d-flex text-info gap-2 align-items-center rounded-m rounded-8 bg-info-o"
+              >
+                <i class="fa-solid fa-sliders"></i>
+                {{ "filtration" | translate }}
+              </button>
+            </div>
+          </header>
+        </div>
+      </div>
+
+      <!-- -------------------------------- data --------------------------------- -->
+      <div class="flex-fill mt-3 mb-4" *ngIf="shifts?.length">
+        <div class="row row-cols-1 g-2">
+          <app-company-shift-card
+            [breakTypes]="breakTypes"
+            [companyShifts]="securityCompanyShifts"
+            (reload)="getClientShifts(client)"
+            [shift]="shift"
+            *ngFor="let shift of shifts | filter: searchKey"
+          ></app-company-shift-card>
+        </div>
+      </div>
+
+      <div
+        *ngIf="!shifts?.length"
+        class="flex-fill d-flex justify-content-center align-items-center"
+      >
+        <app-add-button (click)="canvas.open(addCanvas)">
+          <div class="text-align-center" translate="shifts.add_shift"></div>
+        </app-add-button>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #noDataSelected>
+    <div class="card dashed bg-transparent">
+      <div class="card-body">
+        <div
+          class="d-flex gap-3 align-items-center"
+          translate="shifts.select_client_to_add_shifts"
+        ></div>
+      </div>
+    </div>
+  </ng-template>
+</div>
+
+<!-- ------------------------------ add shift ------------------------------ -->
+<public-api-canvas [id]="addCanvas">
+  <form
+    [formGroup]="shiftForm"
+    (ngSubmit)="addShift()"
+    #form="ngForm"
+    class="h-100"
+  >
+    <div class="d-flex flex-column h-100">
+      <h5 translate="shifts.add_shift" class="fw-500 text-align-center"></h5>
+      <div class="flex-fill">
+        <div class="mt-4 mb-3">
+          <p-dropdown
+            styleClass="w-100"
+            [options]="securityCompanyShifts"
+            placeholder="{{ 'shift' | translate }}"
+            [filter]="true"
+            [optionLabel]="
+              (lang.isAr | async) ? 'shiftType.name' : 'shiftType.nameEn'
+            "
+            optionValue="id"
+            formControlName="companyShiftId"
+          ></p-dropdown>
+
+          <div
+            class="error-message"
+            *ngIf="controls['companyShiftId'].invalid && form.submitted"
+          >
+            <i class="fa-solid fa-circle-exclamation"></i>
+            {{ "validation.field_required" | translate }}
+          </div>
+        </div>
+
+        <div class="row g-4 row-cols-2">
+          <div>
+            <div class="form-floating">
+              <input
+                type="time"
+                class="form-control"
+                id="shift_start"
+                placeholder="data"
+                formControlName="shiftStartTime"
+              />
+              <label
+                for="shift_start"
+                translate="shifts.shift_start_at"
+              ></label>
+            </div>
+            <div
+              class="error-message"
+              *ngIf="controls['shiftStartTime'].invalid && form.submitted"
+            >
+              <i class="fa-solid fa-circle-exclamation"></i>
+              {{ "validation.field_required" | translate }}
+            </div>
+          </div>
+          <div>
+            <div class="form-floating">
+              <input
+                type="time"
+                class="form-control"
+                id="end_date"
+                placeholder="data"
+                formControlName="shiftEndTime"
+              />
+              <label for="end_date" translate="shifts.shift_end_at"></label>
+            </div>
+
+            <div
+              class="error-message"
+              *ngIf="controls['shiftEndTime'].invalid && form.submitted"
+            >
+              <i class="fa-solid fa-circle-exclamation"></i>
+              {{ "validation.field_required" | translate }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="d-flex justify-content-end gap-2 mt-3">
+        <button
+          data-bs-dismiss="offcanvas"
+          type="reset"
+          class="btn bg-info-o px-4 rounded-10"
+          translate="cancel"
+        ></button>
+
+        <button
+          type="submit"
+          class="btn btn-primary px-4 rounded-10"
+          translate="add"
+        ></button>
+      </div>
+    </div>
+  </form>
+</public-api-canvas>

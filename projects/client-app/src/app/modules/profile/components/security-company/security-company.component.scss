@@ -1,0 +1,97 @@
+@import "libs/assets/styles/variables.scss";
+
+
+.header1 {
+  z-index: 1000;
+}
+.avatar {
+  width: 125px;
+  height: 125px;
+  object-fit: cover;
+  object-position: center;
+  position: absolute;
+  transform: translateY(50%);
+}
+
+@media (max-width: 500px) {
+  .header {
+    height: 180px;
+  }
+
+  .avatar {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    object-position: center;
+    transform: translateY(30%);
+  }
+}
+
+.list-group-item {
+  border: 0;
+  padding: 0.2em 0;
+}
+
+.icon {
+  width: 35px;
+  height: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba($color: $warning-color, $alpha: 0.2);
+  color: $warning-color;
+}
+
+.social {
+  .nav-link {
+    padding: 0;
+    display: flex;
+    justify-content: flex-start;
+    font-size: 1.5rem;
+    color: $primary-color;
+
+    &:hover {
+      color: $white;
+    }
+  }
+}
+
+@mixin request-btn($dir) {
+  position: fixed;
+  margin: 1rem;
+  bottom: 0;
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  font-size: 1.3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+
+  @if ($dir == rtl) {
+    right: auto;
+    left: 0;
+  } @else {
+    right: 0;
+    left: auto;
+  }
+}
+
+#float-request-btn {
+  @include request-btn(ltr);
+}
+
+:host-context(.ar) {
+  #float-request-btn {
+    @include request-btn(rtl);
+  }
+}
+
+pre {
+  white-space: pre-wrap; /* css-3 */
+  white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+  white-space: -pre-wrap; /* Opera 4-6 */
+  white-space: -o-pre-wrap; /* Opera 7 */
+  word-wrap: break-word; /* Internet Explorer 5.5+ */
+}

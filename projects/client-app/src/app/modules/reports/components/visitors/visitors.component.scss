@@ -1,0 +1,18 @@
+:host ::ng-deep {
+  .p-image {
+    img {
+      object-fit: cover;
+      object-position: center;
+      border-radius: 8px;
+    }
+  }
+}
+
+.myPadding {
+  padding: 14px 10px;
+}
+
+.header {
+  // height: 240px;
+  z-index: 1000;
+ }

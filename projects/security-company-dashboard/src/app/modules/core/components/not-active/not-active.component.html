@@ -1,0 +1,28 @@
+<div class="vh-100 p-4 bg- ">
+  <div class="d-flex gap-3 align-items-center mb-4">
+    <button
+      (click)="lang.toggleLanguage()"
+      type="button"
+      class="btn lang-btn bg-info-o rounded-8"
+    >
+      <i class="fa-solid fa-globe"></i>
+    </button>
+  </div>
+  <img src="assets/images/logo3.png" height="70" alt="" srcset="" />
+
+  <h3
+    class="mt-5 fw-600 col-md-5 lh-base mb-3 text-capitalize"
+    translate="security_dashboard.account_not_active"
+  ></h3>
+  <!-- <p
+    class="text-info fs-5"
+    translate="security_dashboard.thank_for_choosing_takid"
+  ></p> -->
+
+  <button
+    type="button"
+    class="btn btn-primary px-4 py-2 mt-5 rounded-10"
+    translate="logout"
+    (click)="logout()"
+  ></button>
+</div>

@@ -1,0 +1,8 @@
+.bottom {
+  position: absolute;
+  bottom: 5rem;
+}
+
+::ng-deep .otp-input{
+  border: solid 1px #c5c5c5 !important;
+}

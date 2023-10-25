@@ -1,0 +1,86 @@
+<div class="container py-4 d-flex flex-column" style="min-height: 100%">
+  <div class="d-flex justify-content-between gap-2 flex-wrap">
+    <div
+      [routerLink]="[backLink]"
+      routerLinkActive="router-link-active"
+      class="d-flex align-items-center gap-2 fs-5 gap-3 fw-bold c-pointer"
+    >
+      <ion-icon
+        name="arrow-back-circle-outline"
+        class="rtl-icon"
+        size="large"
+      ></ion-icon>
+      {{ "clients.client_details" | translate }}
+    </div>
+
+    <div *ngIf="false" class="d-flex gap-3 align-items-center">
+      <button
+        type="button"
+        class="btn bg-danger-o text-black gap-2 rounded-8 d-flex align-items-center"
+      >
+        <i class="fa-solid fa-trash text-danger"></i>
+        <span class="d-none d-sm-block" translate="delete"></span>
+      </button>
+      <button
+        type="button"
+        class="btn bg-info-o text-black gap-2 rounded-8 d-flex align-items-center text-black"
+      >
+        <i class="fa-solid fa-pen text-info"></i>
+        <span class="d-none d-sm-block" translate="edit"></span>
+      </button>
+    </div>
+  </div>
+
+  <div class="card mt-3 border-0 rounded-10">
+    <div class="card-body">
+      <div class="d-flex">
+        <div class="flex-shrink-0">
+          <img
+            [src]="client.clientCompany?.photo?.fullLink"
+            [title]="client.clientCompany.name"
+            width="65"
+            height="65"
+            class="obj-cover obj-position-c rounded-8"
+            onerror="this.src = 'assets/images/icons/buldings.png'"
+          />
+        </div>
+        <div class="flex-grow-1 mis-3">
+          <h5 class="m-0 mb-2">{{ client.clientCompany.name }}</h5>
+          <p class="m-0">
+            {{ client.clientCompany.nationalAddress }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card rounded-10 border-0 flex-fill overflow-hidden mt-3">
+    <ul
+      class="nav sub-nav shadow-none rounded-0 flex-shrink-0 nav-tabs flex-nowrap overflow-auto text-nowrap"
+    >
+      <ng-container *ngFor="let link of links">
+        <li *appRole="link.roles" class="nav-item">
+          <a
+            [routerLink]="[link.link]"
+            routerLinkActive="router-link-active"
+            class="nav-link"
+            routerLinkActive="active"
+            >{{ "clients." + link.name | translate }}
+          </a>
+        </li>
+      </ng-container>
+    </ul>
+
+    <div
+      class="card-body d-flex flex-column"
+      [class.p-0]="router.url.includes(excluded)"
+    >
+      <router-outlet *ngIf="!router.url.includes(excluded)"></router-outlet>
+      <div class="wrapper flex-fill" *ngIf="router.url.includes(excluded)">
+        <div class="content">
+          <router-outlet></router-outlet>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,30 @@
+@import "libs/assets/styles/variables";
+
+.header {
+  background-color: $light-color;
+  height: fit-content;
+  border-start-start-radius: 6rem;
+  border-start-end-radius: 6rem;
+  border-end-end-radius: 5rem;
+  border-end-start-radius: 5rem;
+
+  @media (max-width: 500px) {
+    & {
+      height: 180px;
+      border-radius: 2rem;
+    }
+  }
+}
+
+
+
+.breadcrumb-item {
+  color: $primary-color;
+}
+pre{
+  font-size: 16px;
+}
+.content{
+  width: 80%;
+  margin: auto;
+}

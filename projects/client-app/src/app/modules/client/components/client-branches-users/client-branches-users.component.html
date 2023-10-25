@@ -1,0 +1,275 @@
+<div class="position-relative header">
+  <div class="bg-primary fixed-top w-100">
+    <app-navbar> </app-navbar>
+  </div>
+</div>
+
+
+<div class="h-100 bg-info-o py-5">
+
+  <div class="container mt-5 py-5">
+
+<div class="card rounded-8 border-0 mb-4  mt-4">
+  <div class="card-body">
+    <div class="d-flex gap-4 justify-content-between">
+      <div class="d-flex gap-3">
+        <div class="flex-shrink-0">
+          <img [src]="branch.photo?.fullLink" class="obj-cover obj-position-c rounded-8" width="60" height="60">
+        </div>
+        <div class="flex-grow-1">
+          <h5 class="mt-0">{{(lang.isAr | async)? branch.name: branch.nameEn}}</h5>
+          <p class="mb-0">
+            {{branch.address}}
+          </p>
+        </div>
+      </div>
+
+      <p-inputSwitch *ngIf="!branch.isMainBranch" [(ngModel)]="branch.stauts"
+        (ngModelChange)="toggleBranchState(branch)"></p-inputSwitch>
+    </div>
+
+    <hr />
+
+    <h6 translate="description" class="fw-700"></h6>
+
+    <p class="text-info m-0">
+      {{(lang.isAr | async)? branch.overview: branch.overviewEn}}
+    </p>
+  </div>
+</div>
+
+
+<div class="card border-0">
+  <div class="card-body">
+    <div class="mb-3 d-flex gap-3 align-items-center">
+      <ion-icon name="people" class="text-primary" size="large"></ion-icon>
+      <h5 translate="branches.manage_branch_users" class="fw-600 text-primary"></h5>
+    </div>
+
+    <header class="d-flex gap-3 flex-wrap justify-content-between align-items-center">
+      <div>
+        <div class="input-group">
+          <span class="input-group-text border-0 bg-transparent" id="search">
+            <ion-icon name="search"></ion-icon>
+          </span>
+          <input type="text" class="form-control" placeholder="{{ 'search' | translate }}" aria-label="search"
+            aria-describedby="search"  [(ngModel)]="searchKey" />
+        </div>
+      </div>
+
+      <button type="button" class="btn btn-primary rounded-8 px-3" translate="add" (click)="onAdd()"></button>
+    </header>
+
+    <hr />
+
+    <div class="table-responsive table-grid text-primary flex-grow-1">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col" translate="name"></th>
+            <th scope="col" translate="mobile_number"></th>
+            <th scope="col" translate="email"></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="
+                let user of users
+                  | filter: searchKey
+                  | paginate
+                    : {
+                        itemsPerPage: pageSize,
+                        currentPage: pageNumber,
+                        totalItems: total,
+                        id: 'accounts'
+                      }
+              ">
+            <td class="td-photo">
+              <div class="d-flex gap-3 align-items-center">
+                <img [src]="user?.photo?.fullLink!" alt="logo" height="40" width="40"
+                  class="d-block obj-cover obj-position-c rounded-8"
+                  onerror="this.src='assets/images/icons/person.png'" />
+                <div class="fw-500">
+                  {{ user.firstName +" "+user.middleName+" "+user.lastName }}
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="py-2">{{ user.phoneNumber }}</div>
+            </td>
+            <td>
+              <div class="py-2">{{ user.email }}</div>
+            </td>
+            <td>
+              <div class="d-flex justify-content-end gap-4 align-items-center">
+                <div class="d-flex align-items-center gap-3">
+                  <label class="limit">
+                    <span translate="active" *ngIf="user.isActive"></span>
+                    <span translate="not_active" *ngIf="!user.isActive"></span>
+                  </label>
+                  <p-inputSwitch [(ngModel)]="user.isActive" (ngModelChange)="toggleState(user, $event)">
+                  </p-inputSwitch>
+                </div>
+                <div class="d-flex gap-2 justify-content-end">
+                  <button (click)="onEdit(user)" type="button" class="btn rounded-8 bg-primary-o text-primary edit">
+                    <i class="fa-solid fa-pen"></i>
+                  </button>
+                  <button (click)="onDelete(user)" type="button" class="btn rounded-8 bg-danger-o text-danger delete">
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="!users.length">
+            <td colspan="4">
+              <div class="text-align-center text-danger fw-600" translate="no_data_to_show"></div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+</div>
+
+
+</div>
+
+<public-api-canvas [id]="canvasId">
+  <form [formGroup]="userForm" #userFormDirective="ngForm" class="py-2" (ngSubmit)="onSubmit()">
+    <h5 class="fw-600 text-align-center mb-4" translate="branches.add_user"></h5>
+
+    <div class="mb-4">
+      <div class="mx-auto" style="width: 180px; height: 150px;">
+        <public-api-file-upload [Control]="controls['photoId']" [acceptedExtension]="acceptedFiles" [link]="photoLink">
+          <div class="fs-14 text-info text-align-center">
+            {{ "click_to_upload_profile_image" | translate }}
+          </div>
+        </public-api-file-upload>
+      </div>
+
+      <div class="error-message" *ngIf="controls['photoId'].errors?.invalid"
+        [innerHtml]="'validation.image_invalid' | translate"></div>
+    </div>
+
+
+    <div class="bg-info-o d-flex justify-content-between align-items-center p-2 mb-3 rounded-3">
+      <label class="text-info" translate="branches.status"></label>
+      <p-inputSwitch formControlName="isActive"></p-inputSwitch>
+    </div>
+
+    <div class="mb-3 mt-3">
+      <div class="form-floating">
+        <input type="text" class="form-control" id="firstName" placeholder="data" formControlName="firstName" />
+        <label for="firstName" translate="firstName"></label>
+      </div>
+
+      <!--! ------------------------ first name validation ------------------------- -->
+      <div *ngIf="userFormDirective.submitted && controls['firstName'].invalid" class="error-message"
+        [innerHtml]="'validation.first_name_required' | translate"></div>
+    </div>
+    <div class="mb-3">
+      <div class="form-floating">
+        <input type="text" class="form-control" id="middleName" placeholder="data" formControlName="middleName" />
+        <label for="middleName" translate="middle_name"></label>
+      </div>
+
+      <!--! ------------------------ middle name validation ------------------------- -->
+      <div *ngIf="userFormDirective.submitted && controls['middleName'].invalid" class="error-message"
+        [innerHtml]="'validation.middle_name_required' | translate"></div>
+    </div>
+    <div class="mb-3">
+      <div class="form-floating">
+        <input type="text" class="form-control" id="lastName" placeholder="data" formControlName="lastName" />
+        <label for="lastName" translate="lastName"></label>
+      </div>
+
+      <!--! ------------------------ last name validation ------------------------- -->
+      <div *ngIf="userFormDirective.submitted && controls['lastName'].invalid" class="error-message"
+        [innerHtml]="'validation.last_name_required' | translate"></div>
+    </div>
+    <div class="mb-3">
+      <div class="form-floating">
+        <input type="email" class="form-control" id="email" placeholder="data" formControlName="email" />
+        <label for="email" translate="email"></label>
+      </div>
+
+      <!--! -------------------------- email validation --------------------------- -->
+      <div *ngIf="userFormDirective.submitted && controls['email'].invalid">
+        <div class="error-message" *ngIf="controls['email'].hasError('required')"
+          [innerHtml]="'validation.email_required' | translate"></div>
+        <div class="error-message" *ngIf="controls['email'].hasError('email')"
+          [innerHtml]="'validation.email_invalid' | translate"></div>
+      </div>
+    </div>
+
+    <!-- -------------------------------- phone -------------------------------- -->
+    <div class="mb-3">
+      <div id="mobile" class="form-floating">
+        <div class="form-control d-flex">
+          <select class="form-select py-0 w-fit" id="floatingSelect" [formControl]="code">
+            <option [value]="item.prefixCode" *ngFor="let item of codes">
+              {{ item.ioS2 }}
+            </option>
+          </select>
+          <input type="text" id="phone" class="form-control rounded-0 col p-0" formControlName="phoneNumber" />
+        </div>
+
+        <label for="phone">
+          {{ "mobile_number" | translate }}
+        </label>
+      </div>
+
+      <!--! -------------------------- phone validation --------------------------- -->
+      <div *ngIf="MobileNumber.invalid && userFormDirective.submitted">
+        <div class="error-message" *ngIf="MobileNumber.errors.pattern && userFormDirective.submitted"
+          [innerHtml]="'validation.phone_is_not_valid' | translate"></div>
+
+        <div class="error-message" *ngIf="MobileNumber.errors.required && userFormDirective.submitted"
+          [innerHtml]="'validation.phone_required' | translate"></div>
+      </div>
+    </div>
+
+    <!-- --------------------------------- map --------------------------------- -->
+    <div class="mb-3">
+      <div style="height: 180px">
+        <public-api-map-search center="0" [latControl]="controls['lat']" [lngControl]="controls['lng']"
+          [addressControl]="controls['locations']"></public-api-map-search>
+      </div>
+      <div class="error-message" *ngIf="controls['lat'].invalid && userFormDirective.submitted">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        {{ "validation.field_required" | translate }}
+      </div>
+    </div>
+    <!-- ----------------------------- national id ----------------------------- -->
+    <div class="mb-3">
+      <div class="form-floating">
+        <input type="text" class="form-control" id="nationalId" placeholder="data" formControlName="nationalID" />
+        <label for="nationalId" translate="national_id"></label>
+      </div>
+
+      <div class="error-message" *ngIf="controls['nationalID'].invalid && userFormDirective.submitted"
+        [innerHtml]="'validation.national_id_not_valid' | translate"></div>
+    </div>
+
+    <div class="d-flex gap-2 justify-content-end">
+      <button data-bs-dismiss="offcanvas" translate="cancel" type="reset" class="btn px-4 rounded-10"></button>
+      <button type="submit" class="btn btn-primary px-4 rounded-10" translate="add"></button>
+    </div>
+  </form>
+</public-api-canvas>
+
+<public-api-modal classList="modal-dialog-centered" [id]="modalId">
+  <img src="assets/images/svg/delete.svg" alt="" class="mb-3" srcset="" />
+  <h4 class="fw-700" translate="branches.delete_user"></h4>
+  <p class="mt-2 text-info" translate="cancel_this_operation"></p>
+
+  <div class="d-flex justify-content-end gap-2">
+    <button type="button" data-bs-dismiss="modal" class="btn rounded-8 px-4 py-2 btn-light" translate="cancel"
+      (click)="selectedUser = null"></button>
+    <button translate="yes_delete" (click)="delete()" type="button" data-bs-dismiss="modal"
+      class="btn rounded-8 px-4 py-2 btn-danger"></button>
+  </div>
+</public-api-modal>

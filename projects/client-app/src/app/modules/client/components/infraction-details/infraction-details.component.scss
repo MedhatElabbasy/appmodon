@@ -1,0 +1,18 @@
+.status {
+  width: fit-content;
+  text-align: center;
+}
+.menue2 .dropdown-toggle::after {
+  visibility: hidden;
+}
+.header {
+  z-index: 1000;
+}
+.form-check-label {
+  margin-top: 2px;
+}
+@media (max-width: 500px) {
+  #filter {
+    width: 100%;
+  }
+}

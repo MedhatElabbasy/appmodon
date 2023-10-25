@@ -1,0 +1,56 @@
+@import "libs/assets/styles/variables.scss";
+
+.main {
+  background: url("/assets/images/svgs/backgroundimage.svg") $primary-color;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: bottom;
+  min-height: 100vh;
+}
+
+
+.auth-side {
+  left: auto;
+  right: 0;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-image: url(../../../assets/images/svgs/takidlogo.svg),
+      url(../../../assets/images/svgs/modonlogo.svg);
+    background-repeat: no-repeat;
+    background-size: 20%;
+    background-position: 30% 37%, 80% 37%;
+    background-repeat: no-repeat;
+
+  }
+
+  :host-context(.ar) & {
+    position: absolute;
+    left: 0;
+    right: auto;
+  }
+}
+
+.display {
+  margin-top: -1.5rem;
+}
+
+
+.line {
+  // height: 50%;
+  width: 1px;
+  background-color: #8A8AA5;
+  border: 1px solid #8A8AA5;
+  padding: 0;
+  margin: 70px 0;
+}
+
+.vision{
+  position: absolute;
+  bottom: 30px;
+}

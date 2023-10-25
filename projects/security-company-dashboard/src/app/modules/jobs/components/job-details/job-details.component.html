@@ -1,0 +1,425 @@
+<section *ngIf="company">
+  <div class="h-100 py-4 container">
+    <div class="d-flex justify-content-between gap-2">
+      <div routerLinkActive="router-link-active" class="d-flex align-items-center gap-2 fs-5 fw-bold c-pointer">
+        <ion-icon (click)="back()" name="arrow-back-circle-outline" class="rtl-icon" size="large"></ion-icon>
+        {{ "job.job_details" | translate }}
+      </div>
+
+      <div class="d-flex gap-3 align-items-center">
+        <button (click)="onDeleteMode()" type="button"
+          class="btn bg-danger-o text-black gap-2 rounded-8 d-flex align-items-center">
+          <i class="fa-solid fa-trash text-danger"></i>
+          <span class="d-none d-sm-block" translate="delete"></span>
+        </button>
+        <button type="button" (click)="onEditMode()"
+          class="btn bg-info-o text-black gap-2 rounded-8 d-flex align-items-center text-black">
+          <i class="fa-solid fa-pen text-info"></i>
+          <span class="d-none d-sm-block" translate="edit"></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="card mt-3 border-0 rounded-8">
+      <div class="card-body">
+        <!-- ------------------------------- header -------------------------------- -->
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+          <div>
+            <div class="d-flex align-items-center gap-3">
+              <div class="flex-shrink-0">
+                <img [src]="company.companyLogo?.fullLink" alt="company-logo" class="company-logo" />
+              </div>
+              <div class="flex-grow-1">
+                <h5 class="fw-700">{{ company.name }}</h5>
+                <p class="m-0 fs-18">
+                  <span class="text-info mie-2" translate="company_address"></span>{{ company.address }}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex align-items-center gap-3">
+            <div class="bg-warning-o icon">
+              <ion-icon name="calendar"></ion-icon>
+            </div>
+
+            <div>
+              <div class="text-info mb-1 fs-14" translate="job.posted_on"></div>
+              <div class="text-primary fs-18 fw-700">
+                {{ job.createdDateTime }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr />
+        <!-- ----------------------------- description ----------------------------- -->
+        <div>
+          <h6 class="text-info fs-14" translate="job.job_description"></h6>
+          <div class="fs-6 fw-500">
+            {{ isArabic ? job.jobDescription : job.jobDescriptionEN }}
+          </div>
+        </div>
+        <hr />
+        <!-- ------------------------------- details ------------------------------- -->
+        <div class="row row-cols-xl-5 row-cols-md-3 row-cols-2 gy-3">
+          <div>
+            <p class="fs-14 mb-2 text-info" translate="job.open_vacancy"></p>
+            <div class="fw-bold">{{ job.openJobNumber }}</div>
+          </div>
+          <div>
+            <p class="fs-14 mb-2 text-info" translate="job.job_type"></p>
+            <div class="fw-bold">
+              {{ isArabic ? job.jobType.name : job.jobType.nameEN }}
+            </div>
+          </div>
+          <div>
+            <p class="fs-14 mb-2 text-info" translate="job.shift_preference"></p>
+            <div class="fw-bold">
+              {{ isArabic ? job.shiftType.name : job.shiftType.nameEN }}
+            </div>
+          </div>
+          <div>
+            <p class="fs-14 mb-2 text-info" translate="job.required_experience"></p>
+            <div class="fw-bold">{{ job.experinceReqiured }}</div>
+          </div>
+          <div>
+            <p class="fs-14 mb-2 text-info" translate="job.preferred_gender"></p>
+            <div class="fw-bold">
+              {{ isArabic ? job.gender.name : job.gender.nameEN }}
+            </div>
+          </div>
+        </div>
+        <hr />
+        <div>
+          <h6 class="text-info fs-14" translate="job.job_requirements"></h6>
+          <div class="fs-6 fw-500">
+            {{ isArabic ? job.jobReqiurement : job.jobReqiurementEN }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h5 class="my-4" translate="job.received_applications" [translateParams]="{ number: total }"></h5>
+
+    <div class="card rounded-8 border-0 mb-3">
+      <div class="card-body">
+        <header class="d-flex gap-3 flex-wrap justify-content-between align-items-center">
+          <div class="col-12 col-sm-4">
+            <div class="input-group">
+              <span class="input-group-text border-0 bg-transparent" id="search">
+                <ion-icon name="search"></ion-icon>
+              </span>
+              <input type="text" class="form-control" [placeholder]="'search' | translate" aria-label="search"
+                aria-describedby="search" [(ngModel)]="searchKey" />
+            </div>
+          </div>
+
+
+        </header>
+        <hr />
+        <div class="table-responsive text-primary">
+          <table class="table table-striped table-borderless">
+            <thead>
+              <tr>
+                <th scope="col" translate="job.applicant_name"></th>
+                <th scope="col" translate="job.contact_number"></th>
+                <th scope="col" translate="job.applied_on"></th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="c-pointer" *ngFor="
+                  let app of jobApps | filter:searchKey
+                    | paginate
+                      : {
+                          itemsPerPage: pageSize,
+                          currentPage: pageNumber,
+                          totalItems: total,
+                          id: 'apps'
+                        }
+                ">
+                <td>
+                  {{ app.securityGuard.firstName }}
+                  {{ app.securityGuard.lastName }}
+                </td>
+                <td>{{ app.phone }}</td>
+                <td class="text-nowrap">{{ app.createdDateTime }}</td>
+                <td>
+                  <div class="d-flex gap-2 justify-content-end">
+                    <button type="button" (click)="showAppDetails(app)"
+                      class="btn text-nowrap btn-warning rounded-8 text-white d-flex align-items-center gap-2">
+                      <ion-icon name="document-text"></ion-icon>
+                      {{ "job.view_resume" | translate }}
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td *ngIf="!jobApps.length" colspan="4">
+                  <h6 class="fw-600 text-align-center text-danger" translate="no_data_to_show"></h6>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <hr />
+
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+          <div class="text-info d-flex gap-3 align-items-center">
+            <label class="fw-500" translate="for_page"></label>
+            <div>
+              <select class="form-select" (change)="onPageSizeChange($event)">
+                <option *ngFor="let size of sizes" [selected]="size == pageSize">
+                  {{ size }}
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <pagination-controls id="apps" (pageChange)="onPageChange($event)"
+            (pageBoundsCorrection)="onPageChange($event)" [maxSize]="3" [responsive]="true" [previousLabel]="''"
+            [nextLabel]="''" screenReaderPaginationLabel="Pagination" screenReaderPageLabel="page"
+            screenReaderCurrentLabel="You're on page">
+          </pagination-controls>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ----------------------------------------------------------------------- -->
+  <!-- ----------------------------------------------------------------------- -->
+  <!-- ----------------------------------------------------------------------- -->
+
+  <public-api-canvas [id]="detailsID">
+    <div class="d-flex flex-column h-100">
+      <div *ngIf="selectedApp" class="flex-fill">
+        <h5 class="text-align-center fw-600 mt-2 mb-4" translate="job.application_details"></h5>
+        <div class="form-floating mb-3">
+          <input disabled [value]="
+              selectedApp?.securityGuard?.firstName +
+              ' ' +
+              selectedApp?.securityGuard?.lastName
+            " type="email" class="form-control" placeholder="data" />
+          <label translate="job.applicant_name"></label>
+        </div>
+        <div class="mb-2">
+          <label class="text-info fs-14 mb-1" translate="job.contact_number"></label>
+          <div class="fw-700">{{ selectedApp?.phone }}</div>
+        </div>
+        <div class="mb-2">
+          <label class="text-info fs-14 mb-1" translate="emil"></label>
+          <div class="fw-700">{{ selectedApp?.securityGuard?.email }}</div>
+        </div>
+        <div class="row row-cols-2 mb-3">
+          <div>
+            <label class="text-info fs-14 mb-1" translate="job.applied_on"></label>
+            <div class="fw-700">{{ selectedApp?.createdDateTime }}</div>
+          </div>
+          <div>
+            <label class="text-info fs-14 mb-1" translate="job.shift_preference"></label>
+            <div class="fw-700">{{ job?.shiftType?.name }}</div>
+          </div>
+        </div>
+
+        <div class="d-flex rounded-8 justify-content-between gap-2 align-items-center p-2 bg-warning-o">
+          <div class="d-flex align-items-center gap-3">
+            <div class="bg-warning icon flex-shrink-0">
+              <ion-icon name="document-text" class="text-white"></ion-icon>
+            </div>
+
+            <div>
+              <div class="text-info mb-1 fs-14">المرفقات</div>
+              <div class="text-primary fs-18 fw-700">
+                {{ selectedAttachment?.name | slice: 0:15 }}...
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <a type="button" [href]="selectedAttachment?.fullLink" target="_blank"
+              class="btn btn-warning rounded-8 text-white" translate="show">
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="d-flex justify-content-end gap-2">
+        <button translate="cancel" type="submit" class="btn px-4 py-2 rounded-8 bg-info-o"
+          data-bs-dismiss="offcanvas"></button>
+        <button (click)="rejectGuardApplication(selectedApp)" type="button" class="btn btn-warning rounded-10"
+          translate="refuse"></button>
+        <button (click)="acceptGuardApplication(selectedApp)" type="button" class="btn btn-primary rounded-10"
+          translate="accept"></button>
+      </div>
+    </div>
+  </public-api-canvas>
+
+  <public-api-canvas [id]="editJob">
+    <form [formGroup]="jobForm" #form="ngForm" (ngSubmit)="onSubmit()" class="f-container">
+      <div class="form">
+        <h5 *ngIf="!selectedJob" class="text-align-center fw-600 mt-2 mb-4" translate="job.create_new_job"></h5>
+        <h5 *ngIf="selectedJob" class="text-align-center fw-600 mt-2 mb-4" translate="job.edit_job"></h5>
+
+        <div class="mb-3">
+          <p-dropdown styleClass=" w-100" [options]="jobTypes" optionLabel="name" optionValue="id"
+            [placeholder]="'job.job_type' | translate" formControlName="jobTypeId"></p-dropdown>
+
+          <div class="error-message" *ngIf="controls['jobTypeId'].invalid && form.submitted">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            {{ "validation.field_required" | translate }}
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <div class="form-floating">
+            <textarea class="form-control" placeholder="Leave a comment here" id="desc" style="height: 140px"
+              formControlName="jobDescription"></textarea>
+            <label for="desc" translate="job.job_description"></label>
+          </div>
+          <div class="error-message" *ngIf="controls['jobDescription'].invalid && form.submitted">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            {{ "validation.field_required" | translate }}
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <div class="form-floating mb-3">
+            <textarea class="form-control" placeholder="Leave a comment here" id="desc" style="height: 140px"
+              formControlName="jobReqiurement"></textarea>
+            <label for="desc" translate="job.job_requirements"></label>
+          </div>
+          <div class="error-message" *ngIf="controls['jobReqiurement'].invalid && form.submitted">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            {{ "validation.field_required" | translate }}
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <div class="form-floating">
+            <textarea class="form-control" placeholder="Leave a comment here" id="descEN" style="height: 140px"
+              formControlName="jobDescriptionEN"></textarea>
+            <label for="descEN" translate="job.job_descriptionEN"></label>
+          </div>
+          <div class="error-message" *ngIf="controls['jobDescriptionEN'].invalid && form.submitted">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            {{ "validation.field_required" | translate }}
+          </div>
+        </div>
+        <div class="mb-3">
+          <div class="form-floating mb-3">
+            <textarea class="form-control" placeholder="Leave a comment here" id="descEN" style="height: 140px"
+              formControlName="jobReqiurementEN"></textarea>
+            <label for="descEN" translate="job.job_requirementsEN"></label>
+          </div>
+          <div class="error-message" *ngIf="controls['jobReqiurementEN'].invalid && form.submitted">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            {{ "validation.field_required" | translate }}
+          </div>
+        </div>
+
+        <div style="height: 250px" class="mb-3">
+          <public-api-map-search (coordinates)="onLocationListener($any($event))" class="map mb-3">
+          </public-api-map-search>
+          <div class="error-message" *ngIf="controls['locationName'].invalid && form.submitted">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            {{ "validation.field_required" | translate }}
+          </div>
+        </div>
+
+        <div class="row row-cols-1 g-3">
+          <div>
+            <p-dropdown [options]="shifts" class="grid-item" styleClass="w-100" optionLabel="name" optionValue="id"
+              [placeholder]="'shift' | translate" formControlName="shiftTypeId"></p-dropdown>
+
+            <div class="error-message" *ngIf="controls['shiftTypeId'].invalid && form.submitted">
+              <i class="fa-solid fa-circle-exclamation"></i>
+              {{ "validation.field_required" | translate }}
+            </div>
+          </div>
+          <div>
+            <div class="form-floating w-auto">
+              <input type="number" class="form-control" id="openJobNumber" placeholder="data"
+                formControlName="openJobNumber" />
+              <label for="openJobNumber" translate="job.open_vacancy"></label>
+            </div>
+
+            <div class="error-message" *ngIf="controls['openJobNumber'].invalid && form.submitted">
+              <i class="fa-solid fa-circle-exclamation"></i>
+              <span *ngIf="controls['openJobNumber'].errors.required">
+                {{ "validation.field_required" | translate }}
+              </span>
+              <span *ngIf="controls['openJobNumber'].errors.pattern">
+                {{ "validation.not_valid_to_use" | translate }}
+              </span>
+            </div>
+          </div>
+
+          <div>
+            <div class="form-floating w-auto">
+              <input type="number" class="form-control" id="openJobNumber" placeholder="data"
+                formControlName="experinceReqiured" />
+              <label for="openJobNumber" translate="job.required_experience"></label>
+            </div>
+
+            <div class="error-message" *ngIf="controls['experinceReqiured'].invalid && form.submitted">
+              <i class="fa-solid fa-circle-exclamation"></i>
+              <span *ngIf="controls['experinceReqiured'].errors.required">
+                {{ "validation.field_required" | translate }}
+              </span>
+              <span *ngIf="controls['experinceReqiured'].errors.pattern">
+                {{ "validation.not_valid_to_use" | translate }}
+              </span>
+            </div>
+          </div>
+
+          <div>
+            <p-dropdown [options]="genders" class="grid-item" styleClass="w-100" optionLabel="name" optionValue="id"
+              formControlName="genderId" [placeholder]="'job.preferred_gender' | translate"></p-dropdown>
+
+            <div class="error-message" *ngIf="controls['genderId'].invalid && form.submitted">
+              <i class="fa-solid fa-circle-exclamation"></i>
+              {{ "validation.field_required" | translate }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="buttons mt-5 mb-2 d-flex justify-content-end">
+        <button translate="save_changes" type="submit" class="btn px-4 py-2 rounded-8 btn-primary"></button>
+      </div>
+    </form>
+  </public-api-canvas>
+
+  <!-- ------------------------------- delete -------------------------------- -->
+  <public-api-modal classList="modal-dialog-centered" [id]="modalID">
+    <img src="assets/images/svg/delete.svg" alt="" class="mb-3" srcset="" />
+    <h4 class="fw-700" translate="job.are_you_sure_about_deleting_job"></h4>
+    <p class="mt-2 text-info" translate="cancel_this_operation"></p>
+
+    <div class="d-flex justify-content-end gap-2">
+      <button type="button" data-bs-dismiss="modal" class="btn rounded-8 px-4 py-2 btn-light" translate="cancel"
+        (click)="selectedJob = null"></button>
+      <button translate="yes_delete" (click)="onDelete()" type="button"
+        class="btn rounded-8 px-4 py-2 btn-danger"></button>
+    </div>
+  </public-api-modal>
+</section>
+
+<!-- ------------------------------- success ------------------------------- -->
+<public-api-modal [id]="successAlert" classList="modal-dialog-centered">
+  <img width="50" src="assets/images/icons/checked.png" alt="" class="mb-3" />
+  <h5 class="fw-600" translate="job.applicant_accepted_message"></h5>
+
+  <div class="d-flex justify-content-end gap-2">
+    <button translate="continue" data-bs-dismiss="modal" type="button"
+      class="btn rounded-8 px-4 py-2 btn-primary text-white"></button>
+  </div>
+</public-api-modal>
+<!-- ------------------------------- success ------------------------------- -->
+<public-api-modal [id]="successAlert2" classList="modal-dialog-centered">
+  <img width="50" src="assets/images/icons/checked.png" alt="" class="mb-3" />
+  <h5 class="fw-600" translate="job.applicant_reject_message"></h5>
+
+  <div class="d-flex justify-content-end gap-2">
+    <button translate="continue" data-bs-dismiss="modal" type="button"
+      class="btn rounded-8 px-4 py-2 btn-primary text-white"></button>
+  </div>
+</public-api-modal>

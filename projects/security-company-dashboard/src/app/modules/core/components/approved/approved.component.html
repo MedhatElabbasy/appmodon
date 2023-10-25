@@ -1,0 +1,27 @@
+<div class="vh-100 p-4 bg- ">
+  <div class="d-flex gap-3 align-items-center mb-4">
+    <button
+      (click)="lang.toggleLanguage()"
+      type="button"
+      class="btn lang-btn bg-info-o rounded-8"
+    >
+      <i class="fa-solid fa-globe"></i>
+    </button>
+  </div>
+  <img src="assets/images/logo3.png" height="70" alt="" srcset="" />
+
+  <h3 class="mt-5 fw-600" translate="welcome_in_takid"></h3>
+  <p class="text-info fs-5" translate="happy_to_work_with_you"></p>
+
+  <ul class="reasons mt-4">
+    <li translate="account_accepted"></li>
+    <li translate="waiting_approve"></li>
+  </ul>
+
+  <button
+    type="button"
+    class="btn btn-primary px-4 py-2 rounded-10 mt-5"
+    translate="logout"
+    (click)="logout()"
+  ></button>
+</div>

@@ -1,0 +1,97 @@
+<div class="flex-fill gap-3 d-flex flex-column">
+    <div class="flex-fill" *ngIf="guards?.length">
+      <div class="row g-3 row-cols-md-2 row-cols-xl-2">
+        <div
+         
+          *ngFor="
+            let guard of guards
+              
+              | paginate
+                : {
+                    itemsPerPage: pageSize,
+                    currentPage: pageNumber,
+                    totalItems: total,
+                    id: 'guards'
+                  }
+          "
+        >
+    
+        <div class="card rounded-10 h-100" >
+            <div class="card-body">
+              <span
+                class="badge bg-primary-o text-primary fs-14 p-2 fw-600 position-absolute id-card"
+              >
+                ID: {{ guard.companySecurityGuard.securityGuard.id }}
+              </span>
+              <div class="h-100 d-flex flex-column">
+                <div class="flex-fill d-flex flex-column">
+                  <img
+                    [src]="guard.companySecurityGuard.securityGuard.photo?.fullLink"
+                    class="obj-cover obj-position-c mb-3 rounded-8"
+                    width="60"
+                    height="60"
+                    onerror="this.src = 'assets/images/icons/earth.png'"
+                  />
+                  <h5 class="card-title mb-2">
+                    {{
+                      guard.companySecurityGuard.securityGuard.firstName +
+                        " " +guard.companySecurityGuard.securityGuard.middleName+" "+
+                        guard.companySecurityGuard.securityGuard.lastName
+                    }}
+                  </h5>
+                  <div class="card-subtitle mb-2 text-info">
+                    {{ guard.companySecurityGuard.securityGuard.email }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+    </div>
+      </div>
+    </div>
+
+    <div
+      class="flex-fill d-flex justify-content-center align-items-center"
+      *ngIf="!guards?.length"
+    >
+      <div class="card dashed bg-transparent">
+        <div class="card-body">
+          <div
+            class="d-flex gap-3 align-items-center"
+            translate="clients.no_guards_on_location"
+          ></div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      *ngIf="guards?.length"
+      class="d-flex flex-wrap align-items-center justify-content-between gap-3"
+    >
+      <div class="text-info d-flex gap-3 align-items-center">
+        <label class="fw-500" translate="global.for_page"></label>
+        <div>
+          <select class="form-select" (change)="onPageSizeChange($event)">
+            <option *ngFor="let size of sizes" [selected]="size == pageSize">
+              {{ size }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <pagination-controls
+        id="guards"
+        (pageChange)="onPageNumberChange($event)"
+        (pageBoundsCorrection)="onPageNumberChange($event)"
+        [maxSize]="3"
+        [responsive]="true"
+        [previousLabel]="''"
+        [nextLabel]="''"
+        screenReaderPaginationLabel="Pagination"
+        screenReaderPageLabel="page"
+        screenReaderCurrentLabel="You're on page"
+      >
+      </pagination-controls>
+    </div>
+  </div>

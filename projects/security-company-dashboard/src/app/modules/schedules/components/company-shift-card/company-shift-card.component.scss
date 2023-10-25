@@ -1,0 +1,14 @@
+@import "libs/assets/styles/variables.scss";
+
+.wrapper {
+  height: 50px;
+}
+
+.disable,
+input:disabled {
+  color: rgba($color: $info-color, $alpha: 0.2) !important;
+}
+
+input[type="time"]::-webkit-datetime-edit-ampm-field {
+  display: none;
+}

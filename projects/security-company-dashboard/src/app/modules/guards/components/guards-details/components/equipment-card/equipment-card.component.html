@@ -1,0 +1,21 @@
+<div class="card border-0 rounded-12 cursor-pointer">
+  <div class="card-body rounded-4 backGround">
+    <div class="d-flex flex-column flex-md-row gap-3 align-items-md-center">
+      <div class="flex-shrink-0">
+        <img
+          [src]="data?.equipmentPhoto?.fullLink!=null?data?.equipmentPhoto?.fullLink:'assets/images/images/tower.jpg'"
+          class="obj-cover obj-position-c company-logo rounded-10" />
+      </div>
+      <div class="flex-grow-1 d-flex flex-column gap-3">
+        <h5 class="fw-bold m-0">{{data?.equipmentName}}</h5>
+        <div class="d-flex flex-wrap gap-2">
+          <ng-container>
+            <span class="badge px-3 py-2 fw-normal fw-500 bg-primary-o rounded-8 text-primary">
+              {{data?.equipmentType}}
+            </span>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

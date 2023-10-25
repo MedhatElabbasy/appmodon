@@ -1,0 +1,14 @@
+$m: 0.5rem;
+
+#edit-location {
+  top: $m;
+  left: auto;
+  right: $m;
+}
+
+:host :host-context(.ar) {
+  #edit-location {
+    left: $m !important;
+    right: auto !important;
+  }
+}

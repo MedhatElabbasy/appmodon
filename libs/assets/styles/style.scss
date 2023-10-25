@@ -1,0 +1,20 @@
+/* autoprefixer: off */
+
+@import "../../../node_modules/@fortawesome/fontawesome-free/css/all.css";
+@import "../../../node_modules/primeng/resources/themes/saga-blue/theme.css";
+@import "../../../node_modules/primeng/resources/primeng.min.css";
+@import "../../../node_modules/primeicons/primeicons.css";
+@import "../../../node_modules/ngx-owl-carousel-o/lib/styles/prebuilt-themes/owl.carousel.min.css";
+@import "../../../node_modules/ngx-owl-carousel-o/lib/styles/prebuilt-themes/owl.theme.default.min.css";
+@import "../../../node_modules/ngx-bootstrap/datepicker/bs-datepicker";
+@import "~libs/assets/styles/default";
+@import "~node_modules/bootstrap/scss/bootstrap";
+@import "~libs/assets/styles/typography.scss";
+@import "~libs/assets/styles/pagination.scss";
+@import "~libs/assets/styles/popups.scss";
+@import "~libs/assets/styles/tables.scss";
+@import "~libs/assets/styles/forms";
+
+.ngx-pagination {
+  margin-bottom: 0 !important;
+}

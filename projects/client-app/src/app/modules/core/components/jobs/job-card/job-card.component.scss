@@ -1,0 +1,60 @@
+@import "libs/assets/styles/variables.scss";
+
+@mixin number($size) {
+  width: $size;
+  height: $size;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $primary-color;
+  font-weight: 600;
+}
+
+@media (max-width: 500px) {
+  .company-logo {
+    width: 80px;
+    height: 80px;
+  }
+
+  .number {
+    @include number(60px);
+  }
+}
+
+@media (min-width: 501px) {
+  .company-logo {
+    width: 100px;
+    height: 100px;
+  }
+
+  .number {
+    @include number(70px);
+  }
+}
+
+.float-inline-end {
+  float: right;
+}
+
+:host-context(.ar) {
+  .float-inline-end {
+    float: left;
+  }
+}
+.my-background {
+  background-color: #6a1244;
+  color: white;
+  border: 1px solid;
+  border-radius: 20px 0px;
+}
+.clr {
+  clear: both;
+}
+.iconBg,
+.iconBg1 {
+  background-color: #e7e7fb;
+}
+
+.mySize {
+  font-size: 10px !important;
+}

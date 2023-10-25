@@ -1,0 +1,98 @@
+<div class="py-5 bg-primary">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-xl-4 col-md-4">
+        <!-- <img src="assets/images/logo.png" width="160" class="mb-4" alt="" /> -->
+        <img src="assets/images/svgs/modonwhitelogo.svg" class="mx-3 mb-3" height="100" alt="" srcset="">
+        <img src="assets/images/svgs/takidwhitelogo.svg" class="mx-3 mb-3" height="100" alt="" srcset="">
+        <div class=" mb-4 fs-14">
+          <p> {{ "footer_description" | translate }}</p>
+        </div>
+        <h6 class="text-white text-capitalize mb-3 fw-600">
+          {{ "follow_us" | translate }}
+        </h6>
+        <ul class="nav social">
+          <li class="nav-item">
+            <a class="nav-link" target="_blank" href="https://www.facebook.com/takidsaapp/about_profile_transparency">
+              <i class="fa-brands fa-facebook"></i></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" target="_blank" href="https://www.tiktok.com/@takid.app">
+              <i class="fa-brands fa-tiktok"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" target="_blank" href="https://twitter.com/takidplatform">
+              <i class="fa-brands fa-twitter"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="col-xl-2 col-6 col-md-4 fs-14">
+        <h6 target="_blank" class="text-capitalize text-white fw-600 mb-4">
+          {{ "about_us" | translate }}
+        </h6>
+        <ul class="list">
+          <li>
+            <a target="_blank" [routerLink]="links.faqs" routerLinkActive="active">
+              {{ "faqs" | translate }}
+            </a>
+          </li>
+          <li>
+            <a target="_blank" href="https://takid.sa/contact-us/">
+              {{ "contact" | translate }}
+            </a>
+          </li>
+          <li>
+            <a target="_blank" [routerLink]="links.privacyPolicy" routerLinkActive="active">
+              {{ "privacy" | translate }}
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="col-xl-2 col-md-3 col-6 fs-14">
+        <h6 class="text-capitalize text-white fw-600 mb-4">
+          {{ "for_work" | translate }}
+        </h6>
+        <ul class="list">
+          <!-- <li>
+            <a [routerLink]="links.jobs">
+              {{ "jobs" | translate }}
+            </a>
+          </li> -->
+          <li>
+            <a [routerLink]="links.companies">
+              {{ "companies" | translate }}
+            </a>
+          </li>
+          <li>
+            <a target="_blank" [routerLink]="links.postProposal" routerLinkActive="active">
+              {{ "post_proposal" | translate }}
+            </a>
+          </li>
+          <li>
+            <a target="_blank" [routerLink]="links.termsConditions" routerLinkActive="active">
+              {{ "types" | translate }}
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="col-xl-4 col-md-6 fs-14">
+        <h6 class="text-capitalize text-white fw-600 mb-4">
+          {{ "news" | translate }}
+        </h6>
+        <p class=" col-md-5">
+          {{ "get_all_updates" | translate }}
+        </p>
+        <div class="input-group mb-3">
+          <input type="email" class="form-control placeholder-sm" placeholder="{{ 'emil' | translate }}"
+            aria-label="Enter your email address" aria-describedby="button-search" />
+          <a target="_blank" href="mailto: info@takid.sa" class="btn btn-warning text-white rounded-8" type="button"
+            id="button-search">
+            <i class="fa-solid fa-arrow-right-long rtl-flip"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

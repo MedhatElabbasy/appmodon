@@ -1,0 +1,45 @@
+@import "libs/assets/styles/variables.scss";
+
+@mixin number($size) {
+  width: $size;
+  height: $size;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $info-color;
+  font-weight: 600;
+}
+.backGround{
+  background-color: #dedeeb !important;
+}
+@media (max-width: 500px) {
+  .company-logo {
+    width: 80px;
+    height: 80px;
+  }
+
+  .number {
+    @include number(60px);
+  }
+}
+
+@media (min-width: 501px) {
+  .company-logo {
+    width: 100px;
+    height: 100px;
+  }
+
+  .number {
+    @include number(70px);
+  }
+}
+
+.float-inline-end {
+  float: right;
+}
+
+:host-context(.ar) {
+  .float-inline-end {
+    float: left;
+  }
+}

@@ -1,0 +1,134 @@
+<div class="position-relative header">
+    <div class="bg-primary fixed-top w-100">
+        <app-navbar>
+
+        </app-navbar>
+    </div>
+</div>
+<div class="h-100 bg-info-o  py-5">
+
+    <div class="container py-5 mt-5">
+        <div class="row mt-4">
+            <div
+                class="d-flex mb-4 mt-5 flex-wrap flex-row-reverse flex-md-row justify-content-center align-items-center gap-3">
+
+                <div class="card h-100 rounded-12 border-0 mb-3">
+
+                    <div *ngFor="let site of sites;"
+                        class="card-body d-flex flex-column">
+
+                        <div
+                            class="d-flex flex-wrap flex-md-row gap-3 align-items-start">
+                            <img
+                                [src]="site.sitePhoto?.fullLink"
+                                class="obj-cover obj-position-c rounded-10"
+                                width="300"
+                                height="130" />
+                            <div class="flex-fill d-none d-md-block">
+                                <h5 class="fw-600 text-primary">{{ site.siteName
+                                    }}</h5>
+                                <p class="text-info">{{ site.siteAddress }}</p>
+                                <div class="row row-cols-xl-4 row-cols-2">
+                                    <div>
+                                        <h6 class="text-info fs-14"
+                                            translate="clients.enable_geo"></h6>
+                                        <p *ngIf="site.enableGeolocation"
+                                            class="text-primary fw-700">
+                                            {{ "global.active" | translate }}
+                                        </p>
+
+                                        <p *ngIf="!site.enableGeolocation"
+                                            class="text-primary fw-700">
+                                            {{ "global.DeActiveUser" | translate
+                                            }}
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <h6
+                                            class="text-info fs-14"
+                                            translate="clients.locations_on_this_site"></h6>
+                                        <p class="text-primary fw-700">
+                                            {{ site.siteLocations.length }}
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <h6 class="text-info fs-14"
+                                            translate="shift"></h6>
+                                        <p class="text-primary fw-700">
+                                            {{ site.siteSupervisorShifts.length
+                                            }}
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <h6 class="text-info fs-14"
+                                            translate="global.number_of_guards"></h6>
+                                        <p class="text-primary fw-700">
+                                            {{ site.totalNumberOfGurds }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12 d-block d-md-none">
+                                <h5 class="fw-600 text-primary">{{ site.siteName
+                                    }}</h5>
+                                <p class="text-info">{{ site.siteAddress }}</p>
+                                <div class="row row-cols-xl-4 row-cols-2">
+                                    <div>
+                                        <h6 class="text-info fs-14"
+                                            translate="clients.enable_geo"></h6>
+                                        <p *ngIf="site.enableGeolocation"
+                                            class="text-primary fw-700">
+                                            {{ "users.active" | translate }}
+                                        </p>
+
+                                        <p *ngIf="!site.enableGeolocation"
+                                            class="text-primary fw-700">
+                                            {{ "users.DeActiveUser" | translate
+                                            }}
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <h6
+                                            class="text-info fs-14"
+                                            translate="clients.locations_on_this_site"></h6>
+                                        <p class="text-primary fw-700">
+                                            {{ site.siteLocations.length }}
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <h6 class="text-info fs-14"
+                                            translate="global.shift"></h6>
+                                        <p class="text-primary fw-700">
+                                            {{ site.siteSupervisorShifts.length
+                                            }}
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <h6 class="text-info fs-14"
+                                            translate="global.number_of_guards"></h6>
+                                        <p class="text-primary fw-700">
+                                            {{ site.totalNumberOfGurds }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+
+                        </div>
+                        <hr>
+                    </div>
+
+                    <div
+                        *ngIf="!sites?.length"
+                        class="h-100 d-flex align-items-center justify-content-center">
+                        <div class="dashed">
+                            <div class="text-align-center"
+                                translate="clients.no_sites_exist"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

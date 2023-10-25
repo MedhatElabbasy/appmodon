@@ -1,0 +1,283 @@
+<div class="container">
+  <span
+    class="badge bg-info rounded-10 fs-6 py-2 fw-normal"
+    [innerHtml]="
+      'step_number' | translate: { stepOrder: step.order, totalSteps: length }
+    "
+  ></span>
+
+  <h5 class="mt-3 fw-bold">{{ "steps." + step.title | translate }}</h5>
+  <p class="text-info">
+    {{ "bank_details_step_info" | translate }}
+  </p>
+  <form
+    [formGroup]="bankForm"
+    #form="ngForm"
+    (ngSubmit)="onSubmit()"
+    class="mt-4"
+  >
+    <div>
+      <div class="row g-4">
+        <div class="col-12">
+          <div class="form-floating">
+            <input
+              type="text"
+              class="form-control"
+              formControlName="accountHolderName"
+              placeholder="data"
+            />
+            <label>
+              {{ "account_holder_name" | translate }}
+            </label>
+          </div>
+          <div
+            class="error-message"
+            *ngIf="controls['accountHolderName'].invalid && form.submitted"
+            [innerHtml]="'validation.account_holder_name_required' | translate"
+          ></div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input
+              formControlName="bankName"
+              type="text"
+              class="form-control"
+              placeholder="data"
+            />
+            <label>
+              {{ "bank_name" | translate }}
+            </label>
+          </div>
+          <div
+            class="error-message"
+            *ngIf="controls['bankName'].invalid && form.submitted"
+            [innerHtml]="'validation.bank_name_required' | translate"
+          ></div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input
+              formControlName="bankCode"
+              type="text"
+              class="form-control"
+              placeholder="data"
+            />
+            <label>
+              {{ "bank_code" | translate }}
+            </label>
+          </div>
+          <div
+            class="error-message"
+            *ngIf="controls['bankCode'].invalid && form.submitted"
+          >
+            <i class="fa-solid fa-circle-exclamation"></i>
+            {{ "validation.not_valid_to_use" | translate }}
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input
+              formControlName="taxNumber"
+              type="text"
+              class="form-control"
+              placeholder="data"
+            />
+            <label>
+              {{ "tax_number" | translate }}
+            </label>
+          </div>
+
+          <div
+            class="error-message"
+            *ngIf="controls['taxNumber'].invalid && form.submitted"
+          >
+            <i class="fa-solid fa-circle-exclamation"></i>
+            {{ "validation.not_valid_to_use" | translate }}
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input
+              formControlName="accountName"
+              type="text"
+              class="form-control"
+              placeholder="data"
+            />
+            <label>
+              {{ "account_name" | translate }}
+            </label>
+          </div>
+          <div
+            class="error-message"
+            *ngIf="controls['accountName'].invalid && form.submitted"
+            [innerHtml]="'validation.account_name_required' | translate"
+          ></div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input
+              formControlName="bankBranch"
+              type="text"
+              class="form-control"
+              placeholder="data"
+            />
+            <label>
+              {{ "bank_branch" | translate }}
+            </label>
+          </div>
+          <div
+            class="error-message"
+            *ngIf="controls['bankBranch'].invalid && form.submitted"
+          >
+            <i class="fa-solid fa-circle-exclamation"></i>
+            {{ "validation.not_valid_to_use" | translate }}
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input
+              formControlName="iban"
+              type="text"
+              class="form-control"
+              placeholder="data"
+            />
+            <label>
+              {{ "IBAN_number" | translate }}
+            </label>
+          </div>
+
+          <div
+            class="error-message"
+            *ngIf="controls['iban'].invalid && form.submitted"
+          >
+            <i class="fa-solid fa-circle-exclamation"></i>
+            {{ "validation.not_valid_to_use" | translate }}
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div
+            class="file2 bg-info-o rounded-10"
+            [style.backgroundImage]="'url(' + idProofUrl + ')'"
+            (click)="idProofId.click()"
+          >
+            <input type="file" hidden #idProofId (change)="onUpload($event)" />
+            <div *ngIf="!idProofUrl && !docLink">
+              <img
+                src="assets/images/icons/upload2.png"
+                class="d-block obj mx-auto"
+                alt="file-upload"
+                width="45"
+                height="45"
+              />
+              <div class="mt-3 text-info text-align-center">
+                {{ "upload_id_proof" | translate }}
+              </div>
+            </div>
+            <div
+              *ngIf="docLink"
+              class="h-100 w-100 d-flex align-items-center justify-content-center"
+            >
+              <img
+                src="assets/images/icons/file.png"
+                width="60"
+                height="60"
+                class="obj-contain"
+              />
+            </div>
+          </div>
+          <div
+            class="error-message"
+            *ngIf="controls['idProofId'].invalid && form.submitted"
+            [innerHtml]="'validation.id_proof_required' | translate"
+          ></div>
+        </div>
+      </div>
+
+      <div
+        class="d-flex gap-3 mt-5"
+        [ngClass]="{
+          'justify-content-between': step.prev,
+          'justify-content-end': !step.prev
+        }"
+      >
+        <button
+          *ngIf="step.prev"
+          type="button"
+          class="btn btn-light bg-info-o text-info rounded-8 px-4 py-2"
+          [routerLink]="['/' + module + '/' + step.prev]"
+        >
+          {{ "previous_step" | translate }}
+        </button>
+        <button
+          *ngIf="step.next"
+          type="submit"
+          class="btn btn-primary rounded-8 px-4 py-2"
+        >
+          {{ "next_step" | translate }}
+        </button>
+        <button
+          *ngIf="!step.next && step.order === length"
+          type="submit"
+          class="btn btn-primary rounded-8 px-4 py-2"
+        >
+          {{ "submit" | translate }}
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<!-- Button trigger modal -->
+<button
+  type="button"
+  class="btn btn-primary btn-lg"
+  data-bs-toggle="modal"
+  data-bs-target="#companyRegisterSuccess"
+  hidden
+  #successModal
+>
+  Launch
+</button>
+
+<div
+  class="modal fade"
+  id="companyRegisterSuccess"
+  tabindex="-1"
+  role="dialog"
+  aria-hidden="true"
+  data-bs-backdrop="static"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content rounded-16">
+      <div class="modal-body p-4">
+        <img
+          src="assets/images/icons/email.png"
+          alt="email"
+          height="40"
+          class="d-block"
+        />
+        <h6 class="mt-3 fw-700">
+          {{ "details_submitted_successfully" | translate }}
+        </h6>
+        <p class="mt-3 fs-18 fw-500">
+          {{ "details_submitted_successfully_message" | translate }}
+        </p>
+        <button
+          [routerLink]="pendingLink"
+          type="button"
+          data-bs-dismiss="modal"
+          class="btn d-block mis-auto btn-primary px-4 py-2"
+        >
+          {{ "continue" | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,204 @@
+<div>
+    <div class="container">
+      <span class="badge bg-info rounded-10 fs-6 py-2 fw-normal" [innerHtml]="
+            'step_number' | translate: { stepOrder: step.order, totalSteps: length }
+          "></span>
+      <h5 class="mt-3 fw-bold">{{ "steps." + step.title | translate }}</h5>
+      <p class="text-info">
+        {{ "completeCompanyProfile.commissioner_representative_step_info" | translate }}
+      </p>
+    </div>
+    <form [formGroup]="CommissionerRepresentativeForm" #form="ngForm" class="container" (ngSubmit)="onSubmit()">
+      <!--start identity type-->
+      <div class="mb-3">
+        <div class="form-floating ">
+          <p-dropdown [filter]="true" filterBy="name" styleClass="w-100 " [optionLabel]="isAr ? 'name' : 'nameEn'"
+            optionValue="name" [options]="identity"
+            [placeholder]="'completeCompanyProfile.commissionerIdentity' | translate"
+            formControlName="delegatIdentityType" (onChange)="getData()"></p-dropdown>
+        </div>
+        <!--start commissionerIdentity validation-->
+        <div class="mt-1" *ngIf="form.submitted && controls['delegatIdentityType'].invalid">
+          <div *ngIf="controls['delegatIdentityType'].errors.required" class="error-message">
+            <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+            {{ 'completeCompanyProfile.commissionerIdentity_required' | translate }}
+          </div>
+        </div>
+        <!--end commissionerIdentity-->
+      </div>
+      <!--end identity type-->
+      <!--start full name-->
+      <div class="mb-3">
+        <!--start  FullName-->
+        <div class="form-floating">
+          <input type="text" class="form-control myForm" id="delegatFullName" placeholder="data"
+            formControlName="delegatFullName" />
+          <label for="delegatFullName">
+            {{ "completeCompanyProfile.commissionerFullName" | translate }}
+          </label>
+  
+          <!--start  FullName validation-->
+          <div class="mt-1" *ngIf="form.submitted && controls['delegatFullName'].invalid">
+            <div *ngIf="controls['delegatFullName'].errors.required" class="error-message">
+              <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+              {{ 'completeCompanyProfile.commissionerFullName_required' | translate }}
+            </div>
+            <div *ngIf="controls['delegatFullName'].errors.pattern" class="error-message">
+              <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+              {{ 'completeCompanyProfile.commissionerFullName_invalid' | translate }}
+            </div>
+          </div>
+        </div>
+        <!--end  FullName-->
+      </div>
+      <!--end full name-->
+      <!--start nationality-->
+      <div class="mb-3" *ngIf="controls['delegatIdentityType'].value!='وطنية'">
+        <div class="form-floating">
+          <p-dropdown [filter]="true" filterBy="name" styleClass="w-100" [optionLabel]="isAr ? 'name' : 'nameEN'"
+            optionValue="name" [options]="nationality" [placeholder]="'nationality' | translate"
+            formControlName="delegatNationalty"></p-dropdown>
+        </div>
+        <!--start commissionerNationality validation-->
+        <div class="mt-1" *ngIf="form.submitted && controls['delegatNationalty'].invalid">
+          <div *ngIf="controls['delegatNationalty'].errors.required" class="error-message">
+            <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+            {{ 'completeCompanyProfile.commissionerNationality_required' | translate }}
+          </div>
+        </div>
+        <!--end commissionerNationality-->
+      </div>
+      <!--end nationality-->
+
+      <!-------------------------------delegatIdentityNumber--------------------------------------->
+      <div class="mb-3">
+        <div class="form-floating">
+            <div class="form-floating mb-3">
+                <input type="number" class="form-control myForm" placeholder="data" id="delegatIdentityNumber"
+                  formControlName="delegatIdentityNumber"/>
+                <label for="delegatIdentityNumber">
+                  {{ "completeCompanyProfile.delegatIdentityNumber" | translate }}
+                </label>
+      
+                <!--start delegatIdentityNumber validation-->
+                <div class="mt-1" *ngIf="form.submitted && controls['delegatIdentityNumber'].invalid">
+                  <div *ngIf="controls['delegatIdentityNumber'].errors.required" class="error-message">
+                    <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+                    {{ 'completeCompanyProfile.delegatIdentityNumber_required' | translate }}
+                  </div>
+                  <div *ngIf="controls['delegatIdentityNumber'].errors.pattern" class="error-message">
+                    <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+                    {{ 'completeCompanyProfile.delegatIdentityNumber_valid' | translate }}
+                  </div>
+                </div>
+              </div>
+        </div>
+      </div>  
+      <!------------------------------------------------------------------------------------>
+      <div class="row ">
+        <div class="col-md mb-3">
+          <!--start mobile number-->
+          <div>
+            <div id="mobile" class="form-floating">
+              <div class="form-control d-flex">
+                <select class="form-select py-0 w-fit" id="floatingSelect" [formControl]="code">
+                  <option [value]="item.prefixCode" *ngFor="let item of codes">
+                    {{ item.ioS2 }}
+                  </option>
+                </select>
+                <input type="number" id="phone" formControlName="delegatPhoneNumber"
+                  class="form-control rounded-0 col p-0" />
+              </div>
+  
+              <label for="phone">
+                {{ "completeCompanyProfile.commissionerPhoneNumber" | translate }}
+              </label>
+            </div>
+  
+            <div *ngIf="MobileNumber.invalid && form.submitted">
+              <div class="error-message" *ngIf="MobileNumber.errors.pattern && form.submitted"
+                [innerHtml]="'validation.phone_is_not_valid' | translate"></div>
+  
+              <div class="error-message" *ngIf="MobileNumber.errors.required && form.submitted"
+                [innerHtml]="'validation.phone_required' | translate"></div>
+            </div>
+          </div>
+          <!--end mobile number-->
+        </div>
+        <div class="col-md mb-3">
+          <!--start  Responsibility-->
+          <div class="mb-3">
+            <div class="form-floating">
+              <p-dropdown [filter]="true" filterBy="name" styleClass="w-100" [optionLabel]="isAr ? 'nameAr' : 'nameEn'"
+                optionValue="id" [options]="optionSetItems"
+                [placeholder]="'completeCompanyProfile.commissionerResponsap' | translate"
+                formControlName="delegatResponsabilty"></p-dropdown>
+            </div>
+            <!--start  Responsibility validation-->
+            <div class="mt-1" *ngIf="form.submitted && controls['delegatResponsabilty'].invalid">
+              <div *ngIf="controls['delegatResponsabilty'].errors.required" class="error-message">
+                <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+                {{ 'completeCompanyProfile.commissionerResponsap_required' | translate }}
+              </div>
+            </div>
+            <!--end  Responsibility validation-->
+          </div>
+          <!--end  Responsibility-->
+        </div>
+      </div>
+      <!--start email-->
+      <div class="form-floating mb-3">
+        <input type="email" class="form-control myForm" id="delegatEmail" placeholder="data"
+          formControlName="delegatEmail" />
+        <label for="delegatEmail">
+          {{ "completeCompanyProfile.commissionerEmail" | translate }}
+        </label>
+  
+        <!--start email validation-->
+        <div class="mt-1" *ngIf="form.submitted && controls['delegatEmail'].invalid">
+          <div *ngIf="controls['delegatEmail'].errors.required" class="error-message">
+            <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+            {{ 'completeCompanyProfile.commissionerEmail_required' | translate }}
+          </div>
+          <div *ngIf="controls['delegatEmail'].errors.pattern" class="error-message">
+            <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+            {{ 'completeCompanyProfile.email_valid' | translate }}
+          </div>
+        </div>
+      </div>
+      <!--end email-->
+      <div class="d-flex justify-content-between">
+        <button type="button" class="btn btn-light  bg-info-o text-info rounded-8 px-4 py-2" (click)="previous()">
+          {{ "previous_step" | translate }}
+        </button>
+        <button type="submit" class="btn btn-primary  rounded-8 px-4 py-2">
+          {{ "add" | translate }}
+        </button>
+      </div>
+    </form>
+  </div>
+  
+  <public-api-modal [id]="modalId" classList="modal-dialog-centered">
+    <img width="50" src="assets/images/icons/checked.png" alt="" class="mb-3" />
+    <h6 class="mt-3 fw-700">
+      {{ "completeCompanyProfile.completeProfile_successfully" | translate }}
+    </h6>
+  
+    <button type="button" data-bs-dismiss="modal" (click)="closeModel()" class="btn d-block mis-auto btn-primary px-4 py-2">
+      {{ "continue" | translate }}
+    </button>
+  </public-api-modal>
+
+
+  <public-api-modal [id]="modalDone" classList="modal-dialog-centered">
+    <img width="50" src="assets/images/icons/checked.png" alt="" class="mb-3" />
+    <h6 class="mt-3 fw-700">
+      {{ "details_submitted_successfully" | translate }}
+    </h6>
+    <p class="mt-3 fs-18 fw-500">
+      {{ "details_submitted_successfully_message" | translate }}
+    </p>
+    <button type="button" data-bs-dismiss="modal" (click)="clear()" class="btn d-block mis-auto btn-primary px-4 py-2">
+      {{ "continue" | translate }}
+    </button>
+  </public-api-modal>

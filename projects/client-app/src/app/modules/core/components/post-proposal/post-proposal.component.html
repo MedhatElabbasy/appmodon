@@ -1,0 +1,109 @@
+<div class="bg-primary">
+  <app-navbar>
+
+  </app-navbar>
+</div>
+<div class="container py-4">
+  <div class="py-4">
+    <div class="header px-4 px-md-5">
+      <div class="row h-100 row-cols-2 align-items-center">
+        <div class="mt-8">
+          <h1 class="display-4 fw-700 text-primary d-none d-md-block">
+            {{'post_proposal'|translate}}
+          </h1>
+          <h1 class="fw-700 text-primary d-block d-md-none">{{'post_proposal'|translate}}</h1>
+          <nav class=" fs-18">
+            <a class="text-decoration-none text-primary">{{'home' |translate}}/ </a>
+            <a class="text-decoration-none text-primary">{{'post_proposal'|translate}}</a>
+          </nav>
+        </div>
+        <div class="d-flex justify-content-center">
+          <img src="assets/images/bgs/about.png" alt="about-takid" class="img-fluid" />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container my-5">
+    <form [formGroup]="postForm" (ngSubmit)="send(postForm)">
+      <div class="row">
+        <div class="col-lg-6">
+          <div class=" mb-4">
+            <input type="text" class="form-control py-3" [placeholder]="'fullName'|translate"
+              formControlName="fullName">
+            <div class="text-danger"
+              *ngIf="postForm.controls['fullName'].touched && postForm.controls['fullName'].hasError('required')">
+              {{'global.fullName' |translate}}
+            </div>
+            <div class="text-danger"
+              *ngIf="postForm.controls['fullName'].touched && postForm.controls['fullName'].hasError('pattenn')">
+              {{'global.fullName_pattern' |translate}}
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <input type="email" class="form-control py-3" [placeholder]="'email'|translate" formControlName="email">
+            <div class="text-danger"
+              *ngIf="postForm.controls['email'].touched && postForm.controls['email'].hasError('required')">
+              {{'global.email' |translate}}
+            </div>
+            <div class="text-danger"
+              *ngIf="postForm.controls['email'].touched && postForm.controls['email'].hasError('email')">
+              {{'global.invalidEmail' |translate}}
+            </div>
+          </div>
+          <div class="mb-4">
+            <input class="text-danger" type="text" class="form-control py-3" [placeholder]="'mobile_number'|translate"
+              formControlName="phoneNumber">
+            <div class="text-danger"
+              *ngIf="postForm.controls['phoneNumber'].touched && postForm.controls['phoneNumber'].hasError('required')">
+              {{'global.phone' |translate}}
+            </div>
+            <div class="text-danger"
+              *ngIf="postForm.controls['phoneNumber'].touched && postForm.controls['phoneNumber'].hasError('pattern')">
+              {{'global.invalidPhone' |translate}}
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary w-100 py-2"
+            [disabled]="postForm.invalid">{{'send'|translate}}</button>
+        </div>
+        <div class="col-lg-6">
+          <div class="mb-4">
+            <textarea [placeholder]="'writeProposalAR'|translate " rows="4" class="form-control p-3"
+              id="exampleFormControlTextarea1" formControlName="description"></textarea>
+            <div class="text-danger"
+              *ngIf="postForm.controls['description'].touched && postForm.controls['description'].hasError('required')">
+              {{'global.description' |translate}}
+            </div>
+            <div class="text-danger"
+              *ngIf="postForm.controls['description'].touched && postForm.controls['description'].hasError('minlength')">
+              {{'global.description_min_length' |translate}}
+            </div>
+            <div class="text-danger"
+              *ngIf="postForm.controls['description'].touched && postForm.controls['description'].hasError('maxlength')">
+              {{'global.description_max_length' |translate}}
+            </div>
+          </div>
+
+          <textarea [placeholder]="'writeProposalEN'|translate " rows="4" class="form-control p-3 "
+            id="exampleFormControlTextarea1" formControlName="descriptionEN"></textarea>
+          <div class="text-danger"
+            *ngIf="postForm.controls['descriptionEN'].touched && postForm.controls['descriptionEN'].hasError('required')">
+            {{'global.description' |translate}}
+          </div>
+          <div class="text-danger"
+            *ngIf="postForm.controls['descriptionEN'].touched && postForm.controls['descriptionEN'].hasError('minlength')">
+            {{'global.description_min_length' |translate}}
+          </div>
+          <div class="text-danger"
+            *ngIf="postForm.controls['descriptionEN'].touched && postForm.controls['descriptionEN'].hasError('maxlength')">
+            {{'global.description_max_length' |translate}}
+          </div>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+<app-footer>
+</app-footer>

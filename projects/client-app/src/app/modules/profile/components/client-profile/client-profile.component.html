@@ -1,0 +1,469 @@
+<div class="position-relative header">
+  <div class="bg-primary fixed-top w-100">
+    <app-navbar>
+
+    </app-navbar>
+  </div>
+</div>
+<div class="h-100 py-5 bg-info-o mt-5">
+
+  <div *ngIf="user" class="container mt-5  py-5">
+    <div class="card rounded-16 border-0 mb-4 bg-white mt-4">
+      <div class="card-body mt-5">
+        <div class="d-flex gap-4 flex-wrap align-items-start">
+          <img [src]="user.photo?.fullLink" class="avatar d-block obj-cover" alt=""
+            onerror="this.src = 'assets/images/icons/buldings.png'" />
+          <div class="d-flex justify-content-between flex-fill flex-wrap">
+            <div>
+              <h5 class="fw-600 mb-3 lh-1 text-primary text-capitalize">
+                {{ user.name||user.clientCompanyBranch.name }}
+              </h5>
+              <div>
+                <i class="fa-solid text-info mie-2 fa-location-pin"></i>
+                {{ user.nationalAddress||user.clientCompanyBranch.address }}
+              </div>
+            </div>
+
+            <div>
+              <div>
+                <i class="fa-solid mb-3 text-info mie-2 fa-address-card"></i>
+                {{ user.chargePerson ||user.firstName +" "+user.middleName+" "+user.lastName}}
+              </div>
+              <div>
+                <i class="fa-solid text-info mie-2 fa-phone-flip"></i>
+                {{ user.chargePersonPhoneNumber||user.phoneNumber }}
+              </div>
+            </div>
+            <div class="text-truncate">
+              <i class="fa-solid text-info mie-2 fa-envelope"></i>
+              {{ user.email }}
+            </div>
+
+
+          </div>
+
+          <div class="d-flex align-items-start  justify-content-end">
+            <button (click)="editClient(user)" type="button" class="btn rounded-8 bg-primary-o text-primary edit">
+              <i class="fa-solid fa-pen justify-content-end"></i>
+            </button>
+          </div>
+
+
+        </div>
+
+        <div style="height: 450px" class="mt-5">
+          <google-map width="100%" [options]="{ styles: style }" [center]="mainLocation" [zoom]="5">
+            <map-marker-clusterer
+              imagePath="https://raw.githubusercontent.com/googlearchive/js-marker-clusterer/gh-pages/images/m">
+              <map-marker [position]="{ lat: +lat, lng: +long }">
+              </map-marker>
+            </map-marker-clusterer>
+          </google-map>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- <div>
+      <router-outlet></router-outlet>
+    </div> -->
+
+  </div>
+
+
+  <div *ngIf="!user " class="container">
+    <h4 class="text-align-center fw-bold mt-5">
+      {{ "register_breakdown" | translate }}
+    </h4>
+    <p class="text-info text-align-center fs-5">
+      {{ "no_data_to_show" | translate }}
+    </p>
+    <div class="col-md-4 col-12 mx-auto container">
+      <img src="assets/images/icons/Mobilelogin-cuate.png" class="img-fluid" />
+    </div>
+  </div>
+</div>
+
+<public-api-canvas [id]="canvasID">
+  <form [formGroup]="editClientForm" #form="ngForm" (ngSubmit)="onSubmit()"
+    class="d-flex flex-column gap-3 h-100 p-1 overflow-visible">
+    <div>
+      <h5 translate="edit_profile" class="text-align-center fw-600"></h5>
+      <div class="user-photo bg-info-o my-4 mx-auto text-info">
+        <img *ngIf="profileImage" [src]="profileImage | url" alt="user_image" class="user_image"
+          (click)="userPhoto.click()" />
+        <div [hidden]="profileImage" class="p-3" (click)="userPhoto.click()">
+          <img [src]="user?.photo?.fullLink" alt="" class="d-block" width="150" height="150" />
+          <input (change)="onImageUpload($event)" type="file" hidden #userPhoto />
+        </div>
+      </div>
+
+      <!-- -------------------------------- name --------------------------------- -->
+
+      <div class="d-flex flex-column gap-3">
+        <div>
+          <p-dropdown optionValue="id" styleClass="w-100" [options]="companyTypes"
+            [placeholder]="'facility_type' | translate" [optionLabel]="'name'" [filter]="true" [filterBy]="'name'"
+            formControlName="companyTypeId"></p-dropdown>
+
+          <div class="error-message" *ngIf="clientControls['companyTypeId'].invalid && form.submitted">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            {{ "validation.facility_type_required" | translate }}
+          </div>
+        </div>
+
+        <div>
+          <div class="form-floating">
+            <input type="text" class="form-control" id="Facility_Name" placeholder="data" formControlName="name" />
+            <label for="Facility_Name">
+              {{ "facility_name" | translate }}
+            </label>
+          </div>
+
+          <div class="error-message" *ngIf="clientControls['name'].invalid && form.submitted">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            {{ "validation.facility_name_required" | translate }}
+          </div>
+        </div>
+
+        <div>
+          <div class="form-floating">
+            <input type="text" class="form-control" id="Commercial_ID" placeholder="data"
+              formControlName="commercialRegistrationNumber" />
+            <label for="Commercial_ID">
+              {{ "commercial_id" | translate }}
+            </label>
+          </div>
+
+          <div class="error-message" *ngIf="
+          clientControls['commercialRegistrationNumber'].invalid && form.submitted
+            " [innerHtml]="
+              'validation.commercial_registration_id_required' | translate
+            "></div>
+        </div>
+
+        <div>
+          <div class="form-floating">
+            <input type="text" class="form-control" id="ActivityType" placeholder="data"
+              formControlName="activityType" />
+            <label for="ActivityType">
+              {{ "activity_type" | translate }}
+            </label>
+          </div>
+
+          <div class="error-message" *ngIf="clientControls['activityType'].invalid && form.submitted">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            {{ "validation.activity_type_required" | translate }}
+          </div>
+        </div>
+
+        <div>
+          <div class="form-floating">
+            <input type="email" class="form-control" id="text" placeholder="data" formControlName="email" />
+            <label for="text">{{ "email" | translate }}</label>
+          </div>
+
+          <div *ngIf="form.submitted && clientControls['email'].invalid">
+            <div class="error-message" *ngIf="clientControls['email'].hasError('required')"
+              [innerHtml]="'validation.email_required' | translate"></div>
+            <div class="error-message" *ngIf="clientControls['email'].hasError('email')"
+              [innerHtml]="'validation.email_invalid' | translate"></div>
+          </div>
+        </div>
+        <div>
+          <!-- <div class="form-floating">
+            <input type="text" class="form-control" id="nationalAddress" placeholder="data"
+              formControlName="nationalAddress" />
+            <label for="nationalAddress">
+              {{ "national_address" | translate }}
+            </label>
+          </div> -->
+          <div class="mb-3">
+            <div style="height: 200px">
+              <public-api-map-search [latControl]="clientControls['lat']" [lngControl]="clientControls['long']"
+                [addressControl]="clientControls['nationalAddress']"
+                [searchTerm]="mapSearchTermResturant"></public-api-map-search>
+            </div>
+
+            <!-- <div *ngIf="controls['address'].invalid && form.submitted">
+              <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+              {{ 'validation.not_valid_to_use' | translate }}
+            </div> -->
+          </div>
+          <div class="error-message" *ngIf="clientControls['nationalAddress'].invalid && form.submitted"
+            [innerHtml]="'validation.national_id_not_valid' | translate"></div>
+        </div>
+
+        <div>
+          <div class="form-floating">
+            <input type="text" class="form-control" placeholder="data" formControlName="chargePerson" />
+            <label>
+              {{ "charge_person" | translate }}
+            </label>
+          </div>
+
+          <div class="error-message" *ngIf="clientControls['chargePerson'].invalid && form.submitted">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            {{ "validation.charge_person_name_required" | translate }}
+          </div>
+        </div>
+
+        <div>
+          <div id="mobile" class="form-floating">
+            <div class="form-control d-flex">
+              <input type="text" id="phone" formControlName="chargePersonPhoneNumber"
+                class="form-control rounded-0 col p-0" />
+            </div>
+
+            <label for="phone">
+              {{ "charge_person_pone" | translate }}
+            </label>
+          </div>
+
+          <div *ngIf="MobileNumber.invalid && form.submitted">
+            <div class="error-message" *ngIf="MobileNumber.errors.pattern && form.submitted"
+              [innerHtml]="'validation.phone_is_not_valid' | translate"></div>
+
+            <div class="error-message" *ngIf="MobileNumber.errors.required && form.submitted"
+              [innerHtml]="'validation.phone_required' | translate"></div>
+          </div>
+        </div>
+
+        <div>
+          <p-dropdown optionValue="id" styleClass="w-100" [options]="cities" [placeholder]="'city' | translate"
+            [optionLabel]="'name'" [filter]="true" [filterBy]="'name'" formControlName="cityId"></p-dropdown>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex-grow-1 d-flex justify-content-end align-items-end gap-2 pb-3">
+      <button type="button" class="btn px-4 rounded-8 btn-light" translate="cancel" data-bs-dismiss="offcanvas"
+        (click)="form.resetForm()"></button>
+      <button type="submit" translate="edit" class="btn px-4 rounded-8 btn-primary"></button>
+    </div>
+  </form>
+</public-api-canvas>
+
+<public-api-canvas [id]="canvasUserID">
+  <form [formGroup]="editClientUserForm" #form="ngForm" (ngSubmit)="onSubmitUser()"
+    class="d-flex flex-column gap-3 h-100 p-1 overflow-visible">
+    <div>
+      <h5 translate="edit_profile" class="text-align-center fw-600"></h5>
+      <div class="user-photo bg-info-o my-4 mx-auto text-info">
+        <img *ngIf="pImage" [src]="pImage | url" alt="user_image" class="user_image"
+          (click)="userPhoto.click()" />
+        <div [hidden]="pImage" class="p-3" (click)="userPhoto.click()">
+          <img [src]="user?.photo?.fullLink" alt="" class="d-block" width="150" height="150" />
+          <input (change)="onImageUpload($event)" type="file" hidden #userPhoto />
+        </div>
+      </div>
+
+      <!-- -------------------------------- name --------------------------------- -->
+
+      <div class="d-flex flex-column gap-3">
+
+        <div>
+          <div class="form-floating">
+            <input type="text" class="form-control" id="First_Name" placeholder="data" formControlName="firstName" />
+            <label for="First_Name">
+              {{ "First_Name" | translate }}
+            </label>
+          </div>
+
+          <div class="error-message" *ngIf="clientUserControls['firstName']?.invalid && form.submitted">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            {{ "validation.first_name_required" | translate }}
+          </div>
+        </div>
+
+        <div>
+          <div class="form-floating">
+            <input type="text" class="form-control" id="middleName" placeholder="data" formControlName="middleName" />
+            <label for="middleName">
+              {{ "middleName" | translate }}
+            </label>
+          </div>
+
+          <div class="error-message" *ngIf="clientUserControls['middleName']?.invalid && form.submitted">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            {{ "validation.middle_Name_required" | translate }}
+          </div>
+        </div>
+
+        <div>
+          <div class="form-floating">
+            <input type="text" class="form-control" id="lastName" placeholder="data" formControlName="lastName" />
+            <label for="lastName">
+              {{ "lastName" | translate }}
+            </label>
+          </div>
+
+          <div class="error-message" *ngIf="clientUserControls['lastName']?.invalid && form.submitted">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            {{ "validation.last_Name_required" | translate }}
+          </div>
+        </div>
+
+
+        <div>
+          <div class="form-floating">
+            <input type="text" class="form-control" id="nationalID" placeholder="data"
+              formControlName="nationalID" />
+            <label for="nationalID">
+              {{ "nationalID" | translate }}
+            </label>
+          </div>
+
+          <div class="error-message" *ngIf="
+             clientUserControls['nationalID']?.invalid && form.submitted
+            " [innerHtml]="
+              'validation.national_ID_required' | translate
+            "></div>
+        </div>
+<!-- 
+        <div>
+          <div class="form-floating">
+            <input type="text" class="form-control" id="locations" placeholder="data"
+              formControlName="locations" />
+            <label for="locations">
+              {{ "locations" | translate }}
+            </label>
+          </div>
+
+          <div class="error-message" *ngIf="clientUserControls['locations']?.invalid && form.submitted">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            {{ "validation.locations_required" | translate }}
+          </div>
+        </div> -->
+
+        <div>
+          <div class="form-floating">
+            <input type="email" class="form-control" id="text" placeholder="data" formControlName="email" />
+            <label for="text">{{ "email" | translate }}</label>
+          </div>
+
+          <div *ngIf="form.submitted && clientUserControls['email']?.invalid">
+            <div class="error-message" *ngIf="clientUserControls['email'].hasError('required')"
+              [innerHtml]="'validation.email_required' | translate"></div>
+            <div class="error-message" *ngIf="clientUserControls['email']?.hasError('email')"
+              [innerHtml]="'validation.email_invalid' | translate"></div>
+          </div>
+        </div>
+        <div>
+          <!-- <div class="form-floating">
+            <input type="text" class="form-control" id="nationalAddress" placeholder="data"
+              formControlName="nationalAddress" />
+            <label for="nationalAddress">
+              {{ "national_address" | translate }}
+            </label>
+          </div> -->
+          <div class="mb-3">
+            <div style="height: 200px">
+              <public-api-map-search [latControl]="clientUserControls['lat']" [lngControl]="clientUserControls['lng']"
+                [addressControl]="clientUserControls['locations']"
+                [searchTerm]="mapSearchTermResturant"></public-api-map-search>
+            </div>
+
+            <!-- <div *ngIf="controls['address'].invalid && form.submitted">
+              <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+              {{ 'validation.not_valid_to_use' | translate }}
+            </div> -->
+          </div>
+          <!-- <div class="error-message" *ngIf="controls['nationalAddress'].invalid && form.submitted"
+            [innerHtml]="'validation.national_id_not_valid' | translate"></div> -->
+        </div>
+
+       
+        <div>
+          <div id="mobile" class="form-floating">
+            <div class="form-control d-flex">
+              <input type="text" id="phoneNumber" formControlName="phoneNumber"
+                class="form-control rounded-0 col p-0" />
+            </div>
+
+            <label for="phoneNumber">
+              {{ "person_phoneNumber" | translate }}
+            </label>
+          </div>
+
+          <div *ngIf="phoneNumber.invalid && form.submitted">
+            <div class="error-message" *ngIf="phoneNumber.errors.pattern && form.submitted"
+              [innerHtml]="'validation.phone_is_not_valid' | translate"></div>
+
+            <div class="error-message" *ngIf="phoneNumber.errors.required && form.submitted"
+              [innerHtml]="'validation.phone_required' | translate"></div>
+          </div>
+        </div>
+
+        <div>
+          <p-dropdown optionValue="id" styleClass="w-100" [options]="cities" [placeholder]="'city' | translate"
+            [optionLabel]="'name'" [filter]="true" [filterBy]="'name'" formControlName="cityId"></p-dropdown>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex-grow-1 d-flex justify-content-end align-items-end gap-2 pb-3">
+      <button type="button" class="btn px-4 rounded-8 btn-light" translate="cancel" data-bs-dismiss="offcanvas"
+        (click)="form.resetForm()"></button>
+      <button type="submit" translate="edit" class="btn px-4 rounded-8 btn-primary"></button>
+    </div>
+  </form>
+</public-api-canvas>
+
+<!-- <div class="d-flex gap-2 justify-content-end">
+  <button (click)="editClient(user)" type="button" class="btn rounded-8 bg-primary-o text-primary edit">
+    <i class="fa-solid fa-pen justify-content-end"></i>
+  </button>
+</div> -->
+
+
+<!-- <div class="row g-4">
+  <div class="col-12 d-flex flex-column col-lg-8 col-xl-9">
+    <h5 class="text-primary fw-700">
+      {{ "your_requests" | translate }}
+    </h5>
+    <div class="card rounded-16 flex-grow-1 border-0 mt-4">
+      <div class="card-body">
+        <div *ngIf="!orders?.length" class="py-5">
+          <h5 class="fw-500 text-align-center text-primary">
+            {{ "your_request_is_empty" | translate }}
+          </h5>
+          <img src="assets/images/icons/Nodata-cuate.png" class="img-fluid col-sm-8 d-block mx-auto"
+            alt="no-data" />
+        </div>
+
+        <ng-container *ngIf="orders?.length">
+          <ng-container *ngFor="let item of orders  | paginate
+          : {
+              itemsPerPage: pageSize,
+              currentPage: pageNumber,
+              totalItems: orders.length,
+              id: 'orders'
+            }
+     let e = last">
+            <app-order-card [data]="item"></app-order-card>
+            <hr *ngIf="!e" />
+          </ng-container>
+        </ng-container>
+      </div>
+    </div>
+
+    <div class="d-flex mt-3 align-items-center justify-content-between gap-3">
+      <div class="text-info d-flex gap-3 align-items-center">
+        <label class="fw-500" verify="global.for_page"></label>
+        <div>
+          <select class="form-select bg-white" (change)="onPageSizeChange($event)">
+            <option *ngFor="let size of sizes" [selected]="size == pageSize">
+              {{ size }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <pagination-controls id="orders" (pageChange)="pageNumber = $event"
+        (pageBoundsCorrection)="pageNumber = $event" [maxSize]="3" [responsive]="true" [previousLabel]="''"
+        [nextLabel]="''" screenReaderPaginationLabel="Pagination" screenReaderPageLabel="page"
+        screenReaderCurrentLabel="You're on page">
+      </pagination-controls>
+    </div>
+  </div>
+</div> -->

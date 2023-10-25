@@ -1,0 +1,196 @@
+<div class="card rounded-10 overflow-hidden">
+  <button
+    (click)="onEdit()"
+    id="edit-location"
+    type="button"
+    class="btn bg-white text-primary position-absolute d-block edit"
+  >
+    <i class="fas fa-pen"></i>
+  </button>
+  <img [src]="location.photo?.fullLink" class="w-100 obj-cover" height="200" />
+  <div class="card-body">
+    <h5 class="card-title">{{ location.name }}</h5>
+    <p class="card-text">
+      {{ location.locationAddress }}
+    </p>
+
+    <div>
+      <div class="row row-cols-2 g-3">
+        <div>
+          <h6 class="text-info fs-14" translate="clients.location_height"></h6>
+          <p class="text-primary fw-700">
+            {{ location.locationHight }}
+            {{ "clients.meter" | translate }}
+          </p>
+        </div>
+        <div>
+          <h6 class="text-info fs-14" translate="number_of_guards"></h6>
+          <p class="text-primary fw-700">
+            {{ location.numberOfGuards }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<public-api-canvas [id]="locationCanvas">
+  <form
+    (keydown.enter)="$event.preventDefault()"
+    class="h-100 d-flex flex-column"
+    [formGroup]="locationForm"
+    #form="ngForm"
+    (ngSubmit)="edit()"
+  >
+    <div class="flex-fill">
+      <h5
+        class="fw-600 text-align-center mt-1 mb-4"
+        translate="clients.edit_location"
+      ></h5>
+      <!-- ---------------------------- location name ---------------------------- -->
+      <div class="mb-3">
+        <div class="form-floating">
+          <input
+            type="text"
+            class="form-control"
+            id="locationName"
+            placeholder="location name"
+            formControlName="name"
+          />
+          <label for="locationName" translate="name"></label>
+        </div>
+        <div
+          class="error-message"
+          *ngIf="controls['name'].invalid && form.submitted"
+        >
+          <i class="fa-solid fa-circle-exclamation"></i>
+          {{ "validation.field_required" | translate }}
+        </div>
+      </div>
+
+      <!-- -------------------------------- maps --------------------------------- -->
+      <div class="mb-3">
+        <div style="height: 180px">
+          <public-api-map-search
+            [addressControl]="controls['locationAddress']"
+            [latControl]="controls['locationLat']"
+            [lngControl]="controls['locationLong']"
+          ></public-api-map-search>
+        </div>
+
+        <div
+          class="error-message"
+          *ngIf="controls['locationAddress'].invalid && form.submitted"
+        >
+          <i class="fa-solid fa-circle-exclamation"></i>
+          {{ "validation.field_required" | translate }}
+        </div>
+      </div>
+
+      <!-- -------------------------------- photo -------------------------------- -->
+      <div class="mb-3">
+        <div style="height: 150px">
+          <public-api-file-upload
+            [acceptedExtension]="acceptedExtensions"
+            [Control]="controls['photoId']"
+          >
+            <div class="text-info fs-14">
+              {{ "clients.upload_location_image" | translate }}
+            </div>
+          </public-api-file-upload>
+        </div>
+
+        <div
+          class="error-message"
+          *ngIf="controls['photoId'].invalid && form.submitted"
+        >
+          <i class="fa-solid fa-circle-exclamation"></i>
+          {{ "validation.field_required" | translate }}
+        </div>
+      </div>
+
+      <!-- ----------------------- no of guards and height ----------------------- -->
+      <div class="row row-cols-2">
+        <div>
+          <div class="form-floating">
+            <input
+              type="number"
+              class="form-control"
+              id="locationHeight"
+              placeholder="site height"
+              formControlName="locationHight"
+            />
+            <label
+              for="locationHeight"
+              translate="clients.location_height"
+            ></label>
+          </div>
+
+          <ng-container
+            *ngIf="controls['locationHight'].invalid && form.submitted"
+          >
+            <div
+              class="error-message"
+              *ngIf="controls['locationHight'].errors.required"
+            >
+              <i class="fa-solid fa-circle-exclamation"></i>
+              {{ "validation.field_required" | translate }}
+            </div>
+            <div
+              class="error-message"
+              *ngIf="controls['locationHight'].errors.min"
+            >
+              <i class="fa-solid fa-circle-exclamation"></i>
+              {{ "validation.field_min" | translate }}
+            </div>
+          </ng-container>
+        </div>
+        <div>
+          <div class="form-floating mb-3">
+            <input
+              type="number"
+              class="form-control"
+              id="noOfGuards"
+              placeholder="noOfGuards"
+              formControlName="numberOfGuards"
+            />
+            <label for="noOfGuards" translate="number_of_guards"></label>
+          </div>
+
+          <ng-container
+            *ngIf="controls['numberOfGuards'].invalid && form.submitted"
+          >
+            <div
+              class="error-message"
+              *ngIf="controls['numberOfGuards'].errors.required"
+            >
+              <i class="fa-solid fa-circle-exclamation"></i>
+              {{ "validation.field_required" | translate }}
+            </div>
+            <div
+              class="error-message"
+              *ngIf="controls['numberOfGuards'].errors.min"
+            >
+              <i class="fa-solid fa-circle-exclamation"></i>
+              {{ "validation.field_min" | translate }}
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-end gap-2">
+      <button
+        data-bs-dismiss="offcanvas"
+        type="reset"
+        class="btn bg-info-o px-4 rounded-10"
+        translate="cancel"
+      ></button>
+      <button
+        type="submit"
+        class="btn btn-primary px-4 rounded-10"
+        translate="edit"
+      ></button>
+    </div>
+  </form>
+</public-api-canvas>

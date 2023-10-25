@@ -1,0 +1,22 @@
+<div
+  class="card rounded-10 border-0 h-100 c-pointer"
+  [routerLink]="[data.link]"
+>
+  <div class="card-body">
+    <div class="d-flex align-items-center">
+      <div class="flex-shrink-0">
+        <div
+          class="icon bg-info-o d-flex justify-content-center align-items-center rounded-8"
+        >
+          <img [src]="data.image" class="obj-contain" width="50" height="50" />
+        </div>
+      </div>
+      <div class="flex-grow-1 mis-3">
+        <h5 class="mt-0 text-primary fw-600">{{ data.name | translate }}</h5>
+        <p class="fs-14 m-0 text-info">
+          {{ data.description | translate }}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

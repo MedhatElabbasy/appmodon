@@ -1,0 +1,10 @@
+@import "libs/assets/styles/variables.scss";
+.client {
+  background-color: rgba($color: $warning-color, $alpha: 0.08);
+}
+
+.cube {
+  width: 18px;
+  height: 18px;
+  border-radius: 6px;
+}

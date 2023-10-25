@@ -1,0 +1,5 @@
+@import "libs/assets/styles/mixins.scss";
+
+.description {
+  @include line-limit(4);
+}

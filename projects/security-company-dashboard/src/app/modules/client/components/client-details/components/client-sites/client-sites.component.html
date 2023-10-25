@@ -1,0 +1,863 @@
+<div class="h-100">
+  <div
+    *ngIf="!sites?.length"
+    class="h-100 d-flex align-items-center justify-content-center"
+  >
+    <app-add-button (click)="onAddSite()">
+      <div class="text-align-center" translate="clients.no_sites_exist"></div>
+    </app-add-button>
+  </div>
+
+  <div class="h-100" *ngIf="sites?.length">
+    <div class="d-flex justify-content-between">
+      <h5 class="fw-500 text-primary" translate="clients.sites"></h5>
+      <button
+        (click)="onAddSite()"
+        translate="add"
+        type="button"
+        class="btn btn-warning text-white rounded-10"
+      ></button>
+    </div>
+    <hr />
+    <div>
+      <div *ngIf="sites" class="row row-cols-1">
+        <ng-container *ngFor="let site of sites; let l = last">
+          <app-site-card [site]="site" (edit)="onEdit($event)"></app-site-card>
+          <div class="container" *ngIf="!l">
+            <hr />
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ----------------------------------------------------------------------- -->
+<!-- ----------------------------------------------------------------------- -->
+<!-- ---------------------------- add site form ---------------------------- -->
+
+<public-api-canvas [id]="addCanvas">
+  <h5
+    class="fw-500 text-align-center text-primary mb-4"
+    translate="clients.add_location"
+  ></h5>
+
+  <ul class="nav nav-tabs stepper bg-white" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button
+        class="nav-link active"
+        id="site-info-tab"
+        data-bs-toggle="tab"
+        data-bs-target="#site-info"
+        type="button"
+        role="tab"
+        aria-controls="site-info"
+        aria-selected="true"
+        #siteInfoTab
+      >
+        <i class="fa-solid fa-clipboard-list"></i>
+      </button>
+    </li>
+    <div class="line"></div>
+    <li class="nav-item" role="presentation">
+      <button
+        [disabled]="siteInfoForm.invalid"
+        #siteLocationTab
+        class="nav-link"
+        id="site-location-tab"
+        data-bs-toggle="tab"
+        data-bs-target="#site-location"
+        type="button"
+        role="tab"
+        aria-controls="site-location"
+        aria-selected="false"
+      >
+        <i class="fa-solid fa-location-dot"></i>
+      </button>
+    </li>
+  </ul>
+  <div class="tab-content mt-4">
+    <div
+      class="tab-pane fade show active"
+      id="site-info"
+      role="tabpanel"
+      aria-labelledby="site-info-tab"
+    >
+      <form
+        [formGroup]="siteInfoForm"
+        #siteInfo="ngForm"
+        (ngSubmit)="nextStep()"
+      >
+        <!-- ------------------------------ Site name ------------------------------ -->
+        <div class="mb-3">
+          <div class="form-floating">
+            <input
+              type="text"
+              class="form-control"
+              id="site_name"
+              placeholder="site name"
+              formControlName="siteName"
+            />
+            <label for="site_name" translate="clients.site_name"></label>
+          </div>
+
+          <div
+            class="error-message"
+            *ngIf="siteInfoControls['siteName'].invalid && siteInfo.submitted"
+          >
+            <i class="fa-solid fa-circle-exclamation"></i>
+            {{ "validation.field_required" | translate }}
+          </div>
+        </div>
+
+        <!-- --------------------------------- map --------------------------------- -->
+        <div class="mb-3">
+          <div style="height: 200px">
+            <public-api-map-search
+              [addressControl]="siteInfoControls['siteAddress']"
+              [latControl]="siteInfoControls['siteLat']"
+              [lngControl]="siteInfoControls['siteLong']"
+            ></public-api-map-search>
+          </div>
+          <div
+            class="error-message"
+            *ngIf="
+              siteInfoControls['siteAddress'].invalid && siteInfo.submitted
+            "
+          >
+            <i class="fa-solid fa-circle-exclamation"></i>
+            {{ "validation.field_required" | translate }}
+          </div>
+        </div>
+
+        <!-- ----------------------------- site image ------------------------------ -->
+        <div class="mb-3">
+          <div style="height: 150px">
+            <public-api-file-upload
+              [Control]="siteInfoControls['sitePhotoId']"
+              [acceptedExtension]="acceptedExtensions"
+            >
+              <div
+                class="fs-14 text-info mt-3"
+                translate="clients.upload_site_image"
+              ></div>
+            </public-api-file-upload>
+          </div>
+          <div
+            class="error-message"
+            *ngIf="
+              siteInfoControls['sitePhotoId'].invalid && siteInfo.submitted
+            "
+          >
+            <i class="fa-solid fa-circle-exclamation"></i>
+            {{ "validation.field_required" | translate }}
+          </div>
+        </div>
+
+        <!-- ----------------------------- geo option ------------------------------ -->
+        <div class="mb-3 form-check d-flex align-items-center gap-3">
+          <input
+            type="checkbox"
+            class="form-check-input"
+            id="geo"
+            formControlName="enableGeolocation"
+            (change)="rangeValidatorsListener(siteInfoForm)"
+          />
+          <label class="form-check-label" for="geo">
+            <h6 translate="clients.enable_geo" class="text-primary fw-500"></h6>
+            <p
+              translate="clients.an_alert_will_send_when_guard_left_location"
+              class="fs-14 text-info m-0"
+            ></p>
+          </label>
+        </div>
+
+        <!-- -------------------------- height and radius -------------------------- -->
+        <div class="row row-cols-2 mb-3">
+          <div>
+            <div class="form-floating">
+              <input
+                type="number"
+                class="form-control"
+                id="geolocationLenghtInMetter"
+                formControlName="geolocationLenghtInMetter"
+                placeholder="geolocationLenghtInMetter"
+              />
+              <label
+                class="fs-14"
+                for="geolocationLenghtInMetter"
+                translate="clients.select_radius"
+              ></label>
+            </div>
+
+            <ng-container
+              *ngIf="
+                siteInfoControls['geolocationLenghtInMetter'].invalid &&
+                siteInfo.submitted
+              "
+            >
+              <div
+                class="error-message"
+                *ngIf="
+                  siteInfoControls['geolocationLenghtInMetter'].errors.required
+                "
+              >
+                <i class="fa-solid fa-circle-exclamation"></i>
+                {{ "validation.field_required" | translate }}
+              </div>
+
+              <div
+                class="error-message fs-14"
+                *ngIf="siteInfoControls['geolocationLenghtInMetter'].errors.min"
+              >
+                <i class="fa-solid fa-circle-exclamation"></i>
+                {{ "validation.field_min" | translate }}
+              </div>
+            </ng-container>
+          </div>
+          <div>
+            <div class="form-floating">
+              <input
+                type="number"
+                class="form-control"
+                id="site_hight"
+                placeholder="siteHight"
+                formControlName="siteHight"
+              />
+              <label
+                class="fs-14"
+                for="site_hight"
+                translate="clients.site_hight"
+              ></label>
+            </div>
+            <ng-container
+              *ngIf="
+                siteInfoControls['siteHight'].invalid && siteInfo.submitted
+              "
+            >
+              <div
+                class="error-message"
+                *ngIf="siteInfoControls['siteHight'].errors.required"
+              >
+                <i class="fa-solid fa-circle-exclamation"></i>
+                {{ "validation.field_required" | translate }}
+              </div>
+
+              <div
+                class="error-message fs-14"
+                *ngIf="siteInfoControls['siteHight'].errors.min"
+              >
+                <i class="fa-solid fa-circle-exclamation"></i>
+                {{ "validation.field_min" | translate }}
+              </div>
+            </ng-container>
+          </div>
+        </div>
+
+        <hr />
+        <h6
+          translate="clients.shifts_and_supervisors"
+          class="fw-400 fs-14 text-info mb-3"
+        ></h6>
+        <!-- ------------------------------- shifts -------------------------------- -->
+        <div
+          formArrayName="siteSupervisorShifts"
+          *ngFor="
+            let shift of $any(SupervisorsShifts.controls);
+            let i = index;
+            let e = last;
+            let s = first
+          "
+          class="mb-3"
+        >
+          <form [formGroup]="shift">
+            <div class="row row-cols-2 mb-3">
+              <div>
+                <p-dropdown
+                  formControlName="clientShiftScheduleId"
+                  [options]="shifts"
+                  styleClass="w-100"
+                  [filter]="true"
+                  placeholder="{{ 'shift' | translate }}"
+                  [optionLabel]="
+                    (lang.isAr | async)
+                      ? 'companyShift.shiftType.name'
+                      : 'companyShift.shiftType.nameEN'
+                  "
+                  optionValue="id"
+                ></p-dropdown>
+
+                <div
+                  class="error-message fs-14"
+                  *ngIf="
+                    shift.get('clientShiftScheduleId').invalid &&
+                    siteInfo.submitted
+                  "
+                >
+                  <i class="fa-solid fa-circle-exclamation"></i>
+                  {{ "validation.field_required" | translate }}
+                </div>
+              </div>
+
+              <div>
+                <p-dropdown
+                  formControlName="companySecurityGuardId"
+                  [options]="supervisors"
+                  styleClass="w-100"
+                  placeholder="{{ 'supervisor' | translate }}"
+                  optionLabel="securityGuard.userName"
+                  [filter]="true"
+                  optionValue="id"
+                ></p-dropdown>
+
+                <div
+                  class="error-message fs-14"
+                  *ngIf="
+                    shift.get('companySecurityGuardId').invalid &&
+                    siteInfo.submitted
+                  "
+                >
+                  <i class="fa-solid fa-circle-exclamation"></i>
+                  {{ "validation.field_required" | translate }}
+                </div>
+              </div>
+            </div>
+
+            <button
+              *ngIf="!s"
+              (click)="removeShiftsAndSupervisors(i)"
+              type="button"
+              class="btn bg-info-o d-block mis-auto py-2 d-flex flex-column justify-content-center align-items-center"
+            >
+              <ion-icon name="trash" class="text-danger"></ion-icon>
+              {{ "delete" | translate }}
+            </button>
+          </form>
+          <hr *ngIf="!e" />
+          <app-line-add-button
+            (click)="addShiftWithSupervisor()"
+            *ngIf="e || !SupervisorsShifts.controls.length"
+          >
+            {{ "clients.add_shift_and_supervisor" | translate }}
+          </app-line-add-button>
+        </div>
+
+        <!-- ---------------------------- no of guards ----------------------------- -->
+        <div class="mb-3">
+          <div class="form-floating">
+            <input
+              type="number"
+              class="form-control"
+              id="totalNumberOfGurds"
+              placeholder="no_guards"
+              formControlName="totalNumberOfGurds"
+            />
+            <label for="totalNumberOfGurds" translate="clients.guards"></label>
+          </div>
+
+          <ng-container
+            *ngIf="
+              siteInfoControls['totalNumberOfGurds'].invalid &&
+              siteInfo.submitted
+            "
+          >
+            <div
+              class="error-message"
+              *ngIf="siteInfoControls['totalNumberOfGurds'].errors.required"
+            >
+              <i class="fa-solid fa-circle-exclamation"></i>
+              {{ "validation.field_required" | translate }}
+            </div>
+            <div
+              class="error-message"
+              *ngIf="siteInfoControls['totalNumberOfGurds'].errors.min"
+            >
+              <i class="fa-solid fa-circle-exclamation"></i>
+              {{ "validation.field_min" | translate }}
+            </div>
+          </ng-container>
+        </div>
+
+        <!-- -------------------------- sited description -------------------------- -->
+        <div class="mb-3">
+          <div class="form-floating">
+            <textarea
+              class="form-control"
+              placeholder="Leave a comment here"
+              id="siteDescription"
+              style="height: 150px"
+              formControlName="siteDescription"
+            ></textarea>
+            <label for="siteDescription" translate="description"></label>
+          </div>
+          <div
+            class="error-message"
+            *ngIf="
+              siteInfoControls['siteDescription'].invalid && siteInfo.submitted
+            "
+          >
+            <i class="fa-solid fa-circle-exclamation"></i>
+            {{ "validation.field_required" | translate }}
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-end">
+          <button
+            translate="next_step"
+            type="submit"
+            class="btn btn-primary rounded-10 mb-4"
+          ></button>
+        </div>
+      </form>
+    </div>
+    <div
+      class="tab-pane fade"
+      id="site-location"
+      role="tabpanel"
+      aria-labelledby="site-location-tab"
+    >
+      <form
+        [formGroup]="siteForm"
+        #siteLocation="ngForm"
+        (ngSubmit)="addSite()"
+      >
+        <h6
+          translate="clients.locations_on_this_site"
+          class="fw-400 text-info mb-4"
+        ></h6>
+        <div
+          formArrayName="siteLocations"
+          *ngFor="
+            let location of $any(SiteLocations.controls);
+            let i = index;
+            let f = first;
+            let e = last
+          "
+        >
+          <form [formGroup]="location">
+            <!-- ---------------------------- location name ---------------------------- -->
+            <div class="mb-3">
+              <div class="form-floating">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="locationName"
+                  placeholder="location name"
+                  formControlName="name"
+                />
+                <label for="locationName" translate="name"></label>
+              </div>
+              <div
+                class="error-message"
+                *ngIf="location.get('name').invalid && siteLocation.submitted"
+              >
+                <i class="fa-solid fa-circle-exclamation"></i>
+                {{ "validation.field_required" | translate }}
+              </div>
+            </div>
+
+            <!-- -------------------------------- maps --------------------------------- -->
+            <div class="mb-3">
+              <div style="height: 180px">
+                <public-api-map-search
+                  [addressControl]="location.get('locationAddress')"
+                  [latControl]="location.get('locationLat')"
+                  [lngControl]="location.get('locationLong')"
+                ></public-api-map-search>
+              </div>
+
+              <div
+                class="error-message"
+                *ngIf="
+                  location.get('locationAddress').invalid &&
+                  siteLocation.submitted
+                "
+              >
+                <i class="fa-solid fa-circle-exclamation"></i>
+                {{ "validation.field_required" | translate }}
+              </div>
+            </div>
+
+            <!-- -------------------------------- photo -------------------------------- -->
+            <div class="mb-3">
+              <div style="height: 150px">
+                <public-api-file-upload
+                  [acceptedExtension]="acceptedExtensions"
+                  [Control]="location.get('photoId')"
+                >
+                  <div class="text-info fs-14">
+                    {{ "clients.upload_location_image" | translate }}
+                  </div>
+                </public-api-file-upload>
+              </div>
+
+              <div
+                class="error-message"
+                *ngIf="
+                  location.get('photoId').invalid && siteLocation.submitted
+                "
+              >
+                <i class="fa-solid fa-circle-exclamation"></i>
+                {{ "validation.field_required" | translate }}
+              </div>
+            </div>
+
+            <!-- ----------------------- no of guards and height ----------------------- -->
+            <div class="row row-cols-2">
+              <div>
+                <div class="form-floating">
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="locationHeight"
+                    placeholder="site height"
+                    formControlName="locationHight"
+                  />
+                  <label
+                    for="locationHeight"
+                    translate="clients.location_height"
+                  ></label>
+                </div>
+
+                <ng-container
+                  *ngIf="
+                    location.get('locationHight').invalid &&
+                    siteLocation.submitted
+                  "
+                >
+                  <div
+                    class="error-message"
+                    *ngIf="location.get('locationHight').errors.required"
+                  >
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                    {{ "validation.field_required" | translate }}
+                  </div>
+                  <div
+                    class="error-message"
+                    *ngIf="location.get('locationHight').errors.min"
+                  >
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                    {{ "validation.field_min" | translate }}
+                  </div>
+                </ng-container>
+              </div>
+              <div>
+                <div class="form-floating mb-3">
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="noOfGuards"
+                    placeholder="noOfGuards"
+                    formControlName="numberOfGuards"
+                  />
+                  <label for="noOfGuards" translate="number_of_guards"></label>
+                </div>
+
+                <ng-container
+                  *ngIf="
+                    location.get('numberOfGuards').invalid &&
+                    siteLocation.submitted
+                  "
+                >
+                  <div
+                    class="error-message"
+                    *ngIf="location.get('numberOfGuards').errors.required"
+                  >
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                    {{ "validation.field_required" | translate }}
+                  </div>
+                  <div
+                    class="error-message"
+                    *ngIf="location.get('numberOfGuards').errors.min"
+                  >
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                    {{ "validation.field_min" | translate }}
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+            <button
+              *ngIf="!f"
+              (click)="removeLocation(i)"
+              type="button"
+              class="btn bg-info-o d-block mis-auto py-2 d-flex flex-column justify-content-center align-items-center"
+            >
+              <ion-icon name="trash" class="text-danger"></ion-icon>
+              {{ "delete" | translate }}
+            </button>
+          </form>
+          <hr *ngIf="!e" />
+          <app-line-add-button
+            (click)="addLocation()"
+            *ngIf="e || !SupervisorsShifts.controls.length"
+          >
+            {{ "clients.add_location" | translate }}
+          </app-line-add-button>
+        </div>
+
+        <div class="d-flex justify-content-between gap-2">
+          <button
+            type="button"
+            class="btn bg-info-o px-3 rounded-10"
+            translate="prev"
+            (click)="siteInfoTab.click()"
+          ></button>
+          <button
+            type="submit"
+            class="btn btn-primary px-3 rounded-10"
+            translate="add"
+          ></button>
+        </div>
+      </form>
+    </div>
+  </div>
+</public-api-canvas>
+
+<public-api-canvas [id]="editSiteCanvas">
+  <form
+    [formGroup]="siteEditForm"
+    #siteEdit="ngForm"
+    (ngSubmit)="edit()"
+    class="h-100 d-flex flex-column"
+  >
+    <h5
+      class="fw-600 mb-4 text-align-center"
+      translate="clients.site_edit"
+    ></h5>
+    <div class="flex-fill">
+      <!-- ------------------------------ Site name ------------------------------ -->
+      <div class="mb-3">
+        <div class="form-floating">
+          <input
+            type="text"
+            class="form-control"
+            id="site_name"
+            placeholder="site name"
+            formControlName="siteName"
+          />
+          <label for="site_name" translate="clients.site_name"></label>
+        </div>
+
+        <div
+          class="error-message"
+          *ngIf="editSiteControls['siteName'].invalid && siteEdit.submitted"
+        >
+          <i class="fa-solid fa-circle-exclamation"></i>
+          {{ "validation.field_required" | translate }}
+        </div>
+      </div>
+
+      <!-- --------------------------------- map --------------------------------- -->
+      <div class="mb-3">
+        <div style="height: 200px">
+          <public-api-map-search
+            [addressControl]="editSiteControls['siteAddress']"
+            [latControl]="editSiteControls['siteLat']"
+            [lngControl]="editSiteControls['siteLong']"
+          ></public-api-map-search>
+        </div>
+        <div
+          class="error-message"
+          *ngIf="editSiteControls['siteAddress'].invalid && siteEdit.submitted"
+        >
+          <i class="fa-solid fa-circle-exclamation"></i>
+          {{ "validation.field_required" | translate }}
+        </div>
+      </div>
+
+      <!-- ----------------------------- site image ------------------------------ -->
+      <div class="mb-3">
+        <div style="height: 150px">
+          <public-api-file-upload
+            [Control]="editSiteControls['sitePhotoId']"
+            [acceptedExtension]="acceptedExtensions"
+            [link]="selectedSite?.sitePhoto?.fullLink!"
+          >
+            <div
+              class="fs-14 text-info mt-3"
+              translate="clients.upload_site_image"
+            ></div>
+          </public-api-file-upload>
+        </div>
+        <div
+          class="error-message"
+          *ngIf="editSiteControls['sitePhotoId'].invalid && siteEdit.submitted"
+        >
+          <i class="fa-solid fa-circle-exclamation"></i>
+          {{ "validation.field_required" | translate }}
+        </div>
+      </div>
+
+      <!-- ----------------------------- geo option ------------------------------ -->
+      <div class="mb-3 form-check d-flex align-items-center gap-3">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          id="geo"
+          [value]="false"
+          formControlName="enableGeolocation"
+          (change)="rangeValidatorsListener(siteEditForm)"
+        />
+        <label class="form-check-label" for="geo">
+          <h6 translate="clients.enable_geo" class="text-primary fw-500"></h6>
+          <p
+            translate="clients.an_alert_will_send_when_guard_left_location"
+            class="fs-14 text-info m-0"
+          ></p>
+        </label>
+      </div>
+
+      <!-- -------------------------- height and radius -------------------------- -->
+      <div class="row row-cols-2 mb-3">
+        <div>
+          <div class="form-floating">
+            <input
+              type="number"
+              class="form-control"
+              id="geolocationLenghtInMetter"
+              formControlName="geolocationLenghtInMetter"
+              placeholder="geolocationLenghtInMetter"
+            />
+            <label
+              class="fs-14"
+              for="geolocationLenghtInMetter"
+              translate="clients.select_radius"
+            ></label>
+          </div>
+
+          <ng-container
+            *ngIf="
+              editSiteControls['geolocationLenghtInMetter'].invalid &&
+              siteEdit.submitted
+            "
+          >
+            <div
+              class="error-message"
+              *ngIf="
+                editSiteControls['geolocationLenghtInMetter'].errors.required
+              "
+            >
+              <i class="fa-solid fa-circle-exclamation"></i>
+              {{ "validation.field_required" | translate }}
+            </div>
+
+            <div
+              class="error-message fs-14"
+              *ngIf="editSiteControls['geolocationLenghtInMetter'].errors.min"
+            >
+              <i class="fa-solid fa-circle-exclamation"></i>
+              {{ "validation.field_min" | translate }}
+            </div>
+          </ng-container>
+        </div>
+        <div>
+          <div class="form-floating">
+            <input
+              type="number"
+              class="form-control"
+              id="site_hight"
+              placeholder="siteHight"
+              formControlName="siteHight"
+            />
+            <label
+              class="fs-14"
+              for="site_hight"
+              translate="clients.site_hight"
+            ></label>
+          </div>
+          <ng-container
+            *ngIf="editSiteControls['siteHight'].invalid && siteEdit.submitted"
+          >
+            <div
+              class="error-message"
+              *ngIf="editSiteControls['siteHight'].errors.required"
+            >
+              <i class="fa-solid fa-circle-exclamation"></i>
+              {{ "validation.field_required" | translate }}
+            </div>
+
+            <div
+              class="error-message fs-14"
+              *ngIf="editSiteControls['siteHight'].errors.min"
+            >
+              <i class="fa-solid fa-circle-exclamation"></i>
+              {{ "validation.field_min" | translate }}
+            </div>
+          </ng-container>
+        </div>
+      </div>
+
+      <!-- ---------------------------- no of guards ----------------------------- -->
+      <div class="mb-3">
+        <div class="form-floating">
+          <input
+            type="number"
+            class="form-control"
+            id="totalNumberOfGurds"
+            placeholder="no_guards"
+            formControlName="totalNumberOfGurds"
+          />
+          <label for="totalNumberOfGurds" translate="clients.guards"></label>
+        </div>
+
+        <ng-container
+          *ngIf="
+            editSiteControls['totalNumberOfGurds'].invalid && siteInfo.submitted
+          "
+        >
+          <div
+            class="error-message"
+            *ngIf="editSiteControls['totalNumberOfGurds'].errors.required"
+          >
+            <i class="fa-solid fa-circle-exclamation"></i>
+            {{ "validation.field_required" | translate }}
+          </div>
+          <div
+            class="error-message"
+            *ngIf="editSiteControls['totalNumberOfGurds'].errors.min"
+          >
+            <i class="fa-solid fa-circle-exclamation"></i>
+            {{ "validation.field_min" | translate }}
+          </div>
+        </ng-container>
+      </div>
+
+      <!-- -------------------------- sited description -------------------------- -->
+      <div class="mb-3">
+        <div class="form-floating">
+          <textarea
+            class="form-control"
+            placeholder="Leave a comment here"
+            id="siteDescription"
+            style="height: 150px"
+            formControlName="siteDescription"
+          ></textarea>
+          <label for="siteDescription" translate="description"></label>
+        </div>
+        <div
+          class="error-message"
+          *ngIf="
+            editSiteControls['siteDescription'].invalid && siteInfo.submitted
+          "
+        >
+          <i class="fa-solid fa-circle-exclamation"></i>
+          {{ "validation.field_required" | translate }}
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-end gap-2">
+      <button
+        type="reset"
+        class="btn bg-info-o rounded-10 px-4"
+        translate="cancel"
+        data-bs-dismiss="offcanvas"
+      ></button>
+      <button
+        type="submit"
+        class="btn btn-primary rounded-10 px-4"
+        translate="edit"
+      ></button>
+    </div>
+  </form>
+</public-api-canvas>

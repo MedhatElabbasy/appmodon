@@ -1,0 +1,36 @@
+@import "libs/assets/styles/variables.scss";
+
+.icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 0.5rem;
+  background-color: rgba($color: $info-color, $alpha: 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: x-large;
+}
+
+.form-check {
+  padding: 0;
+  margin: 0;
+
+  .form-check-input {
+    margin: 0;
+    display: none;
+  }
+
+  .form-check-label {
+    color: $primary-color;
+    cursor: pointer;
+  }
+
+  .form-check-input:checked + .form-check-label .card {
+    background-color: rgba($color: $primary-color, $alpha: 0.2) !important;
+
+    & .icon {
+      background-color: $warning-color !important;
+      color: white;
+    }
+  }
+}

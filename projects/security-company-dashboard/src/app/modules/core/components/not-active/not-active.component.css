@@ -1,0 +1,43 @@
+.bg-logo-white {
+  background: url("/assets/images/bgs/reject-bg.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  position: relative;
+}
+
+:host-context(.ar) .bg-logo-white {
+  background: url("/assets/images/bgs/reject-bg-ar.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  position: relative;
+}
+
+.reasons {
+  list-style: none;
+  display: flex;
+  flex-flow: column;
+  gap: 0.5rem;
+  padding: 0;
+}
+
+li {
+  position: relative;
+  -webkit-padding-start: 40px;
+          padding-inline-start: 40px;
+  font-size: larger;
+}
+
+li::before {
+  position: absolute;
+  content: "";
+  width: 25px;
+  height: 25px;
+  -webkit-margin-start: -40px;
+          margin-inline-start: -40px;
+  margin-top: 5px;
+  background: url("/assets/images/icons/list.png");
+  background-size: 100%;
+  background-position: center;
+}/*# sourceMappingURL=not-active.component.css.map */

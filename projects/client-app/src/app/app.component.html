@@ -1,0 +1,38 @@
+<!--<p-toast></p-toast>
+<p-toast position="top-left" key="tl"></p-toast>
+<p-toast position="top-right" key="tr"></p-toast>-->
+
+<public-api-modal classList="modal-dialog-centered myWidth" [id]="modalId">
+  <div class="d-flex gap-2">
+    <img src="assets/images/svg/molumen_red_square_error_warning_icon.svg" alt="" class="mb-3" srcset="" width="20"
+      height="20" />
+    <h5 class="fw-500 mt-1 fs-5" translate="error"></h5>
+  </div>
+  <p class="mt-2 myColor fw-400 fs-5 text-align-center">{{message}}</p>
+  <div class="d-flex justify-content-end gap-2">
+    <button type="button" data-bs-dismiss="modal" class="btn rounded-8 px-4 py-2 btn-danger"
+      translate="cancel"></button>
+  </div>
+</public-api-modal>
+<public-api-loader></public-api-loader>
+<app-chat></app-chat>
+<div class="">
+  <router-outlet></router-outlet>
+</div>
+
+
+
+
+<!-- <app-chat></app-chat> -->
+<!-- <public-api-modal [id]="companyModelID" classList="modal-dialog-centered">
+  <h6 class="my-5 fw-700 " translate="برجاء أختيار شركة الأمن"></h6>
+  <div class="d-flex gap-2 justify-content-center mt-1">
+      <div class="mb-3" *ngFor=" let company of companies">
+        <button (click)="redirectToCompany(company)" type="button" style="width: 170px; height:100px;" data-bs-dismiss="modal"
+      class="btn bg-primary py-2 d-flex text-white align-items-center gap-4 rounded-8">
+      {{company.securityCompany.name}}
+    </button>
+  </div>
+      </div>
+  
+</public-api-modal> -->

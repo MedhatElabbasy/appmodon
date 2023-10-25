@@ -1,0 +1,52 @@
+<div *ngIf="client.clientCompany.chargePersonPhoneNumber">
+  <div class="row row-cols-md-3 row-cols-1">
+    <div>
+      <h6 class="text-info fs-14" translate="clients.client_code"></h6>
+      <p class="text-primary fw-700">{{ client.clientCompany.id }}</p>
+    </div>
+    <div>
+      <h6 class="text-info fs-14" translate="contact_number"></h6>
+      <p class="text-primary fw-700">
+        {{ client.clientCompany.chargePersonPhoneNumber }}
+      </p>
+    </div>
+    <div>
+      <h6 class="text-info fs-14" translate="commercial_id"></h6>
+      <p class="text-primary fw-700">
+        {{ client.clientCompany.commercialRegistrationNumber }}
+      </p>
+    </div>
+    <div>
+      <h6 class="text-info fs-14" translate="email"></h6>
+      <p class="text-primary fw-700">{{ client.clientCompany.email }}</p>
+    </div>
+
+    <div>
+      <h6 class="text-info fs-14" translate="national_address"></h6>
+      <p class="text-primary fw-700">
+        {{ client.clientCompany.nationalAddress }}
+      </p>
+    </div>
+  </div>
+
+  <hr />
+  <h6 class="fw-400 fs-14 text-info mb-3" translate="contact-info"></h6>
+  <div class="row row-cols-md-3 row-cols-2">
+    <div>
+      <h6 class="text-info fs-14" translate="email"></h6>
+      <p class="text-primary fw-700">info@takid.com</p>
+    </div>
+    <div>
+      <h6 class="text-info fs-14" translate="contact_number"></h6>
+      <p class="text-primary fw-700">
+        920033257
+      </p>
+    </div>
+  </div>
+</div>
+<div class="container" *ngIf="!client.clientCompany.chargePersonPhoneNumber">
+  <div class="d-flex justify-content-center align-items-center">
+    <img src="assets/images/icons/Nodata-cuate.png" width="50%">
+  </div>
+  <h3 class="text-align-center fw-bold fs-2">{{"clients.client_not_register"|translate}}</h3>
+</div>

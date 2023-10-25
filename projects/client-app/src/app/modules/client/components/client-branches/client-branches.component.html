@@ -1,0 +1,193 @@
+
+<div class="position-relative header">
+  <div class="bg-primary fixed-top w-100">
+    <app-navbar> </app-navbar>
+  </div>
+</div>
+
+<div class="h-100 bg-info-o py-5 mt-5">
+
+  <div class="container mt-5 py-5">
+
+<div class="card border-0 rounded-12 mt-4" >
+  <div class="card-body ">
+    <h5 class="card-title mb-3" translate="security_dashboard.dash.branches"></h5>
+
+    <header class="d-flex gap-3 flex-wrap justify-content-between align-items-center">
+      <div>
+        <div class="input-group">
+          <span class="input-group-text border-0 bg-transparent" id="search">
+            <ion-icon name="search"></ion-icon>
+          </span>
+          <input type="text" class="form-control" placeholder="{{ 'search' | translate }}" aria-label="search"
+            aria-describedby="search"  [(ngModel)]="searchKey" />
+        </div>
+      </div>
+
+      <button type="button" class="btn btn-primary rounded-8 px-3" (click)="onAdd()"
+        translate="branches.add_new_branch"></button>
+    </header>
+    <hr />
+     <div class="table-responsive">
+      <table class="table">
+        <tbody *ngIf="branches.length">
+          <tr *ngFor="
+          let branch of branches
+          |filter: searchKey
+          ">
+            <td>
+              <div class="d-flex align-items-start text-nowrap">
+                <div class="flex-shrink-0">
+                  <img [src]="branch.photo?.fullLink" class="obj-cover rounded-8" alt="" width="40" height="40">
+                </div>
+                <div class="flex-grow-1 mis-3">
+                  <h5 class="m-0">{{ (lang.isAr | async)? branch.name : branch.nameEn}}</h5>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="d-flex align-items-center gap-2  text-nowrap">
+                {{branch.address}}
+              </div>
+            </td>
+            <td>
+              <span *ngIf="branch.isMainBranch" class="badge fw-normal bg-warning fs-14  rounded-1"
+                translate="branches.is_main_branch"></span>
+            </td>
+            <td>
+              <div class="d-flex align-items-center gap-2 justify-content-end" >
+                <p-inputSwitch *ngIf="!branch.isMainBranch" [(ngModel)]="branch.stauts" (ngModelChange)="edit(branch)">
+                </p-inputSwitch>
+                <button [routerLink]="[manageLink, branch.id]" type="button" class="btn bg-info-o text-primary edit">
+                  <i class="fa-solid fa-gear"></i>
+                </button>
+                <button  *ngIf="!branch.isMainBranch" (click)="onEdit(branch)" type="button" class="btn bg-info-o text-primary edit">
+                  <i class="fas fa-pen"></i>
+                </button>
+                <button  *ngIf="!branch.isMainBranch" (click)="onDelete(branch)" type="button" class="btn bg-danger-o delete">
+                  <i class="fa-solid fa-trash text-danger"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+        <tbody *ngIf="!branches.length">
+          <tr>
+            <td colspan="3">
+              <h6 class="text-danger text-align-center" translate="branches.no_branches_created"></h6>
+            </td>
+          </tr>
+        </tbody>
+      </table> 
+    </div> 
+
+
+  </div>
+</div> 
+
+</div>
+</div>
+
+<public-api-canvas [id]="canvasId" (close)="form.reset">
+  <form [formGroup]="branchForm" #form="ngForm" (ngSubmit)="onSubmit()">
+    <h5 *ngIf="isEdit" class="fw-600 mb-4 text-align-center" translate="branches.edit_branch"></h5>
+    <h5 *ngIf="!isEdit" class="fw-600 mb-4 text-align-center" translate="branches.add_new_branch"></h5>
+    <div class="my-4">
+      <div style="height: 150px; width: 180px;" class="mx-auto">
+        <public-api-file-upload [acceptedExtension]="imageExtension" [Control]="controls['photoId']" [link]="link">
+        </public-api-file-upload>
+      </div>
+      <div class="error-message" *ngIf="controls['photoId'].invalid && form.submitted">
+        <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+        {{ 'validation.not_valid_to_use' | translate }}
+      </div>
+    </div>
+    <div *ngIf="!controls['isMainBranch'].value" class="d-flex justify-content-between bg-info-o p-2 rounded-10 mb-3">
+      <label translate="status.status" class="text-info"></label>
+      <p-inputSwitch formControlName="stauts"></p-inputSwitch>
+    </div>
+    <div  class="d-flex mb-3 justify-content-between bg-info-o p-2 rounded-10">
+      <label translate="branches.is_main_branch" class="text-info"></label>
+      <p-inputSwitch  formControlName="isMainBranch"></p-inputSwitch>
+    </div>
+    <div class="mb-3">
+      <div class="form-floating">
+        <input formControlName="name" type="text" class="form-control" id="name" placeholder="data" />
+        <label for="name" translate="company_address" translate="branches.arabic_name"></label>
+      </div>
+
+      <div class="error-message" *ngIf="controls['name'].invalid && form.submitted">
+        <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+        {{ 'validation.not_valid_to_use' | translate }}
+      </div>
+    </div>
+    <div class="mb-3">
+      <div class="form-floating ">
+        <input formControlName="nameEn" type="text" class="form-control" id="nameEn" placeholder="data" />
+        <label for="nameEn" translate="company_address" translate="branches.english_name"></label>
+      </div>
+
+      <div class="error-message" *ngIf="controls['nameEn'].invalid && form.submitted">
+        <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+        {{ 'validation.not_valid_to_use' | translate }}
+      </div>
+    </div>
+    <div class="mb-3">
+      <div style="height: 200px">
+        <public-api-map-search [latControl]="controls['locationLat']" [lngControl]="controls['locationLng']"
+            [addressControl]="controls['address']"></public-api-map-search>
+    </div>
+
+      <div *ngIf="controls['address'].invalid && form.submitted">
+        <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+        {{ 'validation.not_valid_to_use' | translate }}
+      </div>
+    </div>
+    <div class="mb-3">
+      <div class="form-floating">
+        <textarea formControlName="overview" class="form-control" placeholder="Leave a comment here" id="overview"
+          style=" height: 120px"></textarea>
+        <label for="overview" translate="branches.overview_ar"></label>
+      </div>
+
+      <div class="error-message" *ngIf="controls['overview'].invalid && form.submitted">
+        <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+        {{ 'validation.field_required' | translate }}
+      </div>
+    </div>
+    <div class="mb-3">
+      <div class="form-floating">
+        <textarea formControlName="overviewEn" class="form-control" placeholder="Leave a comment here" id="overview"
+          style=" height: 120px"></textarea>
+        <label for="overview" translate="branches.overview_en"></label>
+      </div>
+
+      <div class="error-message" *ngIf="controls['overviewEn'].invalid && form.submitted">
+        <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+        {{ 'validation.field_required' | translate }}
+      </div>
+    </div>
+    <div class="d-flex justify-content-end gap-2 mt-4">
+      <button #resetBranchForm type="reset" class="btn rounded-10 bg-info-o" data-bs-dismiss="offcanvas"
+        translate="cancel"></button>
+      <button type="submit" class="btn rounded-10 btn-primary" translate="add" *ngIf="!isEdit"></button>
+      <button type="submit" class="btn rounded-10 btn-primary" translate="edit" *ngIf="isEdit"></button>
+    </div>
+  </form>
+</public-api-canvas> 
+
+
+
+<!-- ------------------------------- delete -------------------------------- -->
+<public-api-modal classList="modal-dialog-centered" [id]="modalId">
+  <img src="assets/images/svg/delete.svg" alt="" class="mb-3" srcset="" />
+  <h4 class="fw-700" translate="branches.delete_branch_confirm"></h4>
+  <p class="mt-2 text-info" translate="branches.delete_branch_confirm_desc"></p>
+
+  <div class="d-flex justify-content-end gap-2">
+    <button type="button" data-bs-dismiss="modal" class="btn rounded-8 px-4 py-2 btn-light" translate="cancel"
+      (click)="branch = null"></button>
+    <button translate="yes_delete" type="button" data-bs-dismiss="modal" class="btn rounded-8 px-4 py-2 btn-danger"
+      (click)="delete(branch!); branch = null"></button>
+  </div>
+</public-api-modal> 

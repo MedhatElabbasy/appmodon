@@ -1,0 +1,254 @@
+<div class="h-100 ps-md-5 py-5  ">
+  <div class="container">
+    <form [formGroup]="facilityForm" #form="ngForm" (ngSubmit)="onSubmit()">
+      <div>
+        <div class="d-flex gap-3 align-items-center mb-4">
+          <button [routerLink]="['/']" type="button" class="btn bg-info-o rounded-8">
+            <img src="assets/images/icons/dark_arrow.png" class="rtl-flip" width="20" alt="" />
+          </button>
+          <div class="text-info">
+            {{ "back_to_login" | translate }}
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <h4 class="fw-700 text-primary">
+            {{ "signup_to_continue" | translate }}
+          </h4>
+          <p class="text-info">
+            {{ "fill_details" | translate }}
+          </p>
+        </div>
+
+        <div class="d-flex flex-column gap-3">
+          <div>
+            <p-dropdown optionValue="id" styleClass="w-100" [options]="companyTypes"
+              [placeholder]="'facility_type' | translate" [optionLabel]="'name'" [filter]="true" [filterBy]="'name'"
+              formControlName="companyTypeId"></p-dropdown>
+
+            <div class="error-message" *ngIf="controls['companyTypeId'].invalid && form.submitted">
+              <i class="fa-solid fa-circle-exclamation"></i>
+              {{ "validation.facility_type_required" | translate }}
+            </div>
+          </div>
+
+          <div>
+            <div class="form-floating">
+              <input type="text" class="form-control" id="Facility_Name" placeholder="data" formControlName="name" />
+              <label for="Facility_Name">
+                {{ "facility_name" | translate }}
+              </label>
+            </div>
+
+            <div class="error-message" *ngIf="controls['name'].invalid && form.submitted">
+              <i class="fa-solid fa-circle-exclamation"></i>
+              {{ "validation.facility_name_required" | translate }}
+            </div>
+          </div>
+
+          <div>
+            <div class="form-floating">
+              <input type="text" class="form-control" id="Commercial_ID" placeholder="data"
+                formControlName="CommercialRegistrationNumber" />
+              <label for="Commercial_ID">
+                {{ "commercial_id" | translate }}
+              </label>
+            </div>
+
+            <div class="error-message" *ngIf="
+                controls['CommercialRegistrationNumber'].invalid && form.submitted
+              " [innerHtml]="
+                'validation.commercial_registration_id_required' | translate
+              "></div>
+          </div>
+
+          <div>
+            <div class="form-floating">
+              <input type="text" class="form-control" id="ActivityType" placeholder="data"
+                formControlName="activityType" />
+              <label for="ActivityType">
+                {{ "activity_type" | translate }}
+              </label>
+            </div>
+
+            <div class="error-message" *ngIf="controls['activityType'].invalid && form.submitted">
+              <i class="fa-solid fa-circle-exclamation"></i>
+              {{ "validation.activity_type_required" | translate }}
+            </div>
+          </div>
+
+          <div>
+            <div class="form-floating">
+              <input type="email" class="form-control" id="text" placeholder="data" formControlName="email" />
+              <label for="text">{{ "email" | translate }}</label>
+            </div>
+
+            <div *ngIf="form.submitted && controls['email'].invalid">
+              <div class="error-message" *ngIf="controls['email'].errors.required"
+                [innerHtml]="'validation.email_required' | translate"></div>
+              <div class="error-message" *ngIf="controls['email'].hasError('email')"
+                [innerHtml]="'validation.email_invalid' | translate"></div>
+            </div>
+          </div>
+
+          <div>
+            <div class="form-floating">
+              <input type="text" class="form-control" id="nationalAddress" placeholder="data"
+                formControlName="nationalAddress" />
+              <label for="nationalAddress">
+                {{ "national_address" | translate }}
+              </label>
+            </div>
+
+            <div class="error-message" *ngIf="controls['nationalAddress'].invalid && form.submitted">
+              <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+              {{ 'validation.national_address_required' | translate }}
+            </div>
+          </div>
+
+          <div>
+            <div class="form-floating">
+              <input type="text" class="form-control" placeholder="data" formControlName="chargePerson" />
+              <label>
+                {{ "charge_person" | translate }}
+              </label>
+            </div>
+
+            <div class="error-message" *ngIf="controls['chargePerson'].invalid&& form.submitted">
+              <i class="fa-solid fa-circle-exclamation"></i>
+              {{ "validation.charge_person_name_required" | translate }}
+            </div>
+
+
+          </div>
+
+          <div>
+            <div id="mobile" class="form-floating">
+              <div class="form-control d-flex">
+                <select class="form-select py-0 w-fit" id="floatingSelect" [formControl]="code">
+                  <option [value]="item.prefixCode" *ngFor="let item of codes">
+                    {{ item.ioS2 }}
+                  </option>
+                </select>
+                <input type="text" id="phone" formControlName="chargePersonPhoneNumber"
+                  class="form-control rounded-0 col p-0" />
+              </div>
+
+              <label for="phone">
+                {{ "charge_person_pone" | translate }}
+              </label>
+            </div>
+
+            <div *ngIf="MobileNumber.invalid && form.submitted">
+              <div class="error-message" *ngIf="MobileNumber.errors.pattern && form.submitted"
+                [innerHtml]="'validation.phone_is_not_valid' | translate"></div>
+
+              <div class="error-message" *ngIf="MobileNumber.errors.required && form.submitted"
+                [innerHtml]="'validation.phone_required' | translate"></div>
+            </div>
+          </div>
+
+          <div>
+            <p-dropdown optionValue="id" styleClass="w-100" [options]="cities" [placeholder]="'city' | translate"
+              [optionLabel]="'name'" [filter]="true" [filterBy]="'name'" formControlName="cityId"></p-dropdown>
+
+            <div class="error-message" *ngIf="controls['cityId'].invalid && form.submitted"
+              [innerHtml]="'validation.city_required' | translate"></div>
+          </div>
+          <div>
+            <div class="form-floating">
+              <input type="text" class="form-control" id="Facility_Description" placeholder="Facility_Description"
+                formControlName="description" />
+              <label for="Facility_Description">
+                {{ "Facility_Description" | translate }}
+              </label>
+            </div>
+
+            <div class="error-message" *ngIf="controls['description'].invalid && form.submitted">
+              <i class="fa-solid fa-circle-exclamation"></i>
+              {{ "validation.facility_description_required" | translate }}
+            </div>
+
+          </div>
+          <div>
+            <div class="form-floating">
+              <input type="text" class="form-control" id="Facility_about" placeholder="data"
+                formControlName="aboutCompany" />
+              <label for="Facility_about">
+                {{ "Facility_about" | translate }}
+              </label>
+            </div>
+
+            <div class="error-message" *ngIf="controls['aboutCompany'].invalid && form.submitted">
+              <i class="fa-solid fa-circle-exclamation"></i>
+              {{ "validation.facility_about_required" | translate }}
+            </div>
+
+          </div>
+          <div class="mb-4 px-">
+            <div style="height: 200px;">
+              <public-api-map-search [latControl]="controls['lat']" [lngControl]="controls['long']">
+              </public-api-map-search>
+            </div>
+
+            <div class="error-message" *ngIf="controls['lat'].invalid && form.submitted">
+              <i class="fa-solid fa-circle-exclamation"></i>
+              {{ "validation.facility_location_required" | translate }}
+            </div>
+          </div>
+          <!--? ------------------------ terms and conditions ------------------------- -->
+          <div>
+            <div class="form-check gap-3">
+              <input type="checkbox" class="form-check-input flex-grow-0" id="terms" formControlName="terms"
+                [class.is-invalid]="form.submitted && controls['terms'].invalid" />
+              <label class="form-check-label text-info fs-14 col" for="terms">
+                {{'accept_terms'|translate}}<a target="_blank" class='text-primary' routerLink='/termsConditions'>{{
+                  "types" | translate
+                  }}</a> و<a target="_blank" class='text-primary' routerLink="/privacyPolicy"> {{ "privacy" | translate
+                  }}</a>
+                {{'accept_terms2'|translate}} </label>
+              <!--! ------------------- terms and conditions validations ------------------- -->
+            </div>
+            <div *ngIf="form.submitted && controls['terms'].invalid" class="error-message mb-4"
+              [innerHtml]="'validation.terms_required' | translate"></div>
+          </div>
+        </div>
+
+        <div>
+          <button type="submit" class="btn btn-primary mt-4 py-2 d-flex align-items-center gap-4 rounded-8">
+            <span>
+              {{ "continue" | translate }}
+            </span>
+            <img src="assets/images/icons/arrow.png" class="img-fluid d-block rtl-flip" alt="arrow" />
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#companyRegisterSuccess"
+  hidden #successModal>
+  Launch
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="companyRegisterSuccess" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content rounded-16">
+      <div class="modal-body p-4">
+        <img src="assets/images/icons/email.png" alt="email" height="40" class="d-block" />
+        <h6 class="mt-3 fw-700">
+          {{ "details_submitted_successfully" | translate }}
+        </h6>
+        <p class="mt-3 fs-18 fw-500">
+          {{ "details_submitted_successfully_message" | translate }}
+        </p>
+        <button type="button" data-bs-dismiss="modal" [routerLink]="['/']"
+          class="btn d-block mis-auto btn-primary px-4 py-2">
+          {{ "continue" | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

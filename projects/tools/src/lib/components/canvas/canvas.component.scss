@@ -1,0 +1,14 @@
+.offcanvas.horizontal {
+  border-radius: 0;
+  border-start-end-radius: 1rem;
+  border-start-start-radius: 1rem;
+}
+
+.offcanvas-body {
+  overflow-y: auto;
+  overflow-x: hidden !important;
+}
+
+.offcanvas {
+  z-index: 1045;
+}

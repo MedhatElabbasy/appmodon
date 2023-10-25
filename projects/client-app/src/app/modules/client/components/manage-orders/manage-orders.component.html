@@ -1,0 +1,27 @@
+
+<div class="position-relative header">
+    <div class="bg-primary fixed-top w-100">
+      <app-navbar> </app-navbar>
+    </div>
+  </div>
+
+  
+
+  <div class="h-100 bg-info-o mt-5 py-5">
+
+    <div class="container mt-5 py-5">
+
+<ul class="nav sub-nav nav-tabs my-3">
+    <ng-container *ngFor="let item of list">
+        <li class="nav-item" *appRole="item.role!">
+            <a class="nav-link" [routerLink]="item.link" routerLinkActive="active" [translate]="item.name">
+            </a>
+        </li>
+    </ng-container>
+
+</ul>
+
+<router-outlet></router-outlet>
+
+</div>
+</div>

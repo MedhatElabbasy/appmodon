@@ -1,0 +1,70 @@
+<div class="bg-primary">
+  <app-navbar>
+
+  </app-navbar>
+</div>
+<div class="container py-4">
+  <div class="py-4">
+    <div class="header px-4 px-md-5">
+      <div class="row h-100 row-cols-2 align-items-center">
+        <div class="mt-8">
+          <h1 class="display-4 fw-700 text-primary d-none d-md-block">
+            {{'faqs'|translate}}
+          </h1>
+          <h1 class="fw-700 text-primary d-block d-md-none">{{'faqs'|translate}}</h1>
+          <nav class=" fs-18">
+            <a class="text-decoration-none text-primary">{{'home' |translate}}/ </a>
+            <a class="text-decoration-none text-primary">{{'faqs'|translate}}</a>
+          </nav>
+        </div>
+        <div class="d-flex justify-content-center">
+          <img src="assets/images/bgs/about.png" alt="about-takid" class="img-fluid" />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row mb-5 mt-3">
+    <div class="col-lg-6  mt-4">
+      <div class="p-5 box rounded-4" *ngIf="(lang.isAr | async)">
+        <h4>ما هو عائد على الشركات من استخدام منصة تأكيد؟</h4>
+        <p class="mt-4">
+          الربط<br>
+          تقوم منصة تأكيد بالربط بين المنشآت الأمنيه الخاصه و المنشآت المدنيه الراغبه في التعاقد و بين الكوادر الوطنيهة
+          عبر نظام سحابي آمن و سهل الأستخدام .
+        </p>
+      </div>
+    </div>
+    <div class="col-lg-6  mt-4">
+      <div class="p-5 box rounded-4" *ngIf="(lang.isAr | async)">
+        <h4>أهمية تأكيد للأفراد؟</h4>
+        <p class="mt-4">
+          يكون من خلال رفع كفأةالكوادر الوطنية و تحسين بيئة العمل لتكون بيئة منتجة و جذابة
+        </p>
+      </div>
+    </div>
+    <div class="col-lg-6  mt-4">
+      <div class="p-5 box rounded-4" *ngIf="!(lang.isAr | async)">
+        <h4>What is the benefit for companies from using the Takdeed platform?</h4>
+        <p class="mt-4">
+          Connectivity<br>
+          Takdeed platform connects private security facilities and civil facilities wishing to contract and between
+          national cadres through a secure and easy-to-use cloud system.
+        </p>
+      </div>
+    </div>
+
+    <div class="col-lg-6  mt-4">
+      <div class="p-5 box rounded-4" *ngIf="!(lang.isAr | async)">
+        <h4>The importance of affirmation for individuals?</h4>
+        <p class="mt-4">
+          It is through raising the efficiency of national cadres and improving the work environment to be a productive
+          and attractive environment
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<app-footer>
+</app-footer>

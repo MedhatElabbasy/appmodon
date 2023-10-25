@@ -1,0 +1,50 @@
+<div class="container" *ngIf="data">
+  <h5 class="fw-500">{{'myCompany'|translate}}</h5>
+  <div class="mt-4">
+    <h6 class="fw-bold"> {{'aboutCompany'|translate}}</h6>
+
+    <div class="d-flex gap-3 align-items-center my-4">
+      <img [src]="data?.securityCompany?.companyLogo.fullLink!" alt="logo" height="80" width="80"
+        class="d-block obj-cover obj-position-c rounded-8" onerror="this.src='assets/images/icons/person.png'" />
+      <div >
+        <p class="fw-bold">{{ data.securityCompany.name }}</p>
+      </div>
+    </div>
+    <p class="mt-3 text-secondary">
+      {{
+      data?.securityCompany?.businessDescription
+      }}
+    </p>
+    <hr>
+  </div>
+  <div>
+    <h6 class="fw-bold"> {{'location'|translate}}</h6>
+    <p class="mt-3 text-secondary">
+      {{data?.securityCompany?.address}}
+    </p>
+    <div>
+      <google-map height="400px" width="100%" [options]="{ styles: style }"
+      >
+        <map-marker-clusterer
+        imagePath="https://raw.githubusercontent.com/googlearchive/js-marker-clusterer/gh-pages/images/m">
+          <map-marker
+            [position]="{ lat: +this.data?.securityCompany?.locationLat, lng: +this.data?.securityCompany?.locationLng }">
+          </map-marker>
+        </map-marker-clusterer>
+      </google-map>
+    </div>
+  </div>
+</div>
+
+
+<div class="container" *ngIf="!data">
+  <h4 class="text-align-center fw-bold mt-5">
+    {{ "notExist" | translate }}
+  </h4>
+  <p class="text-info text-align-center fs-5">
+    {{ "no_data_to_show" | translate }}
+  </p>
+  <div class="col-md-4 col-12 mx-auto container">
+    <img src="assets/images/icons/Mobilelogin-cuate.png" class="img-fluid" />
+  </div>
+</div>

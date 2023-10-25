@@ -1,0 +1,108 @@
+<div class="card border-0 rounded-0" *ngIf="site">
+  <div class="card-body p-1">
+    <div class="d-flex flex-wrap flex-md-row gap-3 align-items-start">
+      <img
+        [src]="site.sitePhoto?.fullLink"
+        class="obj-cover obj-position-c rounded-10"
+        width="200"
+        height="130"
+      />
+      <div class="flex-fill d-none d-md-block">
+        <h5 class="fw-600 text-primary">{{ site.siteName }}</h5>
+        <p class="text-info">{{ site.siteAddress }}</p>
+        <div class="row row-cols-xl-4 row-cols-2">
+          <div>
+            <h6 class="text-info fs-14" translate="clients.enable_geo"></h6>
+            <p *ngIf="site.enableGeolocation" class="text-primary fw-700">
+              {{ "active" | translate }}
+            </p>
+
+            <p *ngIf="!site.enableGeolocation" class="text-primary fw-700">
+              {{ "not_active" | translate }}
+            </p>
+          </div>
+          <div>
+            <h6
+              class="text-info fs-14"
+              translate="clients.locations_on_this_site"
+            ></h6>
+            <p class="text-primary fw-700">
+              {{ site.siteLocations.length }}
+            </p>
+          </div>
+          <div>
+            <h6 class="text-info fs-14" translate="shift"></h6>
+            <p class="text-primary fw-700">
+              {{ site.siteSupervisorShifts.length }}
+            </p>
+          </div>
+          <div>
+            <h6 class="text-info fs-14" translate="number_of_guards"></h6>
+            <p class="text-primary fw-700">
+              {{ site.totalNumberOfGurds }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 d-block d-md-none">
+        <h5 class="fw-600 text-primary">{{ site.siteName }}</h5>
+        <p class="text-info">{{ site.siteAddress }}</p>
+        <div class="row row-cols-xl-4 row-cols-2">
+          <div>
+            <h6 class="text-info fs-14" translate="clients.enable_geo"></h6>
+            <p *ngIf="site.enableGeolocation" class="text-primary fw-700">
+              {{ "active" | translate }}
+            </p>
+
+            <p *ngIf="!site.enableGeolocation" class="text-primary fw-700">
+              {{ "not_active" | translate }}
+            </p>
+          </div>
+          <div>
+            <h6
+              class="text-info fs-14"
+              translate="clients.locations_on_this_site"
+            ></h6>
+            <p class="text-primary fw-700">
+              {{ site.siteLocations.length }}
+            </p>
+          </div>
+          <div>
+            <h6 class="text-info fs-14" translate="shift"></h6>
+            <p class="text-primary fw-700">
+              {{ site.siteSupervisorShifts.length }}
+            </p>
+          </div>
+          <div>
+            <h6 class="text-info fs-14" translate="number_of_guards"></h6>
+            <p class="text-primary fw-700">
+              {{ site.totalNumberOfGurds }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <button
+        (click)="onUpdate()"
+        type="button"
+        class="btn bg-primary-o text-primary edit"
+      >
+        <i class="fa fa-pencil" aria-hidden="true"></i>
+      </button>
+      <button
+        [routerLink]="[details, site.id]"
+        type="button"
+        class="btn bg-warning-o rounded-10 border-0 text-primary d-block"
+      >
+        <div class="d-flex gap-3 align-items-center">
+          <span
+            class="fw-600 text-primary"
+            translate="clients.site_details"
+          ></span>
+          <i class="fa-solid fa-arrow-up-right-from-square text-warning"></i>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>

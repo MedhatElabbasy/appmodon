@@ -1,0 +1,6 @@
+<div class="row row-cols-1 g-4">
+  <div *ngFor="let item of sites; let l = last">
+    <app-guard-site-card [site]="item"></app-guard-site-card>
+    <hr *ngIf="!l" />
+  </div>
+</div>

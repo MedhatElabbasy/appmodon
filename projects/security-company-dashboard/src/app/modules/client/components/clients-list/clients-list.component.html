@@ -1,0 +1,106 @@
+<div class="card h-100 rounded-12 border-0 mb-3">
+  <div class="card-body d-flex flex-column">
+    <header class="d-flex gap-3 flex-wrap justify-content-between align-items-center">
+      <div class="col-12 col-sm-4">
+        <div class="input-group">
+          <span class="input-group-text border-0 bg-transparent" id="search">
+            <ion-icon name="search"></ion-icon>
+          </span>
+          <input type="text" class="form-control" [placeholder]="'search' | translate" aria-label="search"
+            aria-describedby="search" [(ngModel)]="searchKey" />
+        </div>
+      </div>
+
+      <div *ngIf="false" class="d-flex col-12 col-sm justify-content-between justify-content-sm-end gap-3">
+        <button type="button" class="btn d-flex text-info gap-2 align-items-center rounded-m rounded-8 bg-info-o">
+          {{ "order_by" | translate }}
+          <ion-icon name="caret-down-outline"></ion-icon>
+        </button>
+        <button type="button" class="btn d-flex text-info gap-2 align-items-center rounded-m rounded-8 bg-info-o">
+          <i class="fa-solid fa-sliders"></i>
+          {{ "filtration" | translate }}
+        </button>
+      </div>
+    </header>
+    <hr />
+    <section class="flex-fill d-flex flex-column" *ngIf="clientsList">
+      <div class="table-responsive flex-fill text-primary">
+        <table class="table table-striped table-borderless">
+          <thead>
+            <tr>
+              <th translate="name"></th>
+              <th translate="charge_person"></th>
+              <th translate="branch_name"></th>
+              <th translate="contact_number"></th>
+              <th translate="email"></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngIf="clientsList">
+              <tr class="c-pointer" (click)="getDetails(client)" *ngFor="
+                  let client of clientsList.data
+                    | filter: searchKey
+                    | paginate
+                      : {
+                          itemsPerPage: pageSize,
+                          currentPage: pageNumber,
+                          totalItems: clientsList.data.length,
+                          id: 'clients_list'
+                        }
+                ">
+                <td *ngIf="client.clientCompany">{{ client?.clientCompany?.name }}</td>
+                <td *ngIf="client.clientCompany">{{ client?.clientCompany?.chargePerson?
+                  client?.clientCompany?.chargePerson: "clients.not_register"|translate }}</td>
+                <td *ngIf="client.clientCompany">{{ (lang.isAr | async) ? client.securityCompanyBranch.name :
+                  client.securityCompanyBranch.nameEn }}
+                </td>
+
+                <td *ngIf="client.clientCompany">{{
+                  client.clientCompany.chargePersonPhoneNumber?client.clientCompany.chargePersonPhoneNumber:"clients.not_register"|translate}}
+                </td>
+                <td *ngIf="client.clientCompany">{{
+                  client.clientCompany.email?client.clientCompany.email:"clients.not_register"|translate }}</td>
+                <td *ngIf="client.clientCompany">
+                  <div class="d-flex justify-content-end">
+                    <button [routerLink]="[link, client.id, client.clientCompany.id]" type="button"
+                      class="btn bg-info-o text-info edit">
+                      <ion-icon name="settings-sharp"></ion-icon>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </ng-container>
+
+            <tr *ngIf="!clientsList.data.length">
+              <td colspan="5">
+                <h6 translate="no_data_to_show" class="fw-600 text-danger text-align-center"></h6>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <hr />
+
+      <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+        <div class="text-info d-flex gap-3 align-items-center">
+          <label class="fw-500" translate="for_page"></label>
+          <div>
+            <select class="form-select" (change)="onPageSizeChange($event)">
+              <option *ngFor="let size of sizes" [selected]="size == pageSize">
+                {{ size }}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <pagination-controls id="clients_list" (pageChange)="onPageNumberChange($event)"
+          (pageBoundsCorrection)="onPageNumberChange($event)" [maxSize]="3" [responsive]="true" [previousLabel]="''"
+          [nextLabel]="''" screenReaderPaginationLabel="Pagination" screenReaderPageLabel="page"
+          screenReaderCurrentLabel="You're on page">
+        </pagination-controls>
+      </div>
+    </section>
+  </div>
+</div>

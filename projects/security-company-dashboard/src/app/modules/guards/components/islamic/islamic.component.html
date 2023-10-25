@@ -1,0 +1,27 @@
+<div class="form-floating d">
+    <input
+     (click)="dp.toggle()"
+     type="text"
+     #dp="ngbDatepicker"
+     ngbDatepicker
+     [(ngModel)]="model"
+     name="dp"
+     class="form-control datapiker-icon"
+     [firstDayOfWeek]="7"
+     (ngModelChange)="changeListener()"
+     [minDate]="minDate"
+     [maxDate]="maxDate"
+     
+   /> 
+   <label for="input1" translate="birth_date"></label>
+ </div>
+<!-- <div class="input-group flex-nowrap">
+   <div class="input-group-wrapper">
+       <input class="form-control" id="date3"  ngbDatepicker #d3="ngbDatepicker">
+       <label for="date3">Date</label>
+   </div>
+   <div class="input-group-append">
+       <button class="btn btn-link calendar far fa-calendar" (click)="d3.toggle()"></button>
+   </div> 
+</div>  -->
+ 

@@ -1,0 +1,19 @@
+@import "libs/assets/styles/variables.scss";
+hr {
+  border-color: $info-color;
+}
+
+.nav-btn {
+  width: 35px;
+  height: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+}
+
+@media (min-width: 992px) {
+  .border-inline-end {
+    border-inline-end: 1.5px solid $light-color;
+  }
+}

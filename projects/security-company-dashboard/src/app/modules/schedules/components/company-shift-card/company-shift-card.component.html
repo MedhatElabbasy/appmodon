@@ -1,0 +1,280 @@
+<ng-container *ngIf="shift">
+  <div class="bg-white rounded-10">
+    <button (click)="onEditShift()" translate="edit" type="button"
+      class="btn my-1 border-0 bg-transparent text-info float-end"></button>
+    <button (click)="onDeleteShift()" translate="delete" type="button"
+      class="btn my-1 border-0 bg-transparent text-info float-end"></button>
+    <div class="p-2 wrapper d-flex align-items-center justify-content-center">
+      <h5 class="fw-600 m-0 text-primary">
+        {{
+        (lang.isAr | async)
+        ? shift.companyShift.shiftType.name
+        : shift.companyShift.shiftType.nameEN
+        }}
+        <span class="mis-2 text-info">( <span translate="from"></span>
+          {{ shift.shiftStartTime | time: (lang.isAr | async) }}
+          <span translate="to"></span>
+          {{ shift.shiftEndTime | time: (lang.isAr | async) }} )</span>
+      </h5>
+    </div>
+  </div>
+
+  <div *ngIf="!shift.schedulings.length" class="mt-4 d-flex justify-content-center align-items-center">
+    <app-add-button (click)="addMode()">
+      <div class="text-align-center" translate="shifts.no_schedules_exist_add"></div>
+    </app-add-button>
+  </div>
+  <!-- -------------------------------- grid --------------------------------- -->
+  <div *ngIf="shift.schedulings.length" class="row mb-2 mt-2 row-cols-xl-3 row-cols-md-2 row-cols-1 g-3">
+    <app-schedules [shift]="shift" *ngFor="let schedule of shift.schedulings" [schedule]="schedule"
+      (edit)="editMode($event)" (delete)="deleteMode($event)"></app-schedules>
+  </div>
+
+  <app-line-add-button (click)="addMode()" *ngIf="shift.schedulings.length">
+    {{ "shifts.click_here_to_add_schedule" | translate }}
+  </app-line-add-button>
+</ng-container>
+
+<!-- ---------------------------- add schedule ----------------------------- -->
+<public-api-canvas [id]="addCanvas">
+  <form [formGroup]="scheduleForm" (ngSubmit)="onSubmit()" #form="ngForm">
+    <h5 class="fw-500 mb-4 text-align-center" translate="shifts.add_schedule"></h5>
+
+    <div class="mb-3">
+      <div class="form-floating">
+        <input type="text" class="form-control" id="schedule_arabic_name" placeholder="data" formControlName="name" />
+        <label for="schedule_arabic_name" translate="shifts.schedule_arabic_name"></label>
+      </div>
+
+      <div class="error-message" *ngIf="controls['nameEn'].invalid && form.submitted">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        {{ "validation.field_required" | translate }}
+      </div>
+    </div>
+    <div class="mb-3">
+      <div class="form-floating">
+        <input type="text" class="form-control" id="schedule_english_name" placeholder="data"
+          formControlName="nameEn" />
+        <label for="schedule_english_name" translate="shifts.schedule_english_name"></label>
+      </div>
+      <div class="error-message" *ngIf="controls['nameEn'].invalid && form.submitted">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        {{ "validation.field_required" | translate }}
+      </div>
+    </div>
+    <hr />
+
+    <!-- -------------------------------- days --------------------------------- -->
+    <h6 translate="shifts.select_working_days" class="fw-400 fs-14 text-info"></h6>
+    <div>
+      <div class="d-flex flex-column gap-3">
+        <div *ngFor="let item of week" class="d-flex gap-3 align-items-center justify-content-between">
+          <p-inputSwitch [formControlName]="item.key"></p-inputSwitch>
+          <h6 class="fw-600 m-0" [translate]="'dayNames.' + item.name"></h6>
+          <div [class.disable]="!controls[item.key].value" class="d-flex align-items-center text-primary gap-2">
+            <div class="bg-info-o p-2 px-3 fw-600 rounded-10">
+              {{ shift.shiftStartTime | time: (lang.isAr | async) }}
+            </div>
+            <span class="text-info">-</span>
+            <div class="bg-info-o p-2 px-3 fw-600 rounded-10">
+              {{ shift.shiftEndTime | time: (lang.isAr | async) }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="error-message" *ngIf="scheduleForm.errors?.['days'] && form.submitted">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        {{ "validation.field_min" | translate }}
+      </div>
+    </div>
+    <hr />
+    <h6 translate="shifts.break_time" class="fw-400 fs-14 text-info"></h6>
+    <h5 *ngIf="!BreakScheduling.controls.length" class="fw-500 text-info text-align-center"
+      translate="shifts.no_breaks_exist"></h5>
+    <app-line-add-button *ngIf="!BreakScheduling.controls.length" (click)="addBreak()">
+      {{ "shifts.add_new_break" | translate }}
+    </app-line-add-button>
+
+    <!-- ------------------------------- breaks -------------------------------- -->
+    <div formArrayName="breakScheduling" *ngFor="
+        let item of $any(BreakScheduling.controls);
+        let i = index;
+        let e = last
+      ">
+      <form [formGroup]="item" #breakForm="ngForm" class="d-flex flex-column gap-3">
+        <div *ngIf="breakTypes">
+          <p-dropdown styleClass="w-100" [options]="breakTypes.optionSetItems!" [placeholder]="
+              (lang.isAr | async)
+                ? breakTypes.displayNameAr
+                : breakTypes.displayNameEN
+            " [optionLabel]="(lang.isAr | async) ? 'nameAr' : 'nameEn'" formControlName="restPaymentTypeId"
+            optionValue="id"></p-dropdown>
+          <div class="error-message" *ngIf="item.get('restPaymentTypeId').invalid && form.submitted">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            {{ "validation.field_required" | translate }}
+          </div>
+        </div>
+        <div>
+          <div class="form-floating">
+            <input type="text" class="form-control" id="ArName" placeholder="data" formControlName="name" />
+            <label for="ArName" translate="branches.arabic_name"></label>
+          </div>
+          <div class="error-message" *ngIf="item.get('name').invalid && form.submitted">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            {{ "validation.field_required" | translate }}
+          </div>
+        </div>
+        <div>
+          <div class="form-floating">
+            <input type="text" class="form-control" id="EnName" placeholder="data" formControlName="nameEn" />
+            <label for="EnName" translate="branches.english_name"></label>
+          </div>
+          <div class="error-message" *ngIf="item.get('nameEn').invalid && form.submitted">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            {{ "validation.field_required" | translate }}
+          </div>
+        </div>
+        <div class="d-flex justify-content-between">
+          <div class="col-6">
+            <div class="form-floating">
+              <input min="1" type="number" class="form-control" placeholder="data" formControlName="breakTime" />
+              <label translate="time_period"></label>
+            </div>
+            <div class="error-message" *ngIf="item.get('breakTime').invalid && form.submitted">
+              <i class="fa-solid fa-circle-exclamation"></i>
+              {{ "validation.field_required" | translate }}
+            </div>
+          </div>
+          <div>
+            <button (click)="removeBreak(i)" type="button"
+              class="btn bg-info-o py-2 d-flex flex-column justify-content-center align-items-center">
+              <ion-icon name="trash" class="text-danger"></ion-icon>
+              {{ "delete" | translate }}
+            </button>
+          </div>
+        </div>
+      </form>
+      <hr *ngIf="!e" />
+
+      <app-line-add-button *ngIf="e || !BreakScheduling.controls.length" (click)="addBreak()">
+        {{ "shifts.add_new_break" | translate }}
+      </app-line-add-button>
+    </div>
+
+    <!-- --------------------------- overtime rules ---------------------------- -->
+    <h6 translate="shifts.overtime_rules" class="fw-400 fs-14 text-info"></h6>
+
+    <div class="mb-3 form-check">
+      <input type="checkbox" class="form-check-input" id="overtime_per_day"
+        formControlName="isPerDayExtraTimeEnabled" />
+      <label class="form-check-label" for="overtime_per_day" translate="shifts.daily_overtime"></label>
+    </div>
+
+    <div class="mb-3">
+      <div class="form-floating col-6">
+        <input min="1" formControlName="perDayExtraTime" type="number" class="form-control" id="day_overtime_hour"
+          placeholder="data" />
+        <label for="day_overtime_hour" translate="shifts.duration"></label>
+      </div>
+
+      <div class="error-message" *ngIf="controls['perDayExtraTime'].invalid && form.submitted">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        {{ "validation.field_required" | translate }}
+      </div>
+    </div>
+
+    <div class="mb-3 form-check">
+      <input formControlName="isPerWeekExtraTimeEnabled" type="checkbox" class="form-check-input"
+        id="overtime_per_day" />
+      <label class="form-check-label" for="overtime_per_day" translate="shifts.weekly_overtime"></label>
+    </div>
+
+    <div class="mb-3">
+      <div class="form-floating col-6">
+        <input min="1" type="number" class="form-control" id="day_overtime_hour" placeholder="data"
+          formControlName="perWeekExtraTime" />
+        <label for="day_overtime_hour" translate="shifts.duration"></label>
+      </div>
+
+      <div class="error-message" *ngIf="controls['perWeekExtraTime'].invalid && form.submitted">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        {{ "validation.field_required" | translate }}
+      </div>
+    </div>
+
+    <div class="mb-3 form-check">
+      <input type="checkbox" class="form-check-input" id="overtime_reset_day" formControlName="timeForRest" />
+      <label class="form-check-label" for="overtime_reset_day" translate="shifts.rest_day_overtime"></label>
+    </div>
+
+    <div class="mb-3 form-check">
+      <input type="checkbox" class="form-check-input" id="overtime_holiday" formControlName="extraTimeForVacations" />
+      <label class="form-check-label" for="overtime_holiday" translate="shifts.holiday_overtime"></label>
+    </div>
+    <button *ngIf="isEdit" translate="Update" type="submit" class="mt-3 btn btn-primary rounded-10 px-4 d-block mis-auto"></button>
+    <button *ngIf="!isEdit" translate="submit" type="submit" class="mt-3 btn btn-primary rounded-10 px-4 d-block mis-auto"></button>
+  </form>
+</public-api-canvas>
+
+<public-api-canvas [id]="editShiftCanvas">
+  <form (ngSubmit)="editShift()" [formGroup]="shiftForm" #form="ngForm" class="h-100">
+    <div class="d-flex flex-column h-100">
+      <h5 translate="shifts.update_shift" class="fw-500 text-align-center"></h5>
+      <div class="flex-fill">
+        <div class="mt-4 mb-3">
+          <p-dropdown styleClass="w-100" [options]="companyShifts" placeholder="{{ 'shift' | translate }}"
+            [filter]="true" [optionLabel]="
+              (lang.isAr | async) ? 'shiftType.name' : 'shiftType.nameEn'
+            " optionValue="id" formControlName="companyShiftId"></p-dropdown>
+
+          <div class="error-message" *ngIf="shiftControls['companyShiftId'].invalid && form.submitted">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            {{ "validation.field_required" | translate }}
+          </div>
+        </div>
+
+        <div class="row g-4 row-cols-2">
+          <div>
+            <div class="form-floating">
+              <input type="time" class="form-control" id="shift_start" placeholder="data"
+                formControlName="shiftStartTime" />
+              <label for="shift_start" translate="shifts.shift_start_at"></label>
+            </div>
+            <div class="error-message" *ngIf="shiftControls['shiftStartTime'].invalid && form.submitted">
+              <i class="fa-solid fa-circle-exclamation"></i>
+              {{ "validation.field_required" | translate }}
+            </div>
+          </div>
+          <div>
+            <div class="form-floating">
+              <input type="time" class="form-control" id="end_date" placeholder="data" formControlName="shiftEndTime" />
+              <label for="end_date" translate="shifts.shift_end_at"></label>
+            </div>
+
+            <div class="error-message" *ngIf="shiftControls['shiftEndTime'].invalid && form.submitted">
+              <i class="fa-solid fa-circle-exclamation"></i>
+              {{ "validation.field_required" | translate }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="d-flex justify-content-end gap-2 mt-3">
+        <button data-bs-dismiss="offcanvas" type="reset" class="btn bg-info-o px-4 rounded-10"
+          translate="cancel"></button>
+        <button type="submit" class="btn btn-primary px-4 rounded-10" translate="edit"></button>
+      </div>
+    </div>
+  </form>
+</public-api-canvas>
+
+
+<!-- ------------------------------- delete -------------------------------- -->
+<public-api-modal classList="modal-dialog-centered" [id]="modalId">
+  <img src="assets/images/svg/delete.svg" alt="" class="mb-3" srcset="" />
+  <h4 class="fw-700" translate="security_dashboard.dash.DeleteShift"></h4>
+  <div class="d-flex justify-content-end gap-2">
+    <button type="button" data-bs-dismiss="modal" class="btn rounded-8 px-4 py-2 btn-light" translate="cancel"></button>
+    <button translate="yes_delete" type="button" data-bs-dismiss="modal" class="btn rounded-8 px-4 py-2 btn-danger"
+      (click)="Delete()"></button>
+  </div>
+</public-api-modal>

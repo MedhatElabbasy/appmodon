@@ -1,0 +1,39 @@
+@import "libs/assets/styles/variables.scss";
+
+.header {
+ // height: 240px;
+  z-index: 1000;
+}
+
+::ng-deep {
+  .map-container {
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 0px;
+    border-start-start-radius: 10px;
+    border-start-end-radius: 10px;
+  }
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.labelClass {
+  text-align: center !important;
+  color: red !important;
+}
+.myPadding {
+  padding: 14px 10px;
+}
+
+::ng-deep{
+  .marker{
+    color: black !important;
+    font-size: 20px !important;
+    bottom: 26px !important;
+    left: 0 !important;
+    position: relative !important;
+  }
+}

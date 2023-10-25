@@ -1,0 +1,333 @@
+<div class="container h-100 py-4">
+  <div class="row h-100 g-4">
+    <div class="col-xl-4 col-lg-4 col-md-12">
+      <div class="card border-0 rounded-10 position-relative">
+        <div class="d-flex controls justify-content-end align-items-center">
+          <div>
+            <span
+              class="badge p-2 fw-normal d-flex align-items-center gap-2 justify-content-between text-primary fs-14 fw-600 bg-white shadow-sm w-fit"
+              *ngIf="branch.isMainBranch">
+              <i class="fa-solid fa-circle text-success" style="font-size: 10px"></i>
+              <span translate="branches.is_main_branch"></span>
+            </span>
+            <span
+              class="badge p-2 fw-normal d-flex align-items-center gap-2 justify-content-between text-primary fs-14 fw-600 bg-white shadow-sm w-fit"
+              *ngIf="!branch.isMainBranch">
+              <i class="fa-solid fa-circle" [class.text-success]="branch.stauts" [class.text-danger]="!branch.stauts"
+                style="font-size: 10px"></i>
+              <span translate="not_active" *ngIf="!branch.stauts"></span>
+              <span translate="active" *ngIf="branch.stauts"></span>
+            </span>
+          </div>
+        </div>
+
+        <div style="height: 160px">
+          <google-map [lang]="(isAr | async) ? 'ar' : 'en'" [options]="mapOptions" [center]="coords">
+            <map-marker [position]="coords"> </map-marker>
+          </google-map>
+        </div>
+
+        <div class="card-body">
+          <div class="d-flex">
+            <div class="flex-shrink-0">
+              <img [src]="branch.photo?.fullLink" [title]="branch.name" width="60" height="60"
+                class="obj-cover obj-position-c rounded-10" />
+            </div>
+            <div class="flex-grow-1 mis-3">
+              <h5 class="card-title fw-600">
+                {{ (isAr | async) ? branch.name : branch.nameEn }}
+              </h5>
+              <h6 class="card-subtitle text-wrap mb-2 text-info mt-1 limit">
+                <i class="fa-solid fa-location-dot mie-2"></i>
+                {{ branch.address }}
+              </h6>
+            </div>
+          </div>
+          <p class="card-text text-info mt-3">
+            {{ (isAr | async) ? branch.overview : branch.overviewEn }}
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-8 col-lg-8 col-md-12">
+      <div class="h-100 d-flex flex-column gap-3">
+        <!-- ------------------------------- header -------------------------------- -->
+        <div class="d-flex justify-content-between align-items-center">
+          <h4 class="fw-500" translate="branches.manage_branch_users"></h4>
+          <button (click)="onAdd()" type="button"
+            class="btn d-flex align-items-center gap-2 btn-primary py-2 px-4 rounded-8">
+            <ion-icon name="add" class="add"></ion-icon>
+            <span translate="branches.add_user"></span>
+          </button>
+        </div>
+
+        <!-- -------------------------------- grid --------------------------------- -->
+        <div *ngIf="users.length" class="card border-0 h-100 rounded-10">
+          <div class="card-body">
+            <div class="d-flex flex-column h-100">
+              <header class="d-flex flex-grow-0 gap-3 flex-wrap justify-content-between align-items-center">
+                <div class="col-12 col-sm-4">
+                  <div class="input-group">
+                    <span class="input-group-text border-0 bg-transparent" id="search">
+                      <ion-icon name="search"></ion-icon>
+                    </span>
+                    <input type="text" class="form-control" [placeholder]="'search' | translate" aria-label="search"
+                      aria-describedby="search" [(ngModel)]="searchKey" />
+                  </div>
+                </div>
+
+                <div *ngIf="false" class="d-flex col-12 col-sm justify-content-between justify-content-sm-end gap-3">
+                  <button type="button"
+                    class="btn d-flex text-info gap-2 align-items-center rounded-m rounded-8 bg-info-o">
+                    {{ "order_by" | translate }}
+                    <ion-icon name="caret-down-outline"></ion-icon>
+                  </button>
+                  <button type="button"
+                    class="btn d-flex text-info gap-2 align-items-center rounded-m rounded-8 bg-info-o">
+                    <i class="fa-solid fa-sliders"></i>
+                    {{ "filtration" | translate }}
+                  </button>
+                </div>
+              </header>
+              <hr />
+
+              <div class="flex-grow-1 grid">
+                <div class="table-responsive table-grid text-primary flex-grow-1">
+                  <table class="table table-striped table-borderless">
+                    <thead>
+                      <tr>
+                        <th scope="col" translate="name"></th>
+                        <th scope="col" translate="mobile_number"></th>
+                        <th scope="col" translate="email"></th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="
+                          let user of users
+                            | filter: searchKey
+                            | paginate
+                              : {
+                                  itemsPerPage: pageSize,
+                                  currentPage: pageNumber,
+                                  totalItems: total,
+                                  id: 'accounts'
+                                }
+                        ">
+                        <td class="td-photo">
+                          <div class="d-flex gap-3 align-items-center">
+                            <img [src]="user?.photo?.fullLink!" alt="logo" height="40" width="40"
+                              class="d-block obj-cover obj-position-c rounded-8"
+                              onerror="this.src='assets/images/icons/person.png'" />
+                            <div class="fw-500">
+                              {{ user.firstName }} {{ user.lastName }}
+                            </div>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="py-2">{{ user.phoneNumber }}</div>
+                        </td>
+                        <td>
+                          <div class="py-2">{{ user.email }}</div>
+                        </td>
+                        <td>
+                          <div class="d-flex justify-content-end gap-4 align-items-center">
+                            <div class="d-flex align-items-center gap-3">
+                              <label class="limit">
+                                <span translate="active" *ngIf="user.isActive"></span>
+                                <span translate="not_active" *ngIf="!user.isActive"></span>
+                              </label>
+                              <p-inputSwitch [(ngModel)]="user.isActive" (onChange)="toggleState(user, $event)">
+                              </p-inputSwitch>
+                            </div>
+                            <div class="d-flex gap-2 justify-content-end">
+                              <button (click)="onEdit(user)" type="button"
+                                class="btn rounded-8 bg-primary-o text-primary edit">
+                                <i class="fa-solid fa-pen"></i>
+                              </button>
+                              <button type="button" (click)="onDelete(user)"
+                                class="btn rounded-8 bg-danger-o text-danger delete">
+                                <i class="fa-solid fa-trash"></i>
+                              </button>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div class="pagination mt-3">
+                  <hr />
+
+                  <div class="d-flex flex-grow-0 flex-wrap align-items-center w-100 justify-content-between gap-3">
+                    <div class="text-info d-flex gap-3 align-items-center">
+                      <label class="fw-500" translate="for_page"></label>
+                      <div>
+                        <select class="form-select" (change)="onPageSizeChange($event)">
+                          <option *ngFor="let size of sizes" [selected]="size == pageSize">
+                            {{ size }}
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <pagination-controls id="accounts" (pageChange)="pageNumber = $event"
+                      (pageBoundsCorrection)="pageNumber = $event" [maxSize]="3" [responsive]="true"
+                      [previousLabel]="''" [nextLabel]="''" screenReaderPaginationLabel="Pagination"
+                      screenReaderPageLabel="page" screenReaderCurrentLabel="You're on page">
+                    </pagination-controls>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ------------------------------- no data ------------------------------- -->
+        <div *ngIf="!users.length" class="card flex-grow-1 border-0 rounded-10">
+          <div class="card-body">
+            <div class="h-100 d-flex justify-content-center align-items-center">
+              <app-add-button (click)="onAdd()">
+                <div class="text-align-center" translate="branches.add_user"></div>
+              </app-add-button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<public-api-canvas [id]="canvasId">
+  <form [formGroup]="userForm" #form="ngForm" (ngSubmit)="onSubmit()" class="py-2">
+    <h4 class="fw-600 text-align-center" [translate]="!selectedUser?'branches.add_user':'branches.update_user'"></h4>
+    <div class="my-3 d-flex justify-content-center">
+      <div class="file bg-info-o col-12 rounded-8 text-info" [style.backgroundImage]="'url(' + photoLink + ')'"
+        (change)="onImageUpload($event)" (click)="personImage.click()">
+        <input type="file" #personImage hidden accept="image/x-png,image/gif,image/jpeg" />
+        <div class="container" *ngIf="!photoLink">
+          <i class="fa-solid fa-user fs-2"></i>
+          <div class="fs-14 mt-3">
+            {{ "click_to_upload_profile_image" | translate }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="error-message" *ngIf="form.submitted &&controls['photoId'].invalid"
+    [innerHtml]="'validation.image_invalid' | translate"></div>
+    <div class="bg-info-o d-flex justify-content-between align-items-center p-2 mb-3 rounded-3">
+      <label class="text-info" translate="branches.status"></label>
+      <p-inputSwitch formControlName="isActive"></p-inputSwitch>
+    </div>
+
+    <div class="mb-3 mt-4">
+      <div class="form-floating">
+        <input type="text" class="form-control" id="firstName" placeholder="data" formControlName="firstName" />
+        <label for="firstName" translate="firstName"></label>
+      </div>
+
+      <!--! ------------------------ first name validation ------------------------- -->
+      <div *ngIf="form.submitted && controls['firstName'].invalid" class="error-message"
+        [innerHtml]="'validation.first_name_required' | translate"></div>
+    </div>
+    <div class="mb-3">
+      <div class="form-floating">
+        <input type="text" class="form-control" id="middleName" placeholder="data" formControlName="middleName" />
+        <label for="middleName" translate="middle_name"></label>
+      </div>
+
+      <!--! ------------------------ middle name validation ------------------------- -->
+      <div *ngIf="form.submitted && controls['middleName'].invalid" class="error-message"
+        [innerHtml]="'validation.middle_name_required' | translate"></div>
+    </div>
+    <div class="mb-3">
+      <div class="form-floating">
+        <input type="text" class="form-control" id="lastName" placeholder="data" formControlName="lastName" />
+        <label for="lastName" translate="lastName"></label>
+      </div>
+
+      <!--! ------------------------ last name validation ------------------------- -->
+      <div *ngIf="form.submitted && controls['lastName'].invalid" class="error-message"
+        [innerHtml]="'validation.last_name_required' | translate"></div>
+    </div>
+    <div class="mb-3">
+      <div class="form-floating">
+        <input type="email" class="form-control" id="email" placeholder="data" formControlName="email" />
+        <label for="email" translate="email"></label>
+      </div>
+      <!--! -------------------------- email validation --------------------------- -->
+      <div *ngIf="form.submitted && controls['email'].invalid">
+        <div class="error-message" *ngIf="controls['email'].hasError('required')"
+          [innerHtml]="'validation.email_required' | translate"></div>
+        <div class="error-message" *ngIf="controls['email'].hasError('email')"
+          [innerHtml]="'validation.email_invalid' | translate"></div>
+      </div>
+    </div>
+
+    <!-- -------------------------------- phone -------------------------------- -->
+    <div class="mb-3" [hidden]="selectedUser">
+      <div id="mobile" class="form-floating">
+        <div class="form-control d-flex">
+          <select class="form-select py-0 w-fit" id="floatingSelect" [formControl]="code">
+            <option [value]="item.prefixCode" *ngFor="let item of codes">
+              {{ item.ioS2 }}
+            </option>
+          </select>
+          <input type="text" id="phone" class="form-control rounded-0 col p-0" formControlName="phoneNumber" />
+        </div>
+
+        <label for="phone">
+          {{ "mobile_number" | translate }}
+        </label>
+      </div>
+
+      <!--! -------------------------- phone validation --------------------------- -->
+      <div *ngIf="MobileNumber.invalid && form.submitted">
+        <div class="error-message" *ngIf="MobileNumber.errors.pattern && form.submitted"
+          [innerHtml]="'validation.phone_is_not_valid' | translate"></div>
+
+        <div class="error-message" *ngIf="MobileNumber.errors.required && form.submitted"
+          [innerHtml]="'validation.phone_required' | translate"></div>
+      </div>
+    </div>
+
+    <!-- --------------------------------- map --------------------------------- -->
+    <div style="height: 180px" class="mb-3">
+      <public-api-map-search (coordinates)="onLocationListener($event)"></public-api-map-search>
+
+    </div>
+    <div class="error-message" *ngIf="controls['locations'].invalid && form.submitted">
+      <i class="fa-solid fa-circle-exclamation"></i>
+      {{ "validation.not_valid_to_use" | translate }}
+    </div>
+    <!-- ----------------------------- national id ----------------------------- -->
+    <div class="mb-3" [hidden]="selectedUser">
+      <div class="form-floating">
+        <input type="text" class="form-control" id="nationalId" placeholder="data" formControlName="nationalID" />
+        <label for="nationalId" translate="national_id"></label>
+      </div>
+
+      <div class="error-message" *ngIf="controls['nationalID'].invalid && form.submitted"
+        [innerHtml]="'validation.national_id_not_valid' | translate"></div>
+    </div>
+
+    <div class="d-flex gap-2 justify-content-end">
+      <button data-bs-dismiss="offcanvas" translate="cancel" type="reset" class="btn px-4 rounded-10"></button>
+      <button type="submit" class="btn btn-primary px-4 rounded-10"  [translate]="selectedUser?'edit':'add'"></button>
+    </div>
+  </form>
+</public-api-canvas>
+<public-api-modal classList="modal-dialog-centered" [id]="modalId">
+  <img src="assets/images/svg/delete.svg" alt="" class="mb-3" srcset="" />
+  <h4 class="fw-700" translate="branches.delete_user"></h4>
+  <p class="mt-2 text-info" translate="cancel_this_operation"></p>
+
+  <div class="d-flex justify-content-end gap-2">
+    <button type="button" data-bs-dismiss="modal" class="btn rounded-8 px-4 py-2 btn-light" translate="cancel"
+      (click)="selectedUser = null"></button>
+    <button translate="yes_delete" type="button" data-bs-dismiss="modal" class="btn rounded-8 px-4 py-2 btn-danger"
+      (click)="delete()"></button>
+  </div>
+</public-api-modal>

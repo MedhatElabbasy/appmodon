@@ -1,0 +1,75 @@
+@import "libs/assets/styles/variables.scss";
+.home {
+  & header {
+    min-height: 100vh;
+    background-image: url(/assets/images/bgs/home_header.jpg);
+    background-size: cover;
+    background-position: center;
+    opacity: 1;
+    margin-top: -1.5rem !important;
+  }
+}
+.header{
+  z-index: 1000;
+}
+#more {
+  min-height: 380px;
+  &:hover a {
+    color: white !important;
+  }
+}
+
+.needs {
+  a {
+    text-decoration: none;
+    transition: all 0.4s;
+  }
+
+  &:hover {
+    a {
+      text-decoration: underline;
+      color: $primary-color !important;
+    }
+  }
+}
+
+.card-img-top {
+  object-fit: cover;
+  object-position: top;
+}
+
+:host ::ng-deep {
+  .owl-carousel.owl-drag .owl-item {
+    padding: 1.5em 1em;
+  }
+
+  .owl-theme .owl-dots {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .owl-theme .owl-dots .owl-dot {
+    display: inline;
+    padding: 0;
+  }
+
+  .owl-theme .owl-dots .owl-dot span {
+    background-color: #f36e3242;
+    margin: 0;
+    transition: all 0.4s;
+  }
+
+  .owl-theme .owl-dots .owl-dot.active span,
+  .owl-theme .owl-dots .owl-dot:hover span {
+    background-color: #f36e32;
+    width: 13px;
+    height: 13px;
+  }
+}
+
+.client-image {
+  width: 50px !important;
+  height: 50px !important;
+}

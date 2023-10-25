@@ -1,0 +1,130 @@
+<div class="card rounded-12 border-0 mb-3">
+  <div class="card-body d-flex flex-column">
+    <header class="d-flex gap-3 flex-wrap justify-content-between align-items-center">
+      <div class="col-12 col-sm-4">
+        <div class="input-group">
+          <span class="input-group-text border-0 bg-transparent" id="search">
+            <ion-icon name="search"></ion-icon>
+          </span>
+          <input type="text" class="form-control" [placeholder]="'search' | translate" aria-label="search"
+            aria-describedby="search" [(ngModel)]="searchKey" />
+        </div>
+      </div>
+
+      <div *ngIf="false" class="d-flex col-12 col-sm justify-content-between justify-content-sm-end gap-3">
+        <button type="button" class="btn d-flex text-info gap-2 align-items-center rounded-m rounded-8 bg-info-o">
+          {{ "order_by" | translate }}
+          <ion-icon name="caret-down-outline"></ion-icon>
+        </button>
+        <button type="button" class="btn d-flex text-info gap-2 align-items-center rounded-m rounded-8 bg-info-o">
+          <i class="fa-solid fa-sliders"></i>
+          {{ "filtration" | translate }}
+        </button>
+      </div>
+    </header>
+    <hr />
+    <section>
+      <div class="table-responsive text-primary">
+        <table class="table table-striped table-borderless">
+          <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col" translate="name"></th>
+              <th scope="col" translate="job_type"></th>
+              <th scope="col" translate="email"></th>
+              <th scope="col" translate="national_id"></th>
+              <th scope="col"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngIf="guards">
+              <tr (click)="goToDetails(guard)"
+               class=" c-pointer" *ngFor="
+                  let guard of guards
+                    | filter: searchKey
+                    | paginate
+                      : {
+                          itemsPerPage: pageSize,
+                          currentPage: pageNumber,
+                          totalItems: guards.length,
+                          id: 'guards'
+                        }
+                ">
+                <td>
+                  <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                      <img [src]="guard.securityGuard.photo?.fullLink"
+                        onerror="this.src = 'assets/images/icons/earth.png'" alt="" width="50" height="50"
+                        class="rounded-10" />
+                    </div>
+                    <div class="flex-grow-1 mis-3">
+                      <h6 class="mt-0 fw-500">{{ guard.securityGuard.id }}</h6>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  {{
+                  guard.securityGuard.firstName +
+                  " " +
+                  guard.securityGuard.lastName
+                  }}
+                </td>
+                <td>
+                  {{
+                  (lang.isAr | async)
+                  ? guard.securityGuard.jobType.name
+                  : guard.securityGuard.jobType.nameEN
+                  }}
+                </td>
+                <td>
+                  {{
+                  guard.securityGuard.email
+                  ? guard.securityGuard.email
+                  : ("not_specified" | translate)
+                  }}
+                </td>
+                <td>
+                  {{ guard.securityGuard.nationalID }}
+                </td>
+                <td>
+                  <div class="d-flex justify-content-end gap-3 align-items-center">
+                    <button (click)="goToDetails(guard)" type="button" class="btn edit bg-primary-o text-primary">
+                      <i class="fa fa-info" aria-hidden="true"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </ng-container>
+
+            <tr *ngIf="!guards.length">
+              <td colspan="6">
+                <h6 class="fw-500 text-danger text-align-center" translate="no_data_to_show"></h6>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <hr />
+
+      <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+        <div class="text-info d-flex gap-3 align-items-center">
+          <label class="fw-500" translate="for_page"></label>
+          <div>
+            <select class="form-select" (change)="onPageSizeChange($event)">
+              <option *ngFor="let size of sizes">
+                {{ size }}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <pagination-controls id="guards" (pageChange)="onPageNumberChange($event)"
+          (pageBoundsCorrection)="onPageNumberChange($event)" [maxSize]="3" [responsive]="true" [previousLabel]="''"
+          [nextLabel]="''" screenReaderPaginationLabel="Pagination" screenReaderPageLabel="page"
+          screenReaderCurrentLabel="You're on page">
+        </pagination-controls>
+      </div>
+    </section>
+  </div>
+</div>

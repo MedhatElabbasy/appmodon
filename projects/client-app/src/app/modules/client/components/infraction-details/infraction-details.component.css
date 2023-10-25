@@ -1,0 +1,20 @@
+.status {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  text-align: center;
+}
+
+.menue2 .dropdown-toggle::after {
+  visibility: hidden;
+}
+
+.form-check-label {
+  margin-top: 2px;
+}
+
+@media (max-width: 500px) {
+  #filter {
+    width: 100%;
+  }
+}/*# sourceMappingURL=infraction-details.component.css.map */

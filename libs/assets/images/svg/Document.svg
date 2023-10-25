@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="23" height="26" viewBox="0 0 23 26">
+  <g id="Document" transform="translate(-3 -2)">
+    <path id="Path_15" data-name="Path 15" d="M20,2H9C5.048,2,3,4.035,3,8V22c0,4.03,2.048,6,6,6H20c4.016,0,6-1.97,6-6V8C26,4.035,24.016,2,20,2Z" transform="translate(0 0)" />
+    <path id="Path_16" data-name="Path 16" d="M9,7H9c-.676,0-2,.328-2,1S8.324,9,9,9h4a.872.872,0,0,0,1-1,.879.879,0,0,0-1-1Zm12,9H9c-.676,0-2-.328-2-1s1.324-1,2-1H21a.879.879,0,0,1,1,1A.879.879,0,0,1,21,16Zm0,7H9c-.471.063-1.749.391-2,0a2.75,2.75,0,0,1,0-2c.251-.406,1.529-.047,2,0H21c.626.063,1,.359,1,1C22,22.623,21.626,22.938,21,23Z" transform="translate(0 0)" fill="#fff" fill-rule="evenodd"/>
+  </g>
+</svg>

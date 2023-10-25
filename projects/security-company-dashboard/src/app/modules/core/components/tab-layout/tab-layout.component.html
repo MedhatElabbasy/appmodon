@@ -1,0 +1,13 @@
+<ul class="nav sub-nav nav-tabs mb-3">
+  <li class="nav-item" *ngFor="let item of list">
+    <a
+      class="nav-link"
+      [routerLink]="item.link"
+      routerLinkActive="active"
+      [translate]="item.name"
+    >
+    </a>
+  </li>
+</ul>
+
+<router-outlet></router-outlet>

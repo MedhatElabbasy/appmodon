@@ -1,0 +1,118 @@
+<div class="container py-4">
+  <div class="card h-100 border-0 rounded-10">
+    <div class="card-body">
+      <div class="d-lg-flex justify-content-between mb-3">
+        <h5 class="fw-600 mt-2 mb-4" translate="reports.location_tracking"></h5>
+        <div class="d-flex justify-content-end gap-3">
+          <div class="form-floating " *ngIf="data">
+            <p-dropdown class="py-2" id="data" [filter]="true" filterBy="name" styleClass="w-100"
+              [optionLabel]="'clientCompany.name'" optionValue="clientCompany.id" [options]="data"
+              [placeholder]="'validation.select_client'|translate" (onChange)="display($event)"></p-dropdown>
+          </div>
+          <div class="form-floating " *ngIf="sites">
+            <p-dropdown [filter]="true" filterBy="siteName" styleClass="w-100" [optionLabel]="'siteName'"
+              optionValue="id" [options]="sites" [placeholder]="'validation.select_site'|translate"
+              (onChange)="display2($event)"></p-dropdown>
+          </div>
+          <div class="dropdown menue2">
+            <button
+              class="btn myPadding rounded-m rounded-8 btn-primary  d-flex gap-2 align-items-center  dropdown-toggle "
+              type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fa-solid fa-sliders"></i>
+              {{ "filtration" | translate }}
+            </button>
+            <ul class="dropdown-menu " aria-labelledby="dropdownMenuButton2">
+              <li class="dropdown-item cursor-pointer text-align-center" (click)="getDataFilter('client')">{{"client"
+                |translate}}</li>
+              <li class="dropdown-item cursor-pointer text-align-center" (click)="getDataFilter('site')">{{"site"
+                |translate}}</li>
+            </ul>
+          </div>
+          <div>
+            <button (click)="deleteFilter()" class="btn myPadding rounded-m rounded-8 btn btn-secondary  d-flex gap-2 "
+              type="button">
+              {{ "filtrationDelete" | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+      <div style="height: 450px" class="">
+        <google-map [options]="{ styles: style }" [center]="mainLocation" [zoom]="2">
+          <map-marker-clusterer
+            imagePath="https://raw.githubusercontent.com/googlearchive/js-marker-clusterer/gh-pages/images/m">
+            <map-marker *ngFor="let marker of markers" [position]="{ lat: +marker.lat, lng: +marker.lng }"
+              [options]="{title:marker.name}">
+            </map-marker>
+          </map-marker-clusterer>
+        </google-map>
+      </div>
+    </div>
+  </div>
+
+  <div class=" card mt-4 rounded-10 border-0">
+    <div class="card-body">
+      <!-- Nav tabs -->
+      <div class="d-flex justify-content-between">
+        <ul class="nav nav-tabs rounded-0 shadow-none" id="myTab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="checkIn-tab" data-bs-toggle="tab" data-bs-target="#checkIn"
+              type="button" role="tab" aria-controls="checkIn" aria-selected="true">
+              {{ "reports.checked_in" | translate }}
+              <span class="badge bg-success">{{ checkedIn.length }}</span>
+            </button>
+
+
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="checkout-tab" data-bs-toggle="tab" data-bs-target="#checkout" type="button"
+              role="tab" aria-controls="checkout" aria-selected="false">
+              {{ "reports.checked_out" | translate }}
+              <span class="badge bg-success">{{ checkedOut.length }}</span>
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="break-tab" data-bs-toggle="tab" data-bs-target="#break" type="button"
+              role="tab" aria-controls="break" aria-selected="false">
+              {{ "reports.on_break" | translate }}
+              <span class="badge bg-success">{{ break.length }}</span>
+            </button>
+          </li>
+        </ul>
+
+      </div>
+      <!-- Tab panes -->
+      <div class="tab-content">
+        <div class="tab-pane active" id="checkIn" role="tabpanel" aria-labelledby="checkIn-tab">
+          <div class="py-3">
+            <div class="row row-cols-xl-3 row-cols-md-2 row-cols-1 g-4">
+              <app-dash-guard-card *ngFor="let item of checkedIn" [data]="item" [time]="item.startTime">
+              </app-dash-guard-card>
+            </div>
+            <div *ngIf="!checkedIn.length" class="mt-4 p-3 rounded-10 bg-info-o text-align-center fw-500"
+              translate="no_data_to_show"></div>
+          </div>
+        </div>
+        <div class="tab-pane" id="checkout" role="tabpanel" aria-labelledby="checkout-tab">
+          <div class="py-3">
+            <div class="row row-cols-xl-3 row-cols-md-2 row-cols-1 g-4">
+              <app-dash-guard-card *ngFor="let item of checkedOut" [data]="item" [time]="item.endTime">
+              </app-dash-guard-card>
+            </div>
+            <div *ngIf="!checkedOut.length" class="mt-4 p-3 rounded-10 bg-info-o text-align-center fw-500"
+              translate="no_data_to_show"></div>
+          </div>
+        </div>
+        <div class="tab-pane" id="break" role="tabpanel" aria-labelledby="break-tab">
+          <div class="py-3">
+            <div class="row row-cols-xl-3 row-cols-md-2 row-cols-1 g-4">
+              <app-dash-guard-card *ngFor="let item of break" [data]="item" [time]="item.toTalBreakTime">
+              </app-dash-guard-card>
+            </div>
+            <div *ngIf="!break.length" class="mt-4 p-3 rounded-10 bg-info-o text-align-center fw-500"
+              translate="no_data_to_show"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

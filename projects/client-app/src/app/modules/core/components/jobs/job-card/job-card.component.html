@@ -1,0 +1,83 @@
+<div class="card border-3 rounded-12 cursor-pointer" *ngIf="!details" (click)="getCard(data.id,$event)">
+  <div class="d-flex flex-column flex-md-row gap-3 align-items-md-center">
+    <div class="flex-shrink-0 pe-3 mt-3">
+      <img [src]="data?.securityCompany?.companyLogo.fullLink"
+        class="obj-cover obj-position-c company-logo rounded-10 " />
+    </div>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-5">
+          <div class="p-2">
+            <h5 class="fw-bold m-0">{{ data?.securityCompany.name }}</h5>
+            <h6 class="card-subtitle text-info mt-3">
+              <i class="fa-solid fa-location-dot mie-2"></i> {{ data?.securityCompany.address }}
+            </h6>
+            <div class="d-flex flex-wrap gap-2 my-3">
+
+              <span class="badge px-3 py-2 fw-normal fw-500 bg-primary-o rounded-8 text-primary">
+                {{
+                isArabic
+                ? data?.shiftType?.name
+                : data?.shiftType?.nameEN
+                }}
+              </span>
+              <span class="badge px-3 py-2 fw-normal fw-500 bg-warning-o rounded-8 text-primary">
+                {{
+                isArabic
+                ? data?.jobType?.name
+                : data?.jobType?.nameEN
+                }}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="p-2" *ngIf="!details">
+            <h6 class="fw-bold"> {{'jobDescription'|translate}}</h6>
+            <p class="mt-3">
+              {{
+              isArabic
+              ? data?.jobDescription
+              : data?.jobDescriptionEN
+              }}
+
+            </p>
+          </div>
+        </div>
+        <div class="col-lg-3">
+          <div class="container-fluid p-0">
+            <div class="row">
+              <div class="col">
+                <span class="text-muted  ps-1 mt-1 mySize" *ngIf="!details">
+                  {{data?.createdDateTime}}
+                </span>
+              </div>
+              <div class="col my-background">
+                <p class="pt-2 text-center fs-12">{{'vacancies'|translate}} <span>: {{data?.openJobNumber}}</span></p>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex justify-content-center my-4" *ngIf="isLogin">
+            <div class="p-2 iconBg1 rounded-2 ">
+              <img src="assets/images/icons/save.png" class="cursor-pointer" alt=""  (click)="getID(data,$event)">
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- ------------------------------- success ------------------------------- -->
+<public-api-modal [id]="successAlert" classList="modal-dialog-centered">
+  <img width="50" src="assets/images/icons/checked.png" alt="" class="mb-3" />
+  <h5 class="fw-600">{{'jobsave'|translate}}</h5>
+
+  <div class="d-flex justify-content-end gap-2">
+    <button translate="continue" data-bs-dismiss="modal" type="button"
+      class="btn rounded-8 px-4 py-2 btn-primary text-white"></button>
+  </div>
+</public-api-modal>

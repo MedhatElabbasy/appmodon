@@ -1,0 +1,200 @@
+<div class="container">
+  <span class="badge bg-info rounded-10 fs-6 py-2 fw-normal" [innerHtml]="
+      'step_number' | translate: { stepOrder: step.order, totalSteps: length }
+    "></span>
+  <h5 class="mt-3 fw-bold">{{ "steps." + step.title | translate }}</h5>
+  <p class="text-info">
+    {{ "personal_details_step_info" | translate }}
+  </p>
+  <form [formGroup]="personalForm" #form="ngForm" (ngSubmit)="onSubmit()" class="mt-4">
+    <div>
+      <div class="row g-4">
+        <!-- -------------------------------- image -------------------------------- -->
+        <div class="col-12">
+          <div class="file bg-info-o col-12 rounded-8 text-info" [style.backgroundImage]="'url(' + profileImage + ')'"
+            (change)="onImageUpload($event)" (click)="personImage.click()">
+            <input type="file" #personImage hidden accept="image/x-png,image/gif,image/jpeg" />
+            <div class="container" *ngIf="!profileImage">
+              <i class="fa-solid fa-user fs-2"></i>
+              <div class="fs-14 mt-3">
+                {{ "click_to_upload_profile_image" | translate }}
+              </div>
+            </div>
+          </div>
+
+          <div class="error-message" *ngIf="controls['profileImageId'].invalid && form.submitted"
+            [innerHtml]="'validation.image_required' | translate"></div>
+          <div class="error-message" *ngIf="controls['profileImageId'].errors?.notValid"
+            [innerHtml]="'validation.image_invalid' | translate"></div>
+        </div>
+
+        <!-- ----------------------------- first name ------------------------------ -->
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input formControlName="firstName" type="text" class="form-control" id="firstName" placeholder="data" />
+            <label for="firstName">
+              {{ "firstName" | translate }}
+            </label>
+          </div>
+
+          <div *ngIf="controls['firstName'].invalid && form.submitted">
+            <div class="error-message" *ngIf="controls['firstName'].errors?.required"
+              [innerHtml]="'validation.firstName_required' | translate"></div>
+
+
+            <div class="error-message" *ngIf="controls['firstName'].errors?.pattern"
+              [innerHtml]="'validation.first_name_invalid' | translate"></div>
+          </div>
+        </div>
+
+        <!-- ----------------------------- middle name ------------------------------ -->
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input formControlName="middleName" type="text" class="form-control" id="middleName" placeholder="data" />
+            <label for="middleName" translate="middle_name"></label>
+          </div>
+
+          <div *ngIf="controls['middleName'].invalid && form.submitted">
+            <div class="error-message" *ngIf="controls['middleName'].errors?.required"
+              [innerHtml]="'validation.middle_name_required' | translate"></div>
+
+            <div class="error-message" *ngIf="controls['middleName'].errors?.pattern"
+              [innerHtml]="'validation.middle_name_invalid' | translate"></div>
+          </div>
+        </div>
+
+        <!-- ------------------------------ last name ------------------------------ -->
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="text" class="form-control" formControlName="lastName" id="lastName" placeholder="data" />
+            <label for="lastName">
+              {{ "lastName" | translate }}
+            </label>
+          </div>
+          <div *ngIf="controls['lastName'].invalid && form.submitted">
+            <div class="error-message" *ngIf="controls['lastName'].errors?.required"
+              [innerHtml]="'validation.lastName_required' | translate"></div>
+            <div class="error-message" *ngIf="controls['lastName'].errors?.pattern"
+              [innerHtml]="'validation.last_name_invalid' | translate"></div>
+          </div>
+        </div>
+
+        <!-- -------------------------------- email -------------------------------- -->
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input formControlName="email" type="email" class="form-control" id="email" placeholder="data" />
+            <label for="email">
+              {{ "email" | translate }}
+            </label>
+          </div>
+          <div *ngIf="controls['email'].invalid && form.submitted">
+            <div class="error-message" *ngIf="controls['email'].errors?.required"
+              [innerHtml]="'validation.email_required' | translate"></div>
+            <div class="error-message" *ngIf="controls['email'].errors?.email"
+              [innerHtml]="'validation.email_invalid' | translate"></div>
+          </div>
+        </div>
+
+        <!-- -------------------------------- phone -------------------------------- -->
+        <!-- <div class="col-md-6">
+            <div class="form-floating">
+              <div class="form-control d-flex">
+                <select
+                  class="form-select py-0 w-fit"
+                  id="floatingSelect"
+                  [formControl]="code"
+                >
+                  <option [value]="item.prefixCode" *ngFor="let item of codes">
+                    {{ item.ioS2 }}
+                  </option>
+                </select>
+                <input
+                  type="text"
+                  id="phone"
+                  class="form-control rounded-0 col p-0"
+                  formControlName="mobileNumber"
+                />
+              </div>
+              <label for="mobileNumber" >
+                {{ "contact_number" | translate }}
+              </label>
+            </div>
+            <div *ngIf="controls['mobileNumber'].invalid && form.submitted">
+              <div
+                class="error-message"
+                *ngIf="controls['mobileNumber'].errors?.required"
+
+                [innerHtml]="'validation.contact_number_required' | translate"
+              ></div>
+              <div
+                class="error-message"
+                *ngIf="controls['mobileNumber'].errors?.pattern"
+
+                [innerHtml]="'validation.contact_number_invalid' | translate"
+              ></div>
+            </div>
+          </div> -->
+
+        <!-- ---------------------------- business type ---------------------------- -->
+        <div class="col-12">
+          <p-dropdown styleClass="w-100" formControlName="businessTypeId" [filter]="true" filterBy="name"
+            [optionLabel]="isAr ? 'name' : 'nameEN'" optionValue="id" [options]="businessTypes"
+            [placeholder]="'bushiness_type' | translate"></p-dropdown>
+
+          <div class="error-message" *ngIf="controls['businessTypeId'].invalid && form.submitted"
+            [innerHtml]="'validation.business_type_required' | translate"></div>
+        </div>
+
+        <!-- -------------------------------- city --------------------------------- -->
+        <div class="col-md-6">
+          <p-dropdown styleClass="w-100" formControlName="cityId" [filter]="true" filterBy="name" optionLabel="name"
+            optionValue="id" [options]="cities" (ngModelChange)="citySelectListener($event)"
+            [placeholder]="'select_city' | translate">
+          </p-dropdown>
+          <div class="error-message" *ngIf="controls['cityId'].invalid && form.submitted"
+            [innerHtml]="'validation.city_required' | translate"></div>
+        </div>
+
+        <!-- -------------------------------- area --------------------------------- -->
+        <div class="col-md-6">
+          <p-dropdown styleClass="w-100" formControlName="areaId" [filter]="true" filterBy="name" optionLabel="name"
+            optionValue="id" [options]="areas" [placeholder]="'select_area' | translate">
+          </p-dropdown>
+          <div class="error-message" *ngIf="controls['areaId'].invalid && form.submitted"
+            [innerHtml]="'validation.area_required' | translate"></div>
+        </div>
+      </div>
+
+      <div class="d-flex gap-3 mt-5" [ngClass]="{
+          'justify-content-between': step.prev,
+          'justify-content-end': !step.prev
+        }">
+        <button *ngIf="step.prev" type="button" class="btn btn-light bg-info-o text-info rounded-8 px-4 py-2"
+          [routerLink]="['/' + module + '/' + step.prev]">
+          {{ "previous_step" | translate }}
+        </button>
+        <button *ngIf="step.next" type="submit" class="btn btn-primary rounded-8 px-4 py-2">
+          {{ "next_step" | translate }}
+        </button>
+        <button *ngIf="!step.next && step.order === length" type="button" class="btn btn-primary rounded-8 px-4 py-2">
+          {{ "submit" | translate }}
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<!---------------------------------model--------------------------------------------->
+<public-api-modal classList="modal-dialog-centered" [id]="modalId">
+  <div class="mb-4">
+    <i class="fa-solid fa-xmark float-end " (click)="cancel()"></i>
+  </div>
+  <div>
+    <h3>
+      {{'areas_notFound'|translate}}
+    </h3>
+  </div>
+  <div class="d-flex justify-content-center gap-2 mt-3">
+    <button type="button" (click)="cancel()" class="btn rounded-8 px-4 py-2 btn-danger" translate="cancel"></button>
+  </div>
+</public-api-modal>

@@ -1,0 +1,195 @@
+<div class="position-relative header1">
+  <div class="bg-primary fixed-top w-100">
+    <app-navbar>
+
+    </app-navbar>
+  </div>
+</div>
+<div class="h-100 bg-info-o py-5" *ngIf="company">
+  <div class="py-5 mt-5">
+    <div class="container d-flex align-items-end h-100 pt-5">
+      <img [src]="company.companyLogo?.fullLink" class="img-fluid avatar
+        rounded-16"
+        onerror="this.src= 'assets/images/images/tower.jpg'" />
+
+      <div class="d-flex justify-content-end align-items-center w-100 gap-3
+        py-3">
+        <h6 class="text-priamry-o text-capitalize m-0 fw-600">
+          {{ "follow_us" | translate }}
+        </h6>
+        <ul class="nav social gap-3">
+          <li class="nav-item">
+            <a class="nav-link" target="_blank"
+              href="https://www.facebook.com/takidsaapp/about_profile_transparency">
+              <i class="fa-brands fa-facebook"></i></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" target="_blank"
+              href="https://www.tiktok.com/@takid.app">
+              <i class="fa-brands fa-tiktok"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" target="_blank"
+              href="https://twitter.com/takidplatform">
+              <i class="fa-brands fa-twitter"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="container pt-4 pb-5">
+    <div class="row g-4">
+      <div class="col-lg-8 col-md-7">
+        <div class="h-100 d-flex flex-column">
+          <div class="d-flex mt-5 justify-content-between gap-3 flex-wrap">
+            <div>
+              <h3 class="fw-bold">{{ company.name }}</h3>
+              <div class="d-flex align-items-center text-info gap-3">
+                <i class="fas fa-location-pin fs-5"></i>
+                <span>{{ company.address }}</span>
+              </div>
+            </div>
+            <div class="d-flex">
+              <a type="button" [href]="company.website"
+                class="btn d-flex gap-2 align-items-center btn-info text-white
+                py-2 rounded-12">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                <span>{{ "visit_website" | translate }}</span>
+              </a>
+              <div class="nav-item mt-1">
+                <a class="px-2 nav-link" [href]="company.socialMediaLink"
+                  target="_blank"> <i
+                    class="fa-brands fa-facebook fs-2"></i></a>
+              </div>
+              <div class="nav-item mt-1">
+                <a class="px-2 nav-link" [href]="company.socialMediaLink2"
+                  target="_blank"><i
+                    class="fa-brands fa-twitter fs-2"></i></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-block mt-3 d-md-none card rounded-16 border-0">
+            <div class="card-body">
+              <h5 class="text-primary fw-700" translate="contact_us"></h5>
+              <div class="mt-3">
+                <ul class="list-group">
+                  <li class="list-group-item d-flex justify-content-between
+                    align-items-center">
+                    <div>
+                      <div class="fs-12 text-info fw-500"
+                        translate="contact_number"></div>
+                      <div class="fw-600">
+                        920033257
+                      </div>
+                    </div>
+                    <div class="icon rounded-8">
+                      <i class="fa-solid fa-phone"></i>
+                    </div>
+                  </li>
+                  <hr class="my-1" />
+                  <li class="list-group-item d-flex justify-content-between
+                    align-items-center">
+                    <div>
+                      <div class="fs-12 text-info fw-500" translate="email"></div>
+                      <div class="fw-600">info@takid.sa</div>
+                    </div>
+                    <div class="icon rounded-8">
+                      <i class="fa-solid fa-envelope"></i>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="card flex-grow-1 mt-3 p-2 rounded-16 border-0  ">
+            <div class="card-body">
+              <h4 class="fw-600" translate="overview"></h4>
+              <pre *ngIf="company.businessDescription==null" class="text-info">
+                {{
+                  (isAr | async)
+                  ? company.overview
+                  : company.overviewEn
+                  }}
+              </pre>
+              <pre *ngIf="company.businessDescription" class="text-info">
+                {{company.businessDescription}} 
+              </pre>
+              <h4 class="fw-600 mt-4" translate="our_services"></h4>
+              <ul style="list-style: none" class="row p-0 g-2 row-cols-md-2
+                text-info">
+                <li *ngFor="let item of
+                  company.securitCompanyAvailableServices">
+                  {{
+                  (isAr | async)
+                  ? item.availableServices.name
+                  : item.availableServices.nameEN
+                  }}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-5">
+        <div class="d-none d-md-block mb-4 card rounded-16 border-0">
+          <div class="card-body">
+            <h5 class="text-primary fw-700" translate="contact_us"></h5>
+            <div class="mt-3">
+              <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between
+                  align-items-center">
+                  <div>
+                    <div class="fs-12 text-info fw-500"
+                      translate="contact_number"></div>
+                    <div class="fw-600">920033257</div>
+                  </div>
+                  <div class="icon rounded-8">
+                    <i class="fa-solid fa-phone"></i>
+                  </div>
+                </li>
+                <hr class="my-1" />
+                <li class="list-group-item d-flex justify-content-between
+                  align-items-center">
+                  <div>
+                    <div class="fs-12 text-info fw-500" translate="email"></div>
+                    <div class="fw-600">info@takid.sa</div>
+                  </div>
+                  <div class="icon rounded-8">
+                    <i class="fa-solid fa-envelope"></i>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <app-request-quote *ngIf="initData"
+          [contractTypes]="initData.contractTypes" [shifts]="initData.shifts"
+          [companyId]="company" class="d-none d-md-block"></app-request-quote>
+      </div>
+    </div>
+
+    <!-- <h5 class="text-primary fw-700 text-capitalize my-4">Similar Companies</h5> -->
+    <!-- <div class="row row-cols-xl-3 row-cols-md-2 row-cols-1 g-4">
+      <app-feature-card
+        *ngFor="let item of companies"
+        [data]="item"
+      ></app-feature-card>
+    </div> -->
+  </div>
+</div>
+
+<public-api-canvas [id]="canvasId">
+  <app-request-quote *ngIf="initData" [contractTypes]="initData.contractTypes"
+    [companyId]="company"
+    [shifts]="initData.shifts"></app-request-quote>
+</public-api-canvas>
+<button id="float-request-btn" (click)="canvas.open(canvasId)" type="button"
+  class="btn d-flex d-md-none btn-warning text-white">
+  <i class="fa-solid fa-pen"></i>
+</button>

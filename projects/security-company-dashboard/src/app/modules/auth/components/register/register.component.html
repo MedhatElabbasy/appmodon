@@ -1,0 +1,58 @@
+<div class="d-flex flex-column h-100">
+  <div class=" bg-primary">
+    <div class=" container p-3 flex-grow-0  d-flex justify-content-between align-items-center">
+      <img src="assets/images/logo.png" alt="takid" height="40" [routerLink]="['/']" />
+      <button class="btn btn-warning" translate="logout" (click)="logout()"></button>
+    </div>
+  </div>
+
+  <div class="container-fluid px-lg-4 px-xl-5 flex-grow-1  ">
+    <div id="layout" class="d-flex flex-wrap h-100">
+      <div id="side" class="col-lg-4 col-xl-3 col-12 py-4 py-lg-5 px-3">
+        <!-- ------------------------------- hr view ------------------------------- -->
+        <div class="d-none d-lg-block">
+          <div [class.active]="stepIndex >= item.order" *ngFor="let item of FormConfig; let s = first; let i = index">
+            <div class="line" *ngIf="!s">
+              <div></div>
+            </div>
+            <div class="d-flex justify-content-end align-items-center gap-4">
+              <div class="media-body col text-align-end">
+                <h6 class="fw-bold fs-5">
+                  {{ "steps." + item.title | translate }}
+                </h6>
+                <span class="fs-14 fw-500">
+                  {{ "steps." + item.description | translate }}</span>
+              </div>
+              <div class="icon">
+                <svg-icon svgClass="step-icon" [src]="item.icon"></svg-icon>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-block d-lg-none">
+          <div class="d-flex">
+            <div class="d-flex align-items-center col gap-2" [class.active]="stepIndex >= item.order" *ngFor="
+                  let item of FormConfig;
+                  let s = first;
+                  let e = last;
+                  let i = index
+                ">
+              <div class="hr flex-grow-1" [class.bg-transparent]="s"></div>
+              <div class="icon-wrapper flex-grow-0">
+                <svg-icon svgClass="step-icon" [src]="item.icon"></svg-icon>
+              </div>
+              <div class="hr flex-grow-1" [class.bg-transparent]="e"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- --------------------------------- vr ---------------------------------- -->
+      <div class="col-lg-8 col-xl-9 col-12 px-md-4 py-5 overflow-auto">
+        <router-outlet></router-outlet>
+        <!--(newItemEvent)="addUrl($event)"-->
+      </div>
+    </div>
+  </div>
+</div>

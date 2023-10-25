@@ -1,0 +1,512 @@
+// variables
+// color palette
+
+@import "~libs/assets/styles/variables.scss";
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/maps";
+@import "~bootstrap/scss/utilities";
+
+$theme-colors: (
+  "primary": $primary-color,
+  "success": $success-color,
+  "info": $info-color,
+  "warning": $warning-color,
+  "danger": $danger-color,
+  "light": $light,
+  "dark": $dark,
+  "secondary": $secondary,
+  "transparent": $transparent,
+  "black": $black,
+  "white": $white,
+);
+
+$utilities: (
+  "background-color": (
+    property: background-color,
+    class: bg,
+    print: true,
+    responsive: true,
+    values: (
+      "primary": $primary-color,
+      "success": $success-color,
+      "info": $info-color,
+      "warning": $warning-color,
+      "danger": $danger-color,
+      "light": $light,
+      "dark": $dark,
+      "secondary": $secondary,
+      "transparent": $transparent,
+      "black": $black,
+      "white": $white,
+      "primary-o":
+        rgba(
+          $color: $primary-color,
+          $alpha: 0.12,
+        ),
+      "success-o":
+        rgba(
+          $color: $success-color,
+          $alpha: 0.12,
+        ),
+      "info-o":
+        rgba(
+          $color: $info-color,
+          $alpha: 0.12,
+        ),
+      "warning-o":
+        rgba(
+          $color: $warning-color,
+          $alpha: 0.12,
+        ),
+      "danger-o":
+        rgba(
+          $color: $danger-color,
+          $alpha: 0.12,
+        ),
+      "dark-o":
+        rgba(
+          $color: $dark,
+          $alpha: 0.12,
+        ),
+      "secondary-o":
+        rgba(
+          $color: $secondary,
+          $alpha: 0.12,
+        ),
+      "light-o":
+        rgba(
+          $color: $bg-light,
+          $alpha: 0.1,
+        ),
+      "light-o1":
+        rgba(
+          $color: $bg-light,
+          $alpha: 0.01,
+        ),
+    ),
+  ),
+  "background-color-hover": (
+    property: background-color,
+    class: bg,
+    print: true,
+    responsive: true,
+    state: hover,
+    values: (
+      "primary": $primary-color,
+      "success": $success-color,
+      "info": $info-color,
+      "warning": $warning-color,
+      "danger": $danger-color,
+      "light": $light,
+      "dark": $dark,
+      "secondary": $secondary,
+      "transparent": $transparent,
+      "black": $black,
+      "white": $white,
+      "primary-o":
+        rgba(
+          $color: $primary-color,
+          $alpha: 0.1,
+        ),
+      "success-o":
+        rgba(
+          $color: $success-color,
+          $alpha: 0.1,
+        ),
+      "info-o":
+        rgba(
+          $color: $info-color,
+          $alpha: 0.1,
+        ),
+      "warning-o":
+        rgba(
+          $color: $warning-color,
+          $alpha: 0.1,
+        ),
+      "danger-o":
+        rgba(
+          $color: $danger-color,
+          $alpha: 0.1,
+        ),
+      "dark-o":
+        rgba(
+          $color: $dark,
+          $alpha: 0.1,
+        ),
+      "secondary-o":
+        rgba(
+          $color: $secondary,
+          $alpha: 0.1,
+        ),
+      "light-o":
+        rgba(
+          $color: $bg-light,
+          $alpha: 0.1,
+        ),
+      "light-o1":
+        rgba(
+          $color: $bg-light,
+          $alpha: 0.01,
+        ),
+    ),
+  ),
+  "color": (
+    property: color,
+    class: text,
+    print: true,
+    responsive: true,
+    values: (
+      "primary": $primary-color,
+      "success": $success-color,
+      "info": $info-color,
+      "warning": $warning-color,
+      "danger": $danger-color,
+      "light": $light,
+      "dark": $dark,
+      "secondary": $secondary,
+      "transparent": $transparent,
+      "black": $black,
+      "white": $white,
+    ),
+  ),
+  "color-hover": (
+    property: color,
+    class: text,
+    print: true,
+    responsive: true,
+    state: hover,
+    values: (
+      "primary": $primary-color,
+      "success": $success-color,
+      "info": $info-color,
+      "warning": $warning-color,
+      "danger": $danger-color,
+      "light": $light,
+      "dark": $dark,
+      "secondary": $secondary,
+      "transparent": $transparent,
+      "black": $black,
+      "white": $white,
+    ),
+  ),
+  "fw": (
+    property: font-weight,
+    class: "fw",
+    responsive: true,
+    print: true,
+    values: (
+      100: 100,
+      200: 200,
+      300: 300,
+      400: 400,
+      500: 500,
+      600: 600,
+      700: 700,
+      800: 800,
+      900: 900,
+    ),
+  ),
+  "text-align": (
+    property: text-align,
+    class: "text-align",
+    responsive: true,
+    print: true,
+    values: (
+      end: end,
+      start: start,
+      center: center,
+    ),
+  ),
+  "border-radius": (
+    property: border-radius,
+    class: "rounded",
+    responsive: true,
+    print: true,
+    values: (
+      8: 8px,
+      10: 10px,
+      12: 12px,
+      16: 16px,
+    ),
+  ),
+  "hover-shadow": (
+    property: box-shadow,
+    class: "shadow",
+    responsive: true,
+    print: true,
+    state: hover,
+    values: (
+      sm: 0 0.125rem 0.25rem rgba($black, 15%),
+      md: 0 0.5rem 1rem rgba($black, 15%),
+      lg: 0 1rem 3rem rgba($black, 15%),
+    ),
+  ),
+  "transition": (
+    property: transition,
+    class: "transition",
+    responsive: true,
+    print: true,
+    values: (
+      ease: all ease 0.4s,
+      in: all ease-in 0.4s,
+      out: all ease-out 0.4s,
+      in-out: all ease-in-out 0.4s,
+    ),
+  ),
+  "custom-margin-end": (
+    property: margin-inline-end,
+    class: "mie",
+    responsive: true,
+    print: true,
+    values: (
+      0: 0rem,
+      1: 0.25rem,
+      2: 0.5rem,
+      3: 1rem,
+      4: 1.5rem,
+      5: 3rem,
+    ),
+  ),
+  "custom-margin-start": (
+    property: margin-inline-start,
+    class: "mis",
+    responsive: true,
+    print: true,
+    values: (
+      0: 0rem,
+      1: 0.25rem,
+      2: 0.5rem,
+      3: 1rem,
+      4: 1.5rem,
+      5: 3rem,
+      auto: auto,
+    ),
+  ),
+  "object-fit": (
+    property: object-fit,
+    class: obj,
+    responsive: true,
+    print: true,
+    values: (
+      contain: contain,
+      cover: cover,
+      fill: fill,
+      none: none,
+      scale-down: scale-down,
+    ),
+  ),
+  "object-position": (
+    property: object-fit,
+    class: obj-position,
+    responsive: true,
+    print: true,
+    values: (
+      t: top,
+      l: left,
+      r: right,
+      c: center,
+      b: bottom,
+    ),
+  ),
+  "cursor": (
+    property: cursor,
+    class: c,
+    responsive: true,
+    values: (
+      alias: alias,
+      all-scroll: all-scroll,
+      auto: auto,
+      cell: cell,
+      col-resize: col-resize,
+      context-menu: context-menu,
+      copy: copy,
+      crosshair: crosshair,
+      default: default,
+      grabbing: grabbing,
+      grab: grab,
+      help: help,
+      move: move,
+      no-drop: no-drop,
+      pointer: pointer,
+      progress: progress,
+      row-resize: row-resize,
+      not-allowed: not-allowed,
+      text: text,
+      zoom-in: zoom-in,
+      wait: wait,
+      zoom-out: zoom-out,
+    ),
+  ),
+  "view-height": (
+    property: height,
+    responsive: true,
+    rtl: true,
+    class: "vh",
+    values: (
+      10: 10vh,
+      20: 20vh,
+      30: 30vh,
+      40: 40vh,
+      50: 50vh,
+      60: 60vh,
+      70: 70vh,
+      80: 80vh,
+      90: 90vh,
+      100: 100vh,
+    ),
+  ),
+  "custom-gap": (
+    property: gap,
+    class: c-gap,
+    responsive: true,
+    values: (
+      0_5: 0.5rem,
+      1: 1rem,
+      1_5: 1.5rem,
+      2: 2rem,
+      2_5: 2.5rem,
+    ),
+  ),
+);
+
+.logo-white {
+  background: url("/assets/images/white-logo.svg");
+  background-repeat: no-repeat;
+  background-size: 210px;
+  background-position: left -90px bottom;
+
+  [lang="ar"] & {
+    background-position: right -90px bottom;
+  }
+}
+
+/**========================================================================
+ *                           Scroll bar
+ *========================================================================**/
+
+@media (min-width: 768px) {
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar:horizontal {
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: $gray-400;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: $warning-color;
+  }
+
+  .cursor-pointer {
+    cursor: pointer;
+  }
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: $warning-color $gray-400;
+    scrollbar-shadow-color: inset 0 0 15px rgba(0, 0, 0, 0.5);
+  }
+}
+
+/* ---------------------------------- alert --------------------------------- */
+
+.p-toast .p-toast-message .p-toast-message-content .p-toast-message-text {
+  margin: 0;
+  margin-inline-start: 1rem;
+}
+
+.p-toast {
+  z-index: 5000 !important;
+}
+
+[lang="ar"] .p-toast .p-toast-message.p-toast-message-error {
+  border-width: 0 6px 0 0px;
+}
+
+.p-component-overlay {
+  z-index: 1000 !important;
+  position: inherit;
+}
+
+[lang="ar"] .rtl-flip {
+  transform: scaleX(-1);
+}
+
+//==========================================================================
+//                              Block
+
+.block {
+  position: relative;
+  overflow: hidden;
+  user-select: none;
+  cursor: not-allowed;
+  padding: 1em 0;
+
+  &::before {
+    content: "";
+    position: absolute;
+    clear: both;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba($color: $black, $alpha: 0.5);
+    border-radius: 16px;
+    color: white;
+    z-index: 5;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: url("/assets/images/icons/lock.png");
+    background-size: 100%;
+    width: 60px;
+    height: 60px;
+    z-index: 6;
+  }
+}
+
+.w-fit {
+  width: fit-content !important;
+}
+
+.bs-datepicker-container {
+  padding: 0 !important;
+}
+
+.limit {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.wrap-text {
+  word-break: break-all;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.float-end {
+  float: right;
+}
+
+html:lang(ar) {
+  .float-end {
+    float: left !important;
+  }
+}
+
+::ng-deep {
+  .p-dropdown .p-dropdown-clearable .p-dropdown-label {
+    padding: 0 !important;
+    padding-inline-end: 1.5rem !important;
+  }
+}

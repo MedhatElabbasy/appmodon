@@ -1,0 +1,10 @@
+.status {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  text-align: center;
+}
+
+.menue2 .dropdown-toggle::after {
+  visibility: hidden;
+}/*# sourceMappingURL=complaints.component.css.map */

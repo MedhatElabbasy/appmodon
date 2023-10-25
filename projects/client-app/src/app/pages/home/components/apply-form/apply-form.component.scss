@@ -1,0 +1,16 @@
+::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  float: left;
+}
+
+.date > .form-control:focus ~ label,
+.date > .form-control:not(:placeholder-shown) ~ label,
+.date > .form-select ~ label {
+  opacity: 1;
+  font-size: 12px;
+  font-weight: 500;
+
+  :host-context(.ar) & {
+    transform: scale(0.85) translateY(-0.5rem) translateX(0rem) !important;
+  }
+}

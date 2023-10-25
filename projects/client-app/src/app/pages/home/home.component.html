@@ -1,0 +1,147 @@
+<div class="position-relative header">
+  <div class="fixed-top w-100">
+    <app-navbar>
+
+    </app-navbar>
+  </div>
+</div>
+<div class="home bg-light">
+  <header>
+    <div class="container d-flex align-items-center vh-100">
+      <div class="w-100">
+        <h1 class="text-white text-align-center lh-base fw-600"
+          [innerHtml]="'all_your_security_needs_solved' | translate"></h1>
+        <div class="text-white fs-6 text-align-center" [innerHtml]="'header_description' | translate"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ------------------------------- features ------------------------------- -->
+  <section class="features py-5">
+    <div class="container">
+      <div class="d-flex justify-content-between flex-wrap gap-3 align-items-lg-end mb-4">
+        <div>
+          <h6 class="text-info">
+            {{ "what_we_do" | translate }}
+          </h6>
+          <h3 class="fw-bold">
+            {{ "our_featured_companies" | translate }}
+          </h3>
+        </div>
+        <div class="col-md-4 col-12">
+          <div class="input-group">
+            <input type="text" class="form-control placeholder-sm"
+              placeholder="{{ 'search_security_companies' | translate }}" aria-label="Enter your email address"
+              aria-describedby="button-search" [(ngModel)]="searchKey" />
+            <button class="btn btn-warning text-white rounded-8" type="button" id="button-search">
+              <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="row row-cols-xl-3 row-cols-md-2 row-cols-1 g-4">
+        <app-feature-card *ngFor="let item of featuresCompanies.data | filter: searchKey" [data]="item">
+        </app-feature-card>
+        <div [routerLink]="[links.companies]" id="more" class="c-pointer">
+          <div class="card h-100 border-0 rounded-12">
+            <div class="card-body">
+              <div
+                class="d-flex justify-content-center rounded-12 align-items-center h-100 bg-primary text-white bg-warning-hover transition-out">
+                <div>
+                  <h1 class="fw-bold display-5 text-align-center">
+                    {{ featuresCompanies.totalCount + "+" | translate }}
+                  </h1>
+                  <a class="fs-5 text-info" role="button">{{
+                    "view_companies" | translate
+                    }}</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button [routerLink]="[links.companies]" type="button" class="btn bg-info-o d-block mx-auto mt-5 px-4 rounded-10">
+        {{ "view_all_companies" | translate }}
+      </button>
+    </div>
+  </section>
+
+  <section id="info" class="bg-info-o">
+    <div class="container py-5">
+      <div class="row row-cols-lg-4 row-cols-2 g-4">
+        <div *ngFor="let item of statistics" class="text-align-center">
+          <h6 class="text-info fs-5">{{ item.title }}</h6>
+          <h1 class="display-5 nums fw-bold" [attr.data-goal]="item.number">
+            {{ item.number }}
+          </h1>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="container py-5">
+    <h6 class="text-align-center lh-lg text-info">
+      {{ "what_we_do" | translate }}
+    </h6>
+    <h2 class="text-align-center fw-700" [innerHtml]="'one_platform' | translate"></h2>
+
+    <div class="mt-4 row row-cols-lg-3 row-cols-md-2 justify-content-center g-4">
+      <div *ngFor="let need of needs">
+        <div
+          class="card needs h-100 border-0 bg-info-o rounded-12 shadow-md-hover c-pointer bg-white-hover transition-in-out">
+          <div class="card-body d-flex flex-column">
+            <div class="mb-3 flex-grow-1">
+              <img [src]="need.image" alt="construction" title="construction" class="mb-3" />
+              <h5 class="fw-700 mb-3">{{ need.title }}</h5>
+              <p class="card-text text-info">{{ need.content }}</p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-5 bg-info-o">
+    <div class="container">
+      <div class="d-flex align-items-center justify-content-between">
+        <h3 class="fw-700 col-lg-4" [innerHtml]="'one_platform' | translate"></h3>
+        <div>
+          <div class="d-flex gap-3">
+            <button type="button" class="btn prev rtl-flip" (click)="owlCar.prev()">
+              <i class="fa-solid fa-angle-left"></i>
+            </button>
+            <button type="button" class="btn next" (click)="owlCar.next()">
+              <i class="fa-solid fa-angle-right rtl-flip"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="mt-4">
+        <owl-carousel-o #owlCar [options]="articlesOwl">
+          <ng-container *ngFor="let slide of articles" class="shadow">
+            <ng-template carouselSlide>
+              <div class="card border-0 rounded-12 text-align-start" style="overflow: hidden">
+                <img [src]="slide.image" class="card-img-top" [alt]="slide.title" height="210" />
+                <div class="card-body py-4">
+                  <h5 class="card-title fw-700">{{ slide.title }}</h5>
+                  <p class="card-text text-info">{{ slide.content }}</p>
+                </div>
+              </div>
+            </ng-template>
+          </ng-container>
+        </owl-carousel-o>
+      </div>
+    </div>
+  </section>
+
+  <!-- -------------------------------- form --------------------------------- -->
+  <section class="py-5">
+    <div class="container py-5">
+      <app-apply-form></app-apply-form>
+    </div>
+  </section>
+
+
+</div>

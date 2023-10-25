@@ -1,0 +1,61 @@
+<div id="branch" class="card border-0 rounded-10 h-100  position-relative">
+  <div class="d-flex controls justify-content-between align-items-center">
+    <div>
+      <span
+        class="badge p-2 fw-normal d-flex align-items-center gap-2 justify-content-between text-primary fs-14 fw-600 bg-white shadow-sm w-fit"
+        *ngIf="branch.isMainBranch">
+        <i class="fa-solid fa-circle text-success" style="font-size: 10px"></i>
+        <span translate="branches.is_main_branch"></span>
+      </span>
+      <span
+        class="badge p-2 fw-normal d-flex align-items-center gap-2 justify-content-between text-primary fs-14 fw-600 bg-white shadow-sm w-fit"
+        *ngIf="!branch.isMainBranch">
+        <i class="fa-solid fa-circle" [class.text-success]="branch.stauts" [class.text-danger]="!branch.stauts"
+          style="font-size: 10px"></i>
+        <span translate="not_active" *ngIf="!branch.stauts"></span>
+        <span translate="active" *ngIf="branch.stauts"></span>
+      </span>
+    </div>
+    <div class="d-flex gap-2 justify-content-end">
+      <button (click)="updateListener()" type="button" class="btn rounded-8 bg-primary-o text-primary edit">
+        <i class="fa-solid fa-pen"></i>
+      </button>
+      <button *ngIf="!branch.isMainBranch" (click)="deleteListener()" type="button"
+        class="btn rounded-8 bg-danger-o text-danger delete">
+        <i class="fa-solid fa-trash"></i>
+      </button>
+    </div>
+  </div>
+
+  <div style="height: 160px">
+    <google-map [lang]="(isAr | async) ? 'ar' : 'en'" [options]="mapOptions" [center]="coords">
+      <map-marker [position]="coords"> </map-marker>
+    </google-map>
+  </div>
+  <div class="card-body">
+    <div class="d-flex">
+      <div class="flex-shrink-0">
+        <img [src]="branch?.photo?.fullLink" [title]="branch.name" width="60" height="60"
+          class="obj-cover obj-position-c rounded-10" onerror="this.src = 'assets/images/icons/error.png'" />
+      </div>
+      <div class="flex-grow-1 mis-3  ">
+        <h5 class="card-title fw-600">
+          {{ (isAr | async) ? branch.name : branch.nameEn }}
+        </h5>
+        <h6 class="card-subtitle mb-2 text-info mt-1 limit d-flex  ">
+          <i class=" fa-solid fa-location-dot mie-2"></i>
+          <p>
+            {{ branch.address |slice:0:33 }} <br>
+            {{ branch.address |slice:33:60 }}
+          </p>
+        </h6>
+      </div>
+    </div>
+    <p class="card-text description text-info mt-3">
+      {{ (isAr | async) ? branch.overview : branch.overviewEn }}
+    </p>
+
+    <button [routerLink]="manageLink" type="button" class="btn btn-outline-primary mt-2"
+      translate="branches.manage_branch"></button>
+  </div>
+</div>

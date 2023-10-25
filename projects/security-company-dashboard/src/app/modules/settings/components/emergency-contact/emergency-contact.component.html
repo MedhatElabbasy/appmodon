@@ -1,0 +1,93 @@
+<div class="container py-4 h-100 d-flex flex-column">
+  <div class="flex-grow-0">
+    <div class="d-flex justify-content-between align-items-center">
+      <h4 class="m-0 fw-600" translate="security_dashboard.dash.EmergencyContact"></h4>
+      <button (click)="add()" type="button" class="btn d-flex align-items-center gap-2 btn-primary py-2 px-4 rounded-8">
+        <ion-icon name="add" class="add"></ion-icon>
+        <span translate="add"></span>
+      </button>
+    </div>
+  </div>
+  <app-tab-layout [list]="list" class="mt-3"></app-tab-layout>
+</div>
+
+
+
+
+<public-api-canvas [id]="canvasId">
+  <div class="py-4">
+    <form [formGroup]="contactForm" #form="ngForm" (ngSubmit)="onSubmit(contactForm)"
+      (keydown.enter)="$event.preventDefault()">
+      <h5 class="fw-600 text-align-center text-primary mb-4 mt-2 mb-1" *ngIf="!isEdit">
+        {{'EmergencyContact.add'|translate}}
+      </h5>
+      <h5 class="fw-600 text-align-center text-primary mb-4 mt-2 mb-1" *ngIf="isEdit">
+        {{'EmergencyContact.update'|translate}}
+      </h5>
+      <!--? -------------------------------- logo --------------------------------- -->
+      <div class="mb-3">
+        <div class="file bg-info-o rounded-8 text-info " [style.backgroundImage]="'url(' + Image + ')'"
+          (change)="onImageUpload($event)" (click)="logo.click()">
+          <input type="file" #logo hidden accept="image/x-png,image/gif,image/jpeg" />
+          <div class="row justify-content-evenly" *ngIf="!Image">
+            <div class="col-6">
+              <img src="../../../assets/Group577.png" class="d-block m-auto mt-4" style="width:120px; height:100px;" />
+              <div class="fs-14  text-align-center mt-3">
+                {{ "managmentTools.uploadImage" | translate }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="error-message" *ngIf="controls['photoId']?.errors?.required && form.submitted">
+          <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+          {{ 'EmergencyContact.Photo_required' | translate }}
+        </div>
+      </div>
+
+      <div class="mt-5">
+        <div id="mobile" class="form-floating">
+          <div class="form-control d-flex">
+            <select class="form-select py-0 w-fit" id="floatingSelect" [formControl]="code">
+              <option [value]="item.prefixCode" *ngFor="let item of codes">
+                {{ item.ioS2 }}
+              </option>
+            </select>
+            <input type="text" id="phone" class="form-control rounded-0 col p-0" formControlName="number" />
+          </div>
+
+          <label for="phone">
+            {{ "mobile_number" | translate }}
+          </label>
+        </div>
+
+        <div *ngIf="MobileNumber.invalid && form.submitted">
+          <div class="error-message" *ngIf="MobileNumber.errors.pattern && form.submitted"
+            [innerHtml]="'validation.phone_is_not_valid' | translate"></div>
+
+          <div class="error-message" *ngIf="MobileNumber.errors.required && form.submitted"
+            [innerHtml]="'validation.phone_required' | translate"></div>
+        </div>
+      </div>
+      <div class="d-flex gap-2 justify-content-end mt-5">
+        <button type="reset" data-bs-dismiss="offcanvas" class="btn bg-info-o text-primary rounded-10"
+          translate="cancel" (click)="reset()"></button>
+        <button type="submit" class="btn btn-primary rounded-10" translate="update" *ngIf="isEdit"></button>
+        <button type="submit" class="btn btn-primary rounded-10" translate="add" *ngIf="!isEdit"></button>
+      </div>
+    </form>
+  </div>
+</public-api-canvas>
+
+
+<public-api-modal [id]="successAlert" classList="modal-dialog-centered">
+  <img width="50" src="assets/images/icons/checked.png" alt="" class="mb-3" />
+  <h4 class="fw-700" translate="created_successfully"></h4>
+  <p class="mt-2 text-info" translate="EmergencyContact.done" *ngIf="!isEdit"></p>
+  <p class="mt-2 text-info" translate="EmergencyContact.updateDone" *ngIf="isEdit"></p>
+
+  <div class="d-flex justify-content-end gap-2">
+    <button translate="continue" data-bs-dismiss="modal" type="button"
+      class="btn rounded-8 px-4 py-2 btn-primary text-white"></button>
+  </div>
+</public-api-modal>

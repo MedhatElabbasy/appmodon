@@ -1,0 +1,65 @@
+<div class="card rounded-10 border-0">
+    <div class="card-body">
+        <header class="d-flex gap-3 flex-wrap justify-content-between align-items-center">
+            <div>
+                <div class="input-group">
+                    <span class="input-group-text border-0 bg-transparent" id="search">
+                        <ion-icon name="search"></ion-icon>
+                    </span>
+                    <input [(ngModel)]="searchKey" type="text" class="form-control"
+                        placeholder="{{ 'search' | translate }}" aria-label="search" aria-describedby="search" />
+                </div>
+            </div>
+        </header>
+        <hr />
+
+        <div class="row g-4">
+            <div class="col-12 d-flex flex-column">
+                <div class="card rounded-16 flex-grow-1 border-0 ">
+                    <div class="card-body">
+                        <div *ngIf="!orders?.length" class="py-5">
+                            <h5 class="fw-500 text-align-center text-primary">
+                                {{ "your_request_is_empty" | translate }}
+                            </h5>
+                            <img src="assets/images/icons/Nodata-cuate.png" class="img-fluid col-sm-8 d-block mx-auto"
+                                alt="no-data" />
+                        </div>
+
+                        <ng-container *ngIf="orders?.length">
+                            <ng-container *ngFor="let item of orders | filter:searchKey | paginate
+                                                                                    : {
+                                                                                        itemsPerPage: pageSize,
+                                                                                        currentPage: pageNumber,
+                                                                                        totalItems: orders.length,
+                                                                                        id: 'orders'
+                                                                                    }
+                                                                                      let e = last">
+                                <app-order-card [data]="item"></app-order-card>
+                                <hr *ngIf="!e" />
+                            </ng-container>
+                        </ng-container>
+                    </div>
+                </div>
+
+                <div class="d-flex mt-3 align-items-center justify-content-between gap-3">
+                    <div class="text-info  d-flex gap-3 align-items-center">
+                        <label class="fw-500" verify="global.for_page"></label>
+                        <div>
+                            <select class="form-select " (change)="onPageSizeChange($event)">
+                                <option *ngFor="let size of sizes" [selected]="size == pageSize">
+                                    {{ size }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <pagination-controls id="orders" (pageChange)="pageNumber = $event"
+                        (pageBoundsCorrection)="pageNumber = $event" [maxSize]="3" [responsive]="true"
+                        [previousLabel]="''" [nextLabel]="''" screenReaderPaginationLabel="Pagination"
+                        screenReaderPageLabel="page" screenReaderCurrentLabel="You're on page">
+                    </pagination-controls>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

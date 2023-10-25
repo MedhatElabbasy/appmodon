@@ -1,0 +1,33 @@
+<div class="card">
+  <div class="card-body">
+    <span
+      translate="shifts.break"
+      *ngIf="data.isOnBreak"
+      class="badge bg-warning text-white fs-14 p-2 fw-600 position-absolute id-card"
+    >
+    </span>
+    <div class="d-flex">
+      <div class="flex-shrink-0">
+        <img
+          [src]="data.companySecurityGuard.securityGuard.photo?.fullLink"
+          onerror="this.src = 'assets/images/icons/earth.png'"
+          width="60"
+          height="60"
+          class="obj-cover rounded-3"
+        />
+      </div>
+      <div class="flex-grow-1 mis-3">
+        <h5 class="mt-0 fw-500">
+          {{
+            data.companySecurityGuard.securityGuard.firstName +
+              " " +
+              data.companySecurityGuard.securityGuard.lastName
+          }}
+        </h5>
+        <p class="fs-14 m-0 text-info">
+          {{ time }}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

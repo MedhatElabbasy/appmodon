@@ -1,0 +1,340 @@
+<div class="container py-4">
+  <div class="flex-grow-0">
+    <div class="d-flex justify-content-between align-items-center">
+      <h4 class="m-0 fw-600" translate="security_dashboard.dash.account_management"></h4>
+      <!-- <button type="button"
+        class="btn bg-info-o text-info border-0 d-flex align-items-center gap-3 btn-primary py-2 rounded-8">
+        <i class="fa-solid fa-pen"></i>
+        {{ "edit" | translate }}
+      </button>-->
+    </div>
+  </div>
+
+  <div class="card mt-3 border-0 rounded-12">
+    <div class="card-body">
+      <button (click)="editPersonProfile()" type="button" class="btn bg-primary-o text-primary float-end edit"><i
+          class="fas fa-pen"></i></button>
+      <div>
+        <div class="row row-cols-1 row-cols-lg-2">
+          <div>
+            <div class="d-flex align-items-center gap-3">
+              <div class="flex-grow-0">
+                <img [src]="company.profileImage?.fullLink" class="avatar rounded-10" alt="profile image" />
+              </div>
+              <div>
+                <h5 class="text-primary mb-1 fw-600">
+                  {{ company.firstName + " " + company.lastName }}
+                </h5>
+                <p class="text-info mb-1">{{ company.email }}</p>
+                <p class="text-info mb-1">{{ company.companyContactNumber }}</p>
+                <p class="mb-1">
+                  <span class="text-info" translate="bushiness_type"></span>:
+                  {{
+                  (isAr | async)
+                  ? company.businessType.name
+                  : company.businessType.nameEN
+                  }}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex align-items-center">
+            <div class="d-flex gap-3 align-items-start">
+              <div class="d-inline-block text-info">
+                <i class="fa-solid fa-location-dot"></i>
+              </div>
+              <div class="d-inline-block">
+                <div translate="location" class="text-info"></div>
+                <div>{{ company.address }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card overflow-hidden mt-4 border-0 rounded-12">
+    <ul class="nav sub-nav rounded-0 nav-tabs" id="myTab" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button translate="security_dashboard.bushiness_details" class="nav-link active" id="Business-tab"
+          data-bs-toggle="tab" data-bs-target="#Business" type="button" role="tab" aria-controls="Business"
+          aria-selected="true"></button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button translate="steps.bank_details" class="nav-link" id="profile-tab" data-bs-toggle="tab"
+          data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false"></button>
+      </li>
+      <!-- <li class="nav-item" role="presentation">
+        <button
+          class="nav-link"
+          id="contact-tab"
+          data-bs-toggle="tab"
+          data-bs-target="#contact"
+          type="button"
+          role="tab"
+          aria-controls="contact"
+          aria-selected="false"
+        >
+          Contact
+        </button>
+      </li> -->
+    </ul>
+    <div class="card-body">
+      <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="Business" role="tabpanel" aria-labelledby="Business-tab">
+          <div class="card border-0 rounded-12">
+            <div class="card-body">
+              <div class="row row-cols-1 row-cols-lg-2">
+                <div>
+                  <div class="d-flex align-items-center gap-3">
+                    <div class="flex-grow-0">
+                      <img [src]="company.companyLogo?.fullLink" class="avatar rounded-10" alt="profile image" />
+                    </div>
+                    <div>
+                      <h5 class="text-primary mb-1 fw-600">
+                        {{ company.name }}
+                      </h5>
+                      <p class="text-info mb-1">{{ company.email }}</p>
+                      <p class="text-info mb-1">
+                        {{ company.companyContactNumber }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="d-flex align-items-center">
+                  <div class="d-flex gap-3 align-items-start">
+                    <div class="d-inline-block text-info">
+                      <i class="fa-solid fa-location-dot"></i>
+                    </div>
+                    <div class="d-inline-block">
+                      <div translate="location" class="text-info"></div>
+                      <div>{{ company.address }}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <hr />
+
+          <h6 translate="about_company" class="text-info"></h6>
+          <pre class="text-info">
+            {{ company.businessDescription }}
+          </pre>
+          <hr />
+          <h6 class="text-info" translate="services_available"></h6>
+          <div class="d-flex flex-wrap gap-2 mt-3">
+            <span *ngFor="let service of company.securitCompanyAvailableServices"
+              class="badge fw-normal fs-6 bg-warning bg-primary p-2">
+              {{
+              (isAr | async)
+              ? service.availableServices.name
+              : service.availableServices.nameEN
+              }}
+            </span>
+          </div>
+
+          <hr />
+
+          <div class="mb-3">
+            <div class="text-info mb-2" translate="company_website"></div>
+            <div>{{ company.website }}</div>
+          </div>
+
+          <div class="row row-cols-1 row-cols-md-2 g-4">
+            <div>
+              <div class="text-info mb-2" translate="social_media_link1"></div>
+              <div>{{ company.socialMediaLink }}</div>
+            </div>
+            <div>
+              <div class="text-info mb-2" translate="social_media_link2"></div>
+              <div>{{ company.socialMediaLink2 }}</div>
+            </div>
+          </div>
+        </div>
+        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+          <div class="row g-4">
+            <div class="col-lg-8 col-md-12">
+              <div class="row row-cols-1 row-cols-md-2 g-4">
+                <div>
+                  <div translate="bank_name" class="text-info mb-2"></div>
+                  <div>{{ company.bankName }}</div>
+                </div>
+                <div>
+                  <div translate="account_holder_name" class="text-info mb-2"></div>
+                  <div>{{ company.accountHolderName }}</div>
+                </div>
+                <div>
+                  <div translate="account_name" class="text-info mb-2"></div>
+                  <div>{{ company.accountName }}</div>
+                </div>
+                <div>
+                  <div translate="IBAN_number" class="text-info mb-2"></div>
+                  <div>{{ company.iban }}</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-12">
+              <div class="d-flex rounded-8 justify-content-between gap-2 align-items-center p-2 bg-info-o">
+                <div class="d-flex align-items-center gap-3">
+                  <div class="bg-primary-o icon flex-shrink-0">
+                    <img [src]="company.idProof?.fullLink" class="id obj-contain" alt="id proof"
+                      onerror="this.src = 'assets/images/icons/file.png'" />
+                  </div>
+
+                  <div>
+                    <div class="text-info mb-1 fs-14" translate="id_proof"></div>
+                    <div class="text-primary fs-18 fw-700">
+                      {{ company.idProof.name }}
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <a [href]="company.idProof?.fullLink" type="button" target="_blank"
+                    class="btn btn-info rounded-8 text-white" translate="show">
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- <div
+          class="tab-pane fade"
+          id="contact"
+          role="tabpanel"
+          aria-labelledby="contact-tab"
+        >
+          ...
+        </div> -->
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<public-api-canvas [id]="editPersonCanvas">
+  <form [formGroup]="personForm" (ngSubmit)="updatePersonalInfo()" #pForm="ngForm">
+    <div>
+      <h5 class="fw-600 text-align-center text-primary mb-4" translate="edit_profile">
+      </h5>
+
+      <!-- -------------------------------- photo -------------------------------- -->
+      <div class="mb-4">
+        <div style="height: 160px; width: 180px;" class="mx-auto">
+          <public-api-file-upload [Control]="personControls['profileImageId']" [acceptedExtension]="acceptedFiles"
+            [link]="imagePath">
+            <div class="text-info fs-14 text-align-center" translate="click_to_upload_profile_image">
+            </div>
+          </public-api-file-upload>
+
+          <!--! -------------------------- image validation --------------------------- -->
+          <div class="error-message" *ngIf="personControls['profileImageId'].invalid && pForm.submitted">
+            <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+            {{"validation.photo_is_required" | translate}}
+          </div>
+        </div>
+      </div>
+
+      <!-- ----------------------------- first name ------------------------------ -->
+      <div class="mb-3">
+        <div class="form-floating">
+          <input type="text" formControlName="firstName" class="form-control" id="firstName" placeholder="data" />
+          <label for="firstName" translate="firstName"></label>
+        </div>
+
+        <!--! ----------------------------- validation ------------------------------ -->
+        <div class="error-message" *ngIf="personControls['firstName'].hasError('required') && pForm.submitted"
+          [innerHtml]="'validation.first_name_required' | translate">
+        </div>
+
+
+      </div>
+
+      <!-- ------------------------------ last name ------------------------------ -->
+
+      <div class="mb-3">
+        <div class="form-floating">
+          <input type="text" formControlName="lastName" class="form-control" id="lastName" placeholder="data" />
+          <label for="lastName" translate="lastName"></label>
+        </div>
+
+        <!--! ----------------------------- validation ------------------------------ -->
+        <div [innerHtml]="'validation.last_name_required' | translate" class="error-message"
+          *ngIf="personControls['lastName'].hasError('required') && pForm.submitted">
+
+        </div>
+
+
+      </div>
+
+      <!-- -------------------------------- email -------------------------------- -->
+      <div class="mb-3">
+        <div class="form-floating">
+          <input type="email" class="form-control" formControlName="email" id="email" placeholder="data" />
+          <label for="email" translate="email"></label>
+        </div>
+
+        <!--! ----------------------------- validation ------------------------------ -->
+        <div class="error-message" *ngIf="personControls['email'].hasError('required') && pForm.submitted">
+          <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+          <div translate="validation.email_required"></div>
+        </div>
+
+        <div class="error-message" *ngIf="personControls['email'].hasError('email') && pForm.submitted">
+          <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+          <div translate="validation.email_invalid"></div>
+        </div>
+      </div>
+
+      <!-- --------------------------- business types ---------------------------- -->
+      <div class="mb-3">
+        <p-dropdown styleClass="w-100" [options]="businessTypes" formControlName="businessTypeId"
+          placeholder="{{ 'bushiness_type' | translate }}" optionLabel="{{(lang.isAr| async) ? 'name': 'nameEN'}}"
+          [filter]="true" optionValue="id"></p-dropdown>
+
+        <!--! ----------------------------- validation ------------------------------ -->
+        <div class="error-message" *ngIf="personControls['businessTypeId'].invalid && pForm.submitted">
+          <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+          <div translate="validation.field_required"></div>
+        </div>
+      </div>
+
+      <!-- -------------------------------- city --------------------------------- -->
+      <div class="mb-3">
+        <p-dropdown formControlName="cityId" styleClass="w-100" [options]="cities"
+          placeholder="{{ 'city' | translate }}" optionLabel="{{(lang.isAr| async) ? 'name': 'nameEN'}}"
+          (onChange)="getArea()" [filter]="true" optionValue="id">
+        </p-dropdown>
+
+        <!--! ----------------------------- validation ------------------------------ -->
+        <div class="error-message" *ngIf="personControls['cityId'].invalid && pForm.submitted">
+          <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+          <div translate="validation.field_required"></div>
+        </div>
+      </div>
+
+      <!-- -------------------------------- area --------------------------------- -->
+      <div class="mb-3">
+        <p-dropdown formControlName="areaId" styleClass="w-100" [options]="areas"
+          placeholder="{{ 'select_area' | translate }}" optionLabel="{{(lang.isAr| async) ? 'name': 'nameEN'}}"
+          [filter]="true" optionValue="id">
+        </p-dropdown>
+
+        <!--! ----------------------------- validation ------------------------------ -->
+        <div class="error-message" *ngIf="personControls['areaId'].invalid && pForm.submitted">
+          <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+          <div translate="validation.field_required"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex gap-2 justify-content-end mt-4">
+      <button type="reset" data-bs-dismiss="offcanvas" class="btn bg-info-o text-primary rounded-10"
+        translate="cancel"></button>
+      <button type="submit" class="btn btn-primary rounded-10" translate="edit"></button>
+    </div>
+  </form>
+</public-api-canvas>

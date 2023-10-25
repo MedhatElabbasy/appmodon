@@ -1,0 +1,289 @@
+@import "./typography.scss";
+
+.form-control,
+.form-select,
+.input-group,
+.p-dropdown,
+.otp-input,
+.p-multiselect {
+  background-color: $form-color-main;
+  border: 0;
+  border-radius: 0.5rem;
+  color: $primary-color;
+  font-weight: bold;
+  font-size: medium;
+
+  &:focus {
+    background-color: $form-color-main;
+    border: none;
+    box-shadow: none;
+  }
+
+  &::placeholder {
+    color: $info-color;
+    font-weight: normal;
+  }
+
+  &:not(.p-disabled).p-focus {
+    box-shadow: none;
+    border: none;
+  }
+}
+
+.otp-input {
+  border: 0 !important;
+  border-radius: 0.5rem !important;
+}
+
+.p-dropdown {
+  padding: 1ex 0.75rem;
+}
+
+.input-group {
+  padding: 0.25rem;
+
+  *:not(input) {
+    border-radius: 0;
+  }
+}
+
+input:disabled {
+  cursor: not-allowed;
+}
+
+.bg-primary {
+  label {
+    color: $white;
+  }
+
+  .form-control,
+  .form-select,
+  .input-group {
+    background-color: rgba($color: $bg-light, $alpha: 0.11);
+    color: $white;
+  }
+
+  .form-select {
+    font-weight: normal;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='white' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+
+    option {
+      color: $black;
+    }
+  }
+}
+
+.input-group {
+  .form-control {
+    background: transparent;
+  }
+}
+
+.form-floating > label {
+  padding: 1rem;
+  color: $info-color;
+
+  [lang="ar"] & {
+    left: auto;
+    right: 0;
+  }
+}
+
+.form-floating > .form-control:focus ~ label,
+.form-floating > .form-control:not(:placeholder-shown) ~ label,
+.form-floating > .form-select ~ label {
+  opacity: 1;
+  font-size: 12px;
+  font-weight: 500;
+
+  [lang="ar"] & {
+    transform: scale(0.85) translateY(-0.5rem) translateX(18%) !important;
+  }
+}
+
+.placeholder-sm::placeholder {
+  font-size: 12px;
+}
+
+.no-focus:focus {
+  box-shadow: none;
+}
+
+.prev,
+.next {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: $primary-color;
+  border-radius: 10px;
+  color: white;
+
+  &:hover {
+    background-color: $warning-color;
+    color: white;
+  }
+
+  &:focus {
+    box-shadow: none;
+  }
+}
+
+.form-check {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0;
+
+  .form-check-input {
+    background-color: $form-color-main;
+    width: 20px;
+    height: 20px;
+    margin: 0;
+    margin-top: 2px;
+    border-radius: 4px;
+
+    &:checked {
+      background-color: $warning-color;
+      border-color: $warning-color;
+    }
+  }
+}
+
+.error-message {
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  color: red;
+  gap: 0.5rem;
+}
+
+.error {
+  & .otp-input {
+    border: 1px solid red !important;
+  }
+}
+
+.p-multiselect.p-multiselect-chip .p-multiselect-token {
+  background-color: $warning-color;
+  color: $white;
+  border-radius: 8px;
+}
+
+.p-multiselect {
+  padding-top: 0.3rem;
+  padding-bottom: 0.3rem;
+}
+
+.ng-otp-input-wrapper {
+  display: flex;
+  gap: 0.6rem;
+
+  input {
+    margin: 0 !important;
+  }
+
+  [lang="ar"] & {
+    justify-content: flex-end;
+    flex-direction: row-reverse;
+  }
+}
+
+[lang="ar"] .p-dropdown-panel .p-dropdown-header .p-dropdown-filter {
+  margin-right: 0 !important;
+}
+
+.p-dropdown .p-dropdown-label.p-placeholder {
+  font-family: $default-font;
+}
+
+.p-dropdown .p-dropdown-label {
+  font-family: $default-font;
+}
+
+button.edit,
+button.delete {
+  width: 35px;
+  height: 35px;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: unset;
+}
+
+/* --------------------------------- switch --------------------------------- */
+.p-inputswitch {
+  width: 2.8rem;
+  height: 1rem;
+}
+.p-inputswitch .p-inputswitch-slider {
+  height: 18px;
+}
+
+.p-inputswitch.p-inputswitch-checked .p-inputswitch-slider {
+  background: $success-color;
+}
+.p-inputswitch.p-inputswitch-checked:not(.p-disabled):hover
+  .p-inputswitch-slider {
+  background: $success-color;
+}
+
+.p-inputswitch .p-inputswitch-slider:before {
+  height: 1.5rem;
+  width: 1.5rem;
+  top: 50%;
+  margin: 0;
+  left: 0;
+  transform: translateY(-50%);
+  border: 3px solid #ced4da;
+}
+
+.p-inputswitch.p-inputswitch-checked .p-inputswitch-slider:before {
+  transform: translate(1.3rem, -50%);
+  border-color: $success-color;
+}
+
+[lang="ar"] .p-inputswitch .p-inputswitch-slider:before {
+  left: auto;
+  right: 0;
+}
+
+[lang="ar"] .p-inputswitch.p-inputswitch-checked .p-inputswitch-slider:before {
+  transform: translate(-1.3rem, -50%);
+}
+
+@mixin datePickerIcon($dir) {
+  background-image: url("../images/icons/calendar.png");
+  background-repeat: no-repeat;
+  background-position: $dir 1rem center;
+}
+
+input[bsDatepicker],
+input[bsDaterangepicker],
+.datapiker-icon {
+  @include datePickerIcon(right);
+
+  [lang="ar"] & {
+    @include datePickerIcon(left);
+  }
+}
+
+.p-multiselect-panel .p-multiselect-items .p-multiselect-item .p-checkbox {
+  margin: 0;
+  margin-inline-end: 0.5rem;
+}
+
+.p-multiselect-panel .p-multiselect-header {
+  [lang="ar"] & {
+    gap: 0.5rem;
+    padding: 0.5rem;
+  }
+}
+
+.p-multiselect.p-multiselect-chip
+  .p-multiselect-token
+  .p-multiselect-token-icon {
+  margin: 0;
+  margin-inline-start: 0.5rem;
+}

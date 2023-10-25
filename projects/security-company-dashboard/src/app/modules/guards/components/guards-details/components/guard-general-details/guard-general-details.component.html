@@ -1,0 +1,102 @@
+<div *ngIf="guard">
+  <div class="row row-cols-md-3 g-3 row-cols-1">
+    <div>
+      <h6 class="text-info fs-14" translate="reports.guard_code"></h6>
+      <p class="text-primary fw-700">{{ guard.id }}</p>
+    </div>
+    <div>
+      <h6 class="text-info fs-14" translate="email"></h6>
+      <p class="text-primary fw-700">
+        {{
+        guard.email
+        ? guard.email
+        : ("not_specified" | translate)
+        }}
+      </p>
+    </div>
+    <div>
+      <h6 class="text-info fs-14" translate="national_id"></h6>
+      <p class="text-primary fw-700">
+        {{
+        guard.nationalID
+        ? guard.nationalID
+        : ("not_specified" | translate)
+        }}
+      </p>
+    </div>
+
+    <div>
+      <h6 class="text-info fs-14" translate="birth_date"></h6>
+      <p class="text-primary fw-700">
+        {{ guard.birthDate.split(" ")[0] }}
+      </p>
+    </div>
+
+    <div>
+      <h6 class="text-info fs-14" translate="blood_type"></h6>
+      <p class="text-primary fw-700">
+        <span *ngIf="guard.bloodType">
+          {{
+          (lang.isAr | async)
+          ? guard.bloodType.name
+          : guard.bloodType.nameEN
+          }}
+        </span>
+        <span *ngIf="!guard.bloodType" translate="not_specified"></span>
+      </p>
+    </div>
+    <div>
+      <h6 class="text-info fs-14" translate="gender"></h6>
+      <p class="text-primary fw-700">
+        {{
+        (lang.isAr | async)
+        ? guard.gender.name
+        : guard.gender.nameEN
+        }}
+      </p>
+    </div>
+
+    <div>
+      <h6 class="text-info fs-14" translate="nationality"></h6>
+      <p class="text-primary fw-700">
+        {{
+        (lang.isAr | async)
+        ? guard.nationality.name
+        : guard.nationality.nameEN
+        }}
+      </p>
+    </div>
+
+    <div>
+      <h6 class="text-info fs-14" translate="city"></h6>
+      <p class="text-primary fw-700">
+        {{
+        (lang.isAr | async)
+        ? guard.city.name
+        : guard.city.nameEN
+        }}
+      </p>
+    </div>
+    <div>
+      <h6 class="text-info fs-14" translate="phone"></h6>
+      <p class="text-primary fw-700">
+        {{guard.appUser?.userName}}
+      </p>
+    </div>
+  </div>
+
+  <hr />
+
+  <div class="row row-cols-md-3 row-cols-2">
+    <div>
+      <h6 class="text-info fs-14" translate="user_role"></h6>
+      <p class="text-primary fw-700">
+        {{
+        (lang.isAr | async)
+        ? guard.jobType.name
+        : guard.jobType.nameEN
+        }}
+      </p>
+    </div>
+  </div>
+</div>

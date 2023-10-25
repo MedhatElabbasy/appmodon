@@ -1,0 +1,270 @@
+<div class="d-flex">
+  <div class="flex-shrink-0">
+    <img [src]="site.sitePhoto?.fullLink" width="60" height="60" class="obj-cover obj-position-c rounded-10" />
+  </div>
+  <div class="flex-grow-1 mis-3">
+    <h5 class="mt-0">{{ site.siteName }}</h5>
+    <p class="text-info m-0">
+      {{ site.siteAddress }}
+    </p>
+  </div>
+</div>
+
+<hr />
+<h6 class="fw-500 fs-14 text-info mb-3" translate="description"></h6>
+<p class="m-0">{{ site.siteDescription }}</p>
+<hr />
+
+<div class="row row-cols-xl-4 row-cols-2">
+  <div>
+    <h6 class="text-info fs-14" translate="clients.enable_geo"></h6>
+    <p *ngIf="site.enableGeolocation" class="text-primary fw-700">
+      {{ "active" | translate }}
+    </p>
+
+    <p *ngIf="!site.enableGeolocation" class="text-primary fw-700">
+      {{ "not_active" | translate }}
+    </p>
+  </div>
+  <div>
+    <h6 class="text-info fs-14" translate="clients.locations_on_this_site"></h6>
+    <p class="text-primary fw-700">
+      {{ site.siteLocations.length }}
+    </p>
+  </div>
+  <div>
+    <h6 class="text-info fs-14" translate="clients.geofence_radius"></h6>
+    <p class="text-primary fw-700">
+      {{ site.geolocationLenghtInMetter }}
+      {{ "clients.meter" | translate }}
+    </p>
+  </div>
+  <div>
+    <h6 class="text-info fs-14" translate="clients.site_hight2"></h6>
+    <p class="text-primary fw-700">
+      {{ site.siteHight }}
+      {{ "clients.meter" | translate }}
+    </p>
+  </div>
+  <div>
+    <h6 class="text-info fs-14" translate="shift"></h6>
+    <p class="text-primary fw-700">
+      {{ site.siteSupervisorShifts.length }}
+    </p>
+  </div>
+  <div>
+    <h6 class="text-info fs-14" translate="supervisor"></h6>
+    <p class="text-primary fw-700">
+      {{ site.siteSupervisorShifts.length }}
+    </p>
+  </div>
+  <div>
+    <h6 class="text-info fs-14" translate="number_of_guards"></h6>
+    <p class="text-primary fw-700">
+      {{ site.totalNumberOfGurds }}
+    </p>
+  </div>
+</div>
+
+<hr />
+
+<p-galleria [value]="images" [(visible)]="displayCustom" [(activeIndex)]="activeIndex"
+  [responsiveOptions]="responsiveOptions" [containerStyle]="{ 'max-width': '850px' }" [numVisible]="7" [circular]="true"
+  [fullScreen]="true" [showItemNavigators]="true" [showThumbnails]="false" [baseZIndex]="100000">
+  <ng-template pTemplate="item" let-item>
+    <img [src]="item" style="width: 100%; display: block" />
+  </ng-template>
+  <ng-template pTemplate="thumbnail" let-item>
+    <div class="grid grid-nogutter justify-content-center">
+      <img [src]="item" style="display: block" />
+    </div>
+  </ng-template>
+</p-galleria>
+<div class="d-flex justify-content-start gap-2 mb-3">
+  <button (click)="owl.prev()" type="button" class="btn btn-warning text-white nav-btn"
+    [innerHtml]="'icons.left_arrow' | translate"></button>
+  <button (click)="owl.next()" type="button" class="btn btn-warning text-white nav-btn"
+    [innerHtml]="'icons.right_arrow' | translate"></button>
+</div>
+<owl-carousel-o [options]="options" #owl>
+  <ng-container *ngFor="let image of images; let index = index">
+    <ng-template carouselSlide [id]="image">
+      <img [src]="image" height="200px" class="obj-cover c-zoom-in rounded-10" (click)="imageClick(index)" />
+    </ng-template>
+  </ng-container>
+</owl-carousel-o>
+
+<hr />
+
+<div class="row row-cols-xl-2 row-cols-1 g-4">
+  <div class="border-inline-end">
+    <div class="d-flex justify-content-between mb-3 align-items-center">
+      <h6 class="fw-500 fs-14 text-info" translate="shift"></h6>
+      <button (click)="openShift()" translate="change" type="button"
+        class="btn btn-warning text-white btn-sm px-3 rounded-8"></button>
+    </div>
+    <div class="d-flex flex-wrap gap-2">
+      <div class="p-2 bg-warning-o text-primary rounded-10" *ngFor="let item of site.siteSupervisorShifts">
+        {{
+        (lang.isAr | async)
+        ? item.clientShiftSchedule.companyShift.shiftType.name
+        : item.clientShiftSchedule.companyShift.shiftType.nameEN
+        }}
+      </div>
+    </div>
+  </div>
+  <div class="d-block d-xl-none">
+    <hr />
+  </div>
+  <div>
+    <div class="d-flex justify-content-between mb-3 align-items-center">
+      <h6 translate="supervisor" class="fw-500 fs-14 text-info"></h6>
+      <button (click)="openShift2()" translate="change" type="button"
+        class="btn btn-warning text-white btn-sm px-3 rounded-8"></button>
+    </div>
+    <div class="container-fluid">
+      <div class="row row-cols-md-2 g-3 row-cols-1">
+        <div *ngFor="let item of shiftSupervisors">
+          <div class="card bg-info-o border-0">
+            <div class="card-body p-2">
+              <div class="d-flex">
+                <div class="flex-shrink-0">
+                  <img [src]="item.photo?.fullLink" class="rounded-10 obj-cover" width="50" height="50"
+                    onerror="this.src = 'assets/images/icons/earth.png'" />
+                </div>
+                <div class="flex-grow-1 mis-3">
+                  <h6 class="mt-0 fw-600 text-primary">
+                    {{ item.firstName + " " + item.lastName }}
+                  </h6>
+                  <p class="m-0 break-word">
+                    {{
+                    item.email ? item.email : ("not_specified" | translate)
+                    }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr />
+
+<!-- ------------------------------ locations ------------------------------ -->
+<div class="d-flex justify-content-between align-items-center">
+  <h6 class="fw-500 fs-14 text-info mb-3" translate="clients.locations_on_this_site"></h6>
+
+  <button type="button" class="btn btn-warning btn-sm rounded-8 text-white" translate="clients.add_location"
+    (click)="onAddLocation()"></button>
+</div>
+
+<div>
+  <div class="row row-cols-md-2 row-cols-xl-3 row-cols-1">
+    <app-location-card [siteId]="site.id" (update)="getSiteUpdate()" [location]="item"
+      *ngFor="let item of site.siteLocations"></app-location-card>
+  </div>
+</div>
+
+<public-api-canvas [id]="canvasId">
+  <app-shifts [updatehift]="updatehift" [shifts]="site.siteSupervisorShifts" [siteId]="site.id"
+    [shiftList]="shifts" (update)="getSiteUpdate()"></app-shifts>
+</public-api-canvas>
+
+<!-- ------------------------------ add site ------------------------------- -->
+<public-api-canvas [id]="locationCanvas">
+  <form class="h-100 d-flex flex-column" [formGroup]="locationForm" #form="ngForm" (ngSubmit)="addLocation()">
+    <div class="flex-fill">
+      <h5 translate="clients.add_location" class="fw-600 text-align-center mt-1 mb-4"></h5>
+      <!-- ---------------------------- location name ---------------------------- -->
+      <div class="mb-3">
+        <div class="form-floating">
+          <input type="text" class="form-control" id="locationName" placeholder="location name"
+            formControlName="name" />
+          <label for="locationName" translate="name"></label>
+        </div>
+        <div class="error-message" *ngIf="controls['name'].invalid && form.submitted">
+          <i class="fa-solid fa-circle-exclamation"></i>
+          {{ "validation.field_required" | translate }}
+        </div>
+      </div>
+
+      <!-- -------------------------------- maps --------------------------------- -->
+      <div class="mb-3">
+        <div style="height: 180px">
+          <public-api-map-search [addressControl]="controls['locationAddress']" [latControl]="controls['locationLat']"
+            [lngControl]="controls['locationLong']"></public-api-map-search>
+        </div>
+
+        <div class="error-message" *ngIf="controls['locationAddress'].invalid && form.submitted">
+          <i class="fa-solid fa-circle-exclamation"></i>
+          {{ "validation.field_required" | translate }}
+        </div>
+      </div>
+
+      <!-- -------------------------------- photo -------------------------------- -->
+      <div class="mb-3">
+        <div style="height: 150px">
+          <public-api-file-upload [acceptedExtension]="acceptedExtensions" [Control]="controls['photoId']">
+            <div class="text-info fs-14">
+              {{ "clients.upload_location_image" | translate }}
+            </div>
+          </public-api-file-upload>
+        </div>
+
+        <div class="error-message" *ngIf="controls['photoId'].invalid && form.submitted">
+          <i class="fa-solid fa-circle-exclamation"></i>
+          {{ "validation.field_required" | translate }}
+        </div>
+      </div>
+
+      <!-- ----------------------- no of guards and height ----------------------- -->
+      <div class="row row-cols-2">
+        <div>
+          <div class="form-floating">
+            <input type="number" class="form-control" id="locationHeight" placeholder="site height"
+              formControlName="locationHight" />
+            <label for="locationHeight" translate="clients.location_height"></label>
+          </div>
+
+          <ng-container *ngIf="controls['locationHight'].invalid && form.submitted">
+            <div class="error-message" *ngIf="controls['locationHight'].errors.required">
+              <i class="fa-solid fa-circle-exclamation"></i>
+              {{ "validation.field_required" | translate }}
+            </div>
+            <div class="error-message" *ngIf="controls['locationHight'].errors.min">
+              <i class="fa-solid fa-circle-exclamation"></i>
+              {{ "validation.field_min" | translate }}
+            </div>
+          </ng-container>
+        </div>
+        <div>
+          <div class="form-floating mb-3">
+            <input type="number" class="form-control" id="noOfGuards" placeholder="noOfGuards"
+              formControlName="numberOfGuards" />
+            <label for="noOfGuards" translate="number_of_guards"></label>
+          </div>
+
+          <ng-container *ngIf="controls['numberOfGuards'].invalid && form.submitted">
+            <div class="error-message" *ngIf="controls['numberOfGuards'].errors.required">
+              <i class="fa-solid fa-circle-exclamation"></i>
+              {{ "validation.field_required" | translate }}
+            </div>
+            <div class="error-message" *ngIf="controls['numberOfGuards'].errors.min">
+              <i class="fa-solid fa-circle-exclamation"></i>
+              {{ "validation.field_min" | translate }}
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-end gap-2">
+      <button data-bs-dismiss="offcanvas" type="reset" class="btn bg-info-o px-4 rounded-10"
+        translate="cancel"></button>
+      <button type="submit" class="btn btn-primary px-4 rounded-10" translate="add"></button>
+    </div>
+  </form>
+</public-api-canvas>

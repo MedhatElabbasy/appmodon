@@ -1,0 +1,6 @@
+::ng-deep ngb-datepicker-navigation {
+  direction: ltr !important;
+}
+::ng-deep ngb-datepicker-navigation-select {
+  gap: 0.5rem;
+}/*# sourceMappingURL=islamic.component.css.map */

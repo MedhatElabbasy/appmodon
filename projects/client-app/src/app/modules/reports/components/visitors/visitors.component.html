@@ -1,0 +1,197 @@
+<div class="position-relative header">
+  <div class="bg-primary fixed-top w-100">
+    <app-navbar>
+
+    </app-navbar>
+  </div>
+</div>
+<div class="h-100 bg-info-o  py-5">
+  <div class="container py-5 mt-5">
+    <div class="row mt-4">
+
+      <div class="container h-100 d-flex flex-column py-4">
+        <div class="d-flex justify-content-between">
+          <h4 class="m-0 fw-600 my-3" translate="reports.visitors"></h4>
+
+          <div class="d-flex justify-content-end gap-3 mb-3">
+            <div class="form-floating mb-3 col-md-4" *ngIf="filter">
+              <input type="email" class="form-control bg-info-o" id="input1" placeholder="date" bsDatepicker
+                [maxDate]="maxDate" [formControl]="date" [bsConfig]="{
+        containerClass: 'theme-red',
+        isAnimated: true,
+        showWeekNumbers: false,
+        adaptivePosition: true
+      }" />
+              <label for="input1" translate="date_day"></label>
+            </div>
+
+            <div class="form-floating " *ngIf="data">
+              <p-dropdown class="py-2" id="data" [filter]="true" filterBy="name" styleClass="w-100"
+                [optionLabel]="'securityCompany.name'" optionValue="securityCompany.id" [options]="data"
+                [placeholder]="'validation.select_company'|translate" (onChange)="displayFilter($event)"></p-dropdown>
+            </div>
+            <div class="dropdown menue2">
+              <button
+                class="btn myPadding rounded-m rounded-8 btn-primary  d-flex gap-2 align-items-center  dropdown-toggle "
+                type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa-solid fa-sliders"></i>
+                {{ "filtration" | translate }}
+              </button>
+              <ul class="dropdown-menu " aria-labelledby="dropdownMenuButton2">
+                <li class="dropdown-item cursor-pointer text-align-center" (click)="getDataFilter('date')">{{"date"
+                  |translate}}</li>
+                <li class="dropdown-item cursor-pointer text-align-center" (click)="getDataFilter('client')">
+                  {{"companies" |translate}}
+                </li>
+              </ul>
+            </div>
+            <div>
+              <button (click)="deleteFilter()"
+                class="btn myPadding rounded-m rounded-8 btn btn-secondary  d-flex gap-2 " type="button">
+                {{ "filtrationDelete" | translate }}
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="card border-0 flex-fill rounded-10">
+          <div class="card-body">
+            <div class="h-100 d-flex flex-column">
+              <div class="col-12">
+                <div class="row">
+                  <div class="input-group col">
+                    <span class="input-group-text border-0 bg-transparent" id="search">
+                      <ion-icon name="search"></ion-icon>
+                    </span>
+                    <input type="text" class="form-control" (keyup)="search()" [placeholder]="'search' | translate" aria-label="search"
+                      aria-describedby="search" [(ngModel)]="searchKey" />
+                  </div>
+                  <div class="bd-dark col">
+                    <button class="btn btn-success text-white  mx-2 mb-3 float-end" (click)="getData()"
+                      translate="dowenloadCvs">
+
+                    </button>
+                    <!-- <button class="btn btn-danger text-white mx-2 float-end" (click)="exportPDF()" translate="dowenloadPdf">
+
+              </button>-->
+                  </div>
+                </div>
+              </div>
+              <div class="table-responsive flex-fill text-primary">
+                <table class="table table-striped table-borderless" id="excel-table">
+                  <thead>
+                    <tr>
+                      <th scope="col" translate="reports.visitor_name"></th>
+                      <th scope="col" translate="phone"></th>
+                      <th scope="col" translate="job.site_name"></th>
+                      <th scope="col" translate="reports.host_name"></th>
+                      <th scope="col" translate="reports.visit_type"></th>
+                      <th scope="col" translate="reports.visit_reason"></th>
+                      <th scope="col" translate="reports.date"></th>
+                      <th scope="col" translate="reports.charge_guard"></th>
+                      <th scope="col" translate="reports.supervisor"></th>
+                      <th scope="col" translate="reports.entry_time"></th>
+                      <th scope="col" translate="reports.leave_time"></th>
+                      <th scope="col" translate="reports.notes"></th>
+                      <th scope="col"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <ng-container>
+                      <tr class="c-pointer" *ngFor="
+                    let visitor of visitorsReport 
+                      | paginate
+                        : {
+                            itemsPerPage: pageSize,
+                            currentPage: pageNumber,
+
+                            id: 'visitors'
+                          }
+                  ">
+                        <td>{{ visitor.visitorName }}</td>
+                        <td class="text-nowrap">
+                          {{ visitor.vistorPhoneNumber }}
+                        </td>
+                        <td>{{ visitor.siteLocation.name }}</td>
+                        <td>{{ visitor.hostName }}</td>
+                        <td>
+                          {{
+                          (lang.isAr | async)
+                          ? visitor.visitorType.nameAr
+                          : visitor.visitorType.nameEn
+                          }}
+                        </td>
+                        <td>{{ visitor.vistorReason }}</td>
+                        <td>{{ visitor.createdDateTime }}</td>
+                        <td>
+                          <span *ngIf="visitor.companySecurityGuard">
+                            {{
+                            visitor.companySecurityGuard.securityGuard.firstName +
+                            " " + visitor.companySecurityGuard.securityGuard.middleName+" "+
+                            visitor.companySecurityGuard.securityGuard.lastName
+                            }}
+                          </span>
+                        </td>
+                        <td>
+                          <span *ngIf="visitor.siteSupervisorShift.companySecurityGuard">
+                            {{
+                            visitor.siteSupervisorShift.companySecurityGuard
+                            .securityGuard.firstName +
+                            " " +visitor.siteSupervisorShift.companySecurityGuard
+                            .securityGuard.middleName+" "+
+                            visitor.siteSupervisorShift.companySecurityGuard
+                            .securityGuard.lastName
+                            }}
+                          </span>
+                        </td>
+                        <td>
+                    {{ visitor.enterTime | time: (lang.isAr | async) }}
+                  </td>
+                  <td>
+                    {{ visitor.leaveTime | time: (lang.isAr | async) }}
+                  </td>
+                        <td>{{ visitor.notes }}</td>
+                        <td>
+                          <div class="d-flex justify-content-end">
+                            <p-image *ngIf="visitor.idPhoto.fullLink" [src]="visitor.idPhoto.fullLink" alt="Image"
+                              width="40" height="40" [preview]="true"></p-image>
+                          </div>
+                        </td>
+                      </tr>
+                    </ng-container>
+
+                    <tr *ngIf="!visitorsReport?.length">
+                      <td colspan="13">
+                        <h6 class="text-align-center fw-500 text-danger" translate="no_data_to_show"></h6>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <hr />
+
+              <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+                <div class="text-info d-flex gap-3 align-items-center">
+                  <label class="fw-500" translate="for_page"></label>
+                  <div>
+                    <select class="form-select" (change)="onPageSizeChange($event)">
+                      <option *ngFor="let size of sizes" [selected]="size == pageSize">
+                        {{ size }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+
+                <pagination-controls id="visitors" (pageChange)="onPageNumberChange($event)"
+                  (pageBoundsCorrection)="onPageNumberChange($event)" [responsive]="true" [previousLabel]="''"
+                  [nextLabel]="''" screenReaderPaginationLabel="Pagination" screenReaderPageLabel="page"
+                  screenReaderCurrentLabel="You're on page">
+                </pagination-controls>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

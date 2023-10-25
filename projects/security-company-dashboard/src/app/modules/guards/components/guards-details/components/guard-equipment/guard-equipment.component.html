@@ -1,0 +1,48 @@
+<div class="container my-3">
+  <div class=" d-flex justify-content-end mb-3">
+    <button (click)="add()" type="button" class="btn d-flex align-items-center gap-2 btn-primary py-2 px-4 rounded-8">
+      <ion-icon name="add" class="add"></ion-icon>
+      <span translate="add"></span>
+    </button>
+  </div>
+  <div class="row g-3 p-0 ">
+    <app-equipment-card class="col-lg-4 col-md-6 mt-3" *ngFor="
+    let item of equipments
+    " [data]="item?.companyEquipment">
+    </app-equipment-card>
+  </div>
+</div>
+<public-api-canvas [id]="canvasId" (close)="form.reset">
+  <form [formGroup]="AddForm" #form="ngForm" (ngSubmit)="onSubmit()">
+    <h5 class="fw-600 my-4 text-align-center" translate="managmentTools.addToUser"></h5>
+
+    <div class="mb-3">
+      <div class="form-floating">
+        <p-dropdown [filter]="true" filterBy="equipmentName" styleClass="w-100" [optionLabel]="'equipmentName'"
+          optionValue="id" [options]="allEquipments" [placeholder]="'managmentTools.tools' | translate"
+          formControlName="companyEquipmentId"></p-dropdown>
+      </div>
+
+      <div class="error-message" *ngIf="AddForm.controls['companyEquipmentId'].invalid && form.submitted"
+        [innerHtml]="'managmentTools.validation_equipmentName' | translate"></div>
+    </div>
+
+    <div class="d-flex justify-content-end gap-2 mt-4">
+      <button #resetAddForm type="reset" class="btn rounded-10 bg-info-o" data-bs-dismiss="offcanvas"
+        translate="cancel"></button>
+      <button type="submit" class="btn rounded-10 btn-primary" translate="add"></button>
+    </div>
+  </form>
+</public-api-canvas>
+
+
+<!-- ------------------------------- success ------------------------------- -->
+<public-api-modal [id]="model" classList="modal-dialog-centered">
+  <img width="50" [src]="link" alt="" class="mb-3" />
+  <h5 class="fw-600" [translate]="message"></h5>
+
+  <div class="d-flex justify-content-end gap-2">
+    <button translate="continue" data-bs-dismiss="modal" type="button"
+      class="btn rounded-8 px-4 py-2 btn-primary text-white"></button>
+  </div>
+</public-api-modal>

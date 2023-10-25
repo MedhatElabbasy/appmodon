@@ -1,0 +1,265 @@
+<div class="position-relative header">
+  <div class="bg-primary fixed-top w-100">
+    <app-navbar>
+
+    </app-navbar>
+  </div>
+</div>
+<div class="h-100  py-5 bg-info-o">
+
+
+  <div *ngIf="user" class="container py-5 mt-5">
+    <div class="row g-4 mt-4">
+      <div class="col-12 col-lg-4 col-xl-3">
+        <div class="card rounded-16 border-0 bg-white">
+          <div class="card-body mt-5">
+            <div class="d-flex justify-content-between">
+              <img [src]="user?.photo?.fullLink" class="avatar d-block"
+                onerror="this.src = 'assets/images/icons/earth.png'" />
+
+              <div class="d-flex gap-2 justify-content-end">
+                <button type="button" (click)="editGuard(user)" class="btn rounded-8 bg-primary-o text-primary edit">
+                  <i class="fa-solid fa-pen justify-content-end"></i>
+                </button>
+              </div>
+            </div>
+
+            <h5 class="fw-600 mt-3 text-primary text-capitalize">
+              {{ user.firstName + " " + user.lastName }}
+            </h5>
+            <ul class="profile-list fs-16 text-primar y">
+              <li class="text-truncate">
+                <i class="fa-solid fa-envelope"></i>
+
+                {{ user.email }}
+              </li>
+
+              <li class="text-truncate">
+                <i class="fa-solid fa-location-dot"></i>
+
+                {{ user?.city?.name }}
+              </li>
+
+              <li class="text-truncate">
+                <i class="fa-solid fa-building"></i>
+                {{ user?.jobType?.name }}
+              </li>
+            </ul>
+            <div class="card">
+              <div class="card-body">
+                <img [src]="qrCode" class="img-fluid" alt="" srcset="" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--<div class="col-12 col-lg-8 col-xl-9">
+        <h5 class="text-primary fw-700">
+          {{ "your_requests" | translate }}
+        </h5>
+        <div class="card rounded-16 border-0 mt-4">
+          <div class="card-body">
+            <div class="py-5">
+              <h5 class="fw-500 text-align-center text-primary">
+                {{ "your_request_is_empty" | translate }}
+              </h5>
+              <img src="assets/images/icons/Nodata-cuate.png" class="img-fluid col-sm-8 d-block mx-auto"
+                alt="no-data" />
+            </div>
+          </div>
+        </div>
+      </div>-->
+      <div class="col-12 col-lg-8 col-xl-9">
+        <div class="card rounded-16 border-0 mt-4">
+          <div class="card-body">
+            <div class="py-5">
+              <div class="container">
+                <div class="row">
+                  <div class="col-3" (click)="myJob()">
+                    <p class=" text-primary text-align-center py-2 rounded-12 bg-warning cursor-pointer change1">
+                      {{ "myJob" | translate }}
+                    </p>
+                  </div>
+                  <div class="col-3" (click)="requestsJob()">
+                    <p class=" cursor-pointer text-primary text-align-center py-2 rounded-12 bg-primary-o  change2">
+                      {{ "jobRequests" | translate }}
+                    </p>
+                  </div>
+                  <div class="col-3" (click)="savedJob()">
+                    <p class=" cursor-pointer text-primary text-align-center py-2 rounded-12 bg-primary-o  change3">
+                      {{ "JobSaved" | translate }}
+                    </p>
+                  </div>
+                  <hr>
+                </div>
+              </div>
+              <div class="mt-3">
+                <div *ngIf="myJobFlag">
+                  <app-my-job [id]="user.id"></app-my-job>
+                </div>
+                <div *ngIf="RequestsFlag">
+                  <app-job-requests [id]="user.id"></app-job-requests>
+                </div>
+                <div *ngIf="savedJobFlag">
+                  <app-saved-job [id]="user.id"></app-saved-job>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="!user" class="container">
+    <h4 class="text-align-center fw-bold mt-5">
+      {{ "register_breakdown" | translate }}
+    </h4>
+    <p class="text-info text-align-center fs-5">
+      {{ "no_data_to_show" | translate }}
+    </p>
+    <div class="col-md-4 col-12 mx-auto container">
+      <img src="assets/images/icons/Mobilelogin-cuate.png" class="img-fluid" />
+    </div>
+  </div>
+</div>
+
+<public-api-canvas [id]="canvasID">
+  <form [formGroup]="editUserForm" #form="ngForm" (ngSubmit)="onSubmit()"
+    class="d-flex flex-column gap-3 h-100 p-1 overflow-visible">
+    <div>
+      <h5 translate="edit_profile" class="text-align-center fw-500"></h5>
+      <div class="user-photo bg-info-o my-4 mx-auto text-info">
+        <img *ngIf="profileImage" [src]="profileImage | url" alt="user_image" class="user_image"
+          (click)="userPhoto.click()" />
+        <div [hidden]="profileImage" class="p-3" (click)="userPhoto.click()">
+          <img [src]="user.photo?.fullLink" alt="" class="d-block" width="150" height="150" />
+          <input (change)="onImageUpload($event)" type="file" hidden #userPhoto />
+        </div>
+      </div>
+
+      <!-- -------------------------------- name --------------------------------- -->
+
+      <div class="row row-cols-md-1 g-3">
+        <div class="form-floating">
+          <input type="text" class="form-control" id="firstName" placeholder="firstName*" formControlName="firstName" />
+          <label for="firstName">
+            {{ "firstName" | translate }}
+          </label>
+
+          <!--! ------------------------ first name validation ------------------------- -->
+          <div *ngIf="form.submitted && controls['firstName'].invalid" class="error-message"
+            [innerHtml]="'validation.first_name_required' | translate"></div>
+        </div>
+
+        <div class="form-floating">
+          <input type="text" class="form-control" id="middleName" placeholder="middleName*"
+            formControlName="middleName" />
+          <label for="middleName">
+            {{ "middle_name" | translate }}
+          </label>
+
+          <!--! ------------------------ middle name validation ------------------------- -->
+          <div *ngIf="form.submitted && controls['middleName'].invalid" class="error-message"
+            [innerHtml]="'validation.middle_name_required' | translate"></div>
+        </div>
+
+        <div>
+          <div class="form-floating">
+            <input type="text" class="form-control" id="lastName" placeholder="lastName*" formControlName="lastName" />
+            <label for="lastName">
+              {{ "lastName" | translate }}
+            </label>
+          </div>
+
+          <!--! ------------------------ last name validation ------------------------- -->
+          <div *ngIf="form.submitted && controls['lastName'].invalid" class="error-message"
+            [innerHtml]="'validation.last_name_required' | translate"></div>
+        </div>
+
+        <!-- -------------------------------- email -------------------------------- -->
+        <div>
+          <div class="form-floating">
+            <input type="email" class="form-control" id="Email" placeholder="Email" formControlName="email" />
+            <label for="Email">
+              {{ "email" | translate }}
+            </label>
+          </div>
+
+          <!--! -------------------------- email validation --------------------------- -->
+          <div *ngIf="form.submitted && controls['email'].invalid">
+            <div class="error-message" *ngIf="controls['email'].hasError('required')"
+              [innerHtml]="'validation.email_required' | translate"></div>
+            <div class="error-message" *ngIf="controls['email'].hasError('email')"
+              [innerHtml]="'validation.email_invalid' | translate"></div>
+          </div>
+        </div>
+
+        <!--? ----------------------------- Nationality ----------------------------- -->
+        <div>
+          <div class="form-floating">
+            <p-dropdown [filter]="true" filterBy="name" styleClass="w-100" [optionLabel]="isAr ? 'name' : 'nameEN'"
+              optionValue="id" [options]="nationalities" [placeholder]="'nationality' | translate"
+              formControlName="nationalityId" (ngModelChange)="loadCities($event)"></p-dropdown>
+          </div>
+
+          <div class="error-message" *ngIf="controls['nationalityId'].invalid && form.submitted"
+            [innerHtml]="'validation.nationality_required' | translate"></div>
+        </div>
+
+        <div>
+          <div class="form-floating">
+            <p-dropdown [filter]="true" filterBy="name" styleClass="w-100" [optionLabel]="isAr ? 'name' : 'nameEN'"
+              optionValue="id" [options]="cities" [placeholder]="'city' | translate" formControlName="cityId">
+            </p-dropdown>
+          </div>
+
+          <div class="error-message" *ngIf="controls['cityId'].invalid && form.submitted"
+            [innerHtml]="'validation.city_required' | translate"></div>
+        </div>
+
+        <!--? ----------------------------- national id ----------------------------- -->
+        <div>
+          <div class="form-floating">
+            <input type="text" class="form-control" id="nationalID" placeholder="National ID"
+              formControlName="nationalID" />
+            <label for="nationalID">
+              {{ "national_id" | translate }}
+            </label>
+          </div>
+
+          <div class="error-message" *ngIf="controls['nationalID'].invalid && form.submitted"
+            [innerHtml]="'validation.national_id_not_valid' | translate"></div>
+        </div>
+        <!--? ------------------------------- gender -------------------------------- -->
+        <div>
+          <div class="form-floating">
+            <p-dropdown [filter]="true" filterBy="name" styleClass="w-100" [optionLabel]="isAr ? 'name' : 'nameEN'"
+              optionValue="id" [options]="genders" [placeholder]="'gender' | translate" formControlName="genderId">
+            </p-dropdown>
+          </div>
+
+          <div class="error-message" *ngIf="controls['genderId'].invalid && form.submitted"
+            [innerHtml]="'validation.gender_required' | translate"></div>
+        </div>
+
+        <!--? ----------------------------- blood type ------------------------------ -->
+        <div>
+          <div class="form-floating">
+            <p-dropdown [filter]="true" filterBy="name" styleClass="w-100" [optionLabel]="isAr ? 'name' : 'nameEN'"
+              optionValue="id" [options]="bloodTypes" [placeholder]="'blood_type' | translate"
+              formControlName="bloodTypeId"></p-dropdown>
+          </div>
+
+          <div class="error-message" *ngIf="controls['bloodTypeId'].invalid && form.submitted"
+            [innerHtml]="'validation.blood_type_required' | translate"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex-grow-1 d-flex justify-content-end align-items-end gap-2 pb-3">
+      <button type="button" class="btn px-4 rounded-8 btn-light" translate="cancel" data-bs-dismiss="offcanvas"
+        (click)="form.resetForm()"></button>
+      <button type="submit" translate="edit" class="btn px-4 rounded-8 btn-primary"></button>
+    </div>
+  </form>
+</public-api-canvas>

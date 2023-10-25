@@ -1,0 +1,122 @@
+<div class="position-relative header">
+  <div class="bg-primary fixed-top w-100">
+    <app-navbar> </app-navbar>
+  </div>
+</div>
+
+<div class="h-100 bg-info-o py-5 mt-5">
+
+
+
+  <div class="container py-4 mt-5">
+
+    <div class="card h-100 mt-5 border-0 rounded-10">
+
+      <div class="d-flex justify-content-end">
+        <button class="btn rounded-m rounded-8 btn-primary d-flex gap-2 align-items-center ml-2 mt-2"
+          style="height:53px;" (click)="clear()" type="button">
+
+          {{ "global.clear"| translate }}
+        </button>
+        <div class="form-floating mx-2 mt-2" *ngIf="companies">
+          <p-dropdown [(ngModel)]="selectedValue" class="py-2" id="data" [filter]="true" filterBy="name" styleClass="w-100"
+            [optionLabel]="'securityCompany.name'" [options]="companies"
+            [placeholder]="'validation.select_company' | translate" (onChange)="display($event)"></p-dropdown>
+        </div>
+
+      </div>
+
+      <div class="card-body">
+        <div class="d-lg-flex justify-content-between mb-3">
+          <h5 class="fw-600 mt-2 mb-4" translate="reports.location_tracking"></h5>
+        </div>
+        <div style="height: 450px" class="">
+          <google-map [options]="{ styles: style }" [center]="mainLocation" [zoom]="2">
+            <map-marker-clusterer
+              imagePath="https://raw.githubusercontent.com/googlearchive/js-marker-clusterer/gh-pages/images/m">
+              <map-marker *ngFor="let marker of markers" [position]="{ lat: +marker.lat, lng: +marker.lng }" [label]="{
+                text: marker.name,
+                className: 'marker'
+              }">
+              </map-marker>
+            </map-marker-clusterer>
+          </google-map>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class=" card mt-4 rounded-10 border-0">
+      <div class="card-body">
+        <!-- Nav tabs -->
+        <div class="d-flex justify-content-between">
+          <ul class="nav nav-tabs rounded-0 shadow-none" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" id="checkIn-tab" data-bs-toggle="tab" data-bs-target="#checkIn"
+                type="button" role="tab" aria-controls="checkIn" aria-selected="true">
+                {{ "reports.checked_in" | translate }}
+                <span class="badge bg-success">{{ checkedIn.length }}</span>
+              </button>
+
+
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="checkout-tab" data-bs-toggle="tab" data-bs-target="#checkout" type="button"
+                role="tab" aria-controls="checkout" aria-selected="false">
+                {{ "reports.checked_out" | translate }}
+                <span class="badge bg-success">{{ checkedOut.length }}</span>
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="break-tab" data-bs-toggle="tab" data-bs-target="#break" type="button"
+                role="tab" aria-controls="break" aria-selected="false">
+                {{ "reports.on_break" | translate }}
+                <span class="badge bg-success">{{ break.length }}</span>
+              </button>
+            </li>
+          </ul>
+
+        </div>
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <div class="tab-pane active" id="checkIn" role="tabpanel" aria-labelledby="checkIn-tab">
+            <div class="py-3">
+              <div class="row row-cols-xl-3 row-cols-md-2 row-cols-1 g-4">
+                <app-dash-guard-card *ngFor="let item of checkedIn" [data]="item" [time]="item.startTime">
+                </app-dash-guard-card>
+              </div>
+              <div *ngIf="!checkedIn.length" class="mt-4 p-3 rounded-10 bg-info-o text-align-center fw-500"
+                translate="no_data_to_show"></div>
+            </div>
+          </div>
+          <div class="tab-pane" id="checkout" role="tabpanel" aria-labelledby="checkout-tab">
+            <div class="py-3">
+              <div class="row row-cols-xl-3 row-cols-md-2 row-cols-1 g-4">
+                <app-dash-guard-card *ngFor="let item of checkedOut" [data]="item" [time]="item.endTime">
+                </app-dash-guard-card>
+              </div>
+              <div *ngIf="!checkedOut.length" class="mt-4 p-3 rounded-10 bg-info-o text-align-center fw-500"
+                translate="no_data_to_show"></div>
+            </div>
+          </div>
+          <div class="tab-pane" id="break" role="tabpanel" aria-labelledby="break-tab">
+            <div class="py-3">
+              <div class="row row-cols-xl-3 row-cols-md-2 row-cols-1 g-4">
+                <app-dash-guard-card *ngFor="let item of break" [data]="item" [time]="item.toTalBreakTime">
+                </app-dash-guard-card>
+              </div>
+              <div *ngIf="!break.length" class="mt-4 p-3 rounded-10 bg-info-o text-align-center fw-500"
+                translate="no_data_to_show"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+  </div>
+</div>

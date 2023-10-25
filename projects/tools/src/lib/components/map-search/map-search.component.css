@@ -1,0 +1,13 @@
+::ng-deep .map-container {
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: 0px;
+  border-start-start-radius: 10px;
+  border-start-end-radius: 10px;
+}
+
+#search {
+  border-radius: 0;
+  border-end-end-radius: 10px;
+  border-end-start-radius: 10px;
+}/*# sourceMappingURL=map-search.component.css.map */

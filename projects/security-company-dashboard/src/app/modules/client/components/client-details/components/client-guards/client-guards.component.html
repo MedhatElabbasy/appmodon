@@ -1,0 +1,71 @@
+<div class="h-100">
+  <div class="container-fluid h-100">
+    <div *ngIf="sites.length" class="row h-100">
+      <div class="col-xl-3 col-md-4 col-12 px-0 border-inline-end">
+        <ng-container *ngTemplateOutlet="sitesTemplate"></ng-container>
+      </div>
+      <div class="col-xl-9 col-md-8 col-12">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+
+    <div class="h-100 d-flex align-items-center justify-content-center">
+      <app-border-title>
+        <span translate="clients.no_sites_to_manage_guards"></span>
+      </app-border-title>
+    </div>
+  </div>
+</div>
+
+<ng-template #sitesTemplate>
+  <div class="accordion" id="site">
+    <div *ngFor="let site of sites" class="accordion-item">
+      <h2 class="accordion-header" [id]="'#site' + site.id">
+        <button
+          class="accordion-button collapsed"
+          type="button"
+          data-bs-toggle="collapse"
+          [attr.data-bs-target]="'#site' + site.id"
+          aria-expanded="false"
+          aria-controls="collapseOne"
+        >
+          {{ site.siteName }}
+        </button>
+      </h2>
+
+      <div
+        [id]="'site' + site.id"
+        class="accordion-collapse collapse"
+        aria-labelledby="headingOne"
+        data-bs-parent="#site"
+      >
+        <div class="accordion-body p-0">
+          <h6
+            class="my-2 px-3 fs-14 text-info"
+            translate="clients.locations_on_this_site"
+          ></h6>
+          <!-- List group -->
+          <div class="list-group" id="myList" role="tablist">
+            <a
+              [routerLink]="[
+                locationLink,
+                location.id,
+                location.numberOfGuards
+              ]"
+              routerLinkActive="active"
+              *ngFor="let location of site.siteLocations"
+              class="list-group-item list-group-item-action"
+              data-toggle="list"
+              role="tab"
+            >
+              <div class="text-info location-name">{{ location.name }}</div>
+              <div class="fs-14 text-info">
+                {{ location.numberOfGuards }} {{ "clients.guards" | translate }}
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

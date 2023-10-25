@@ -1,0 +1,149 @@
+<div class="h-100 d-flex flex-column">
+  <div class="flex-fill">
+    <h5 class="fw-600 text-primary text-align-center mb-4" translate="shifts.change_shifts"></h5>
+    <div class="input-group">
+      <span class="input-group-text border-0 bg-transparent" id="search">
+        <ion-icon name="search"></ion-icon>
+      </span>
+      <input type="text" class="form-control" [placeholder]="'search' | translate" aria-label="search"
+        aria-describedby="search" />
+    </div>
+
+    <div class="d-flex flex-column gap-3 mt-3">
+      <div class="card bg-warning-o border-0 rounded-10" *ngFor="let item of shifts">
+        <div class="card-body">
+          <div class="float-end d-flex gap-2">
+            <div class="d-flex gap-2 justify-content-end">
+              <button (click)="onEdit(item)" type="button" class="btn rounded-8 bg-primary-o text-primary edit">
+                <i class="fa-solid fa-pen"></i>
+              </button>
+              <button (click)="onDelete(item)" type="button" class="btn rounded-8 bg-danger-o text-danger delete">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </div>
+          </div>
+          <h5 class="card-title text-primary fw-600">
+            {{
+            (lang.isAr | async)
+            ? item.clientShiftSchedule.companyShift.shiftType.name
+            : item.clientShiftSchedule.companyShift.shiftType.nameEN
+            }}
+          </h5>
+          <div class="d-flex gap-2 align-items-center mt-4">
+            <span class="badge bg-primary-o text-primary rounded-8 fw-normal p-2 fs-14">
+              <span translate="from"></span>
+              {{
+              item.clientShiftSchedule.shiftStartTime
+              | time: (lang.isAr | async)
+              }}
+              <span translate="to"></span>
+              {{
+              item.clientShiftSchedule.shiftEndTime
+              | time: (lang.isAr | async)
+              }}
+            </span>
+
+            <span class="badge bg-primary-o text-primary rounded-8 fw-normal p-2 fs-14">
+              {{
+              item.companySecurityGuard.securityGuard.firstName +
+              " " +
+              item.companySecurityGuard.securityGuard.firstName
+              }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-4 d-flex justify-content-end gap-2">
+    <button type="button" data-bs-dismiss="offcanvas" class="btn bg-info-o rounded-8" translate="cancel"></button>
+    <button (click)="onAdd()" type="button" class="btn btn-primary rounded-8" translate="shifts.add_shift"></button>
+  </div>
+</div>
+<public-api-canvas [id]="canvasId">
+  <form class="h-100 d-flex flex-column" [formGroup]="shiftForm" #form="ngForm" (ngSubmit)="onSubmit()">
+    <div class="flex-fill">
+      <h5 class="fw-600 text-align-center mb-4" translate="shifts.add_shift"></h5>
+      <div class="mb-3" *ngIf="updatehift">
+        <p-dropdown [options]="shiftList" styleClass="w-100" placeholder="{{ 'shift' | translate }}" [optionLabel]="
+            (lang.isAr | async)
+              ? 'companyShift.shiftType.name'
+              : 'companyShift.shiftType.nameEN'
+          " optionValue="id" [filter]="true" formControlName="clientShiftScheduleId"></p-dropdown>
+
+        <div class="error-message" *ngIf="controls['clientShiftScheduleId'].invalid && form.submitted">
+          <i class="fa-solid fa-circle-exclamation"></i>
+          {{ "validation.field_required" | translate }}
+        </div>
+      </div>
+
+      <div class="mb-3" *ngIf="!updatehift">
+        <p-dropdown [options]="supervisors" styleClass="w-100" placeholder="{{ 'supervisor' | translate }}"
+          placeholder="{{ 'supervisor' | translate }}" optionLabel="securityGuard.userName" [filter]="true"
+          optionValue="id" formControlName="companySecurityGuardId"></p-dropdown>
+
+        <div class="error-message" *ngIf="controls['companySecurityGuardId'].invalid && form.submitted">
+          <i class="fa-solid fa-circle-exclamation"></i>
+          {{ "validation.field_required" | translate }}
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-end gap-2">
+      <button type="reset" data-bs-dismiss="offcanvas" class="btn px-4 rounded-10 bg-info-o"
+        translate="cancel"></button>
+      <button type="submit" class="btn btn-primary px-4 rounded-10" translate="add"></button>
+    </div>
+  </form>
+</public-api-canvas>
+
+
+
+<public-api-canvas [id]="canvasId2">
+  <form class="h-100 d-flex flex-column" [formGroup]="shiftForm" #form="ngForm" (ngSubmit)="onSubmit()">
+    <div class="flex-fill">
+      <h5 class="fw-600 text-align-center mb-4" translate="shifts.add_shift"></h5>
+      <div class="mb-3">
+        <p-dropdown [options]="shiftList" styleClass="w-100" placeholder="{{ 'shift' | translate }}" [optionLabel]="
+            (lang.isAr | async)
+              ? 'companyShift.shiftType.name'
+              : 'companyShift.shiftType.nameEN'
+          " optionValue="id" [filter]="true" formControlName="clientShiftScheduleId"></p-dropdown>
+
+        <div class="error-message" *ngIf="controls['clientShiftScheduleId'].invalid && form.submitted">
+          <i class="fa-solid fa-circle-exclamation"></i>
+          {{ "validation.field_required" | translate }}
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <p-dropdown [options]="supervisors" styleClass="w-100" placeholder="{{ 'supervisor' | translate }}"
+          placeholder="{{ 'supervisor' | translate }}" optionLabel="securityGuard.userName" [filter]="true"
+          optionValue="id" formControlName="companySecurityGuardId"></p-dropdown>
+
+        <div class="error-message" *ngIf="controls['companySecurityGuardId'].invalid && form.submitted">
+          <i class="fa-solid fa-circle-exclamation"></i>
+          {{ "validation.field_required" | translate }}
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-end gap-2">
+      <button type="reset" data-bs-dismiss="offcanvas" class="btn px-4 rounded-10 bg-info-o"
+        translate="cancel"></button>
+      <button type="submit" class="btn btn-primary px-4 rounded-10" translate="add"></button>
+    </div>
+  </form>
+</public-api-canvas>
+<public-api-modal classList="modal-dialog-centered" [id]="modalID">
+  <img src="assets/images/svg/delete.svg" alt="" class="mb-3" srcset="" />
+  <h4 class="fw-700" translate="shifts.delete_shift_confirm"></h4>
+  <p class="mt-2 text-info" translate="cancel_this_operation"></p>
+
+  <div class="d-flex justify-content-end gap-2">
+    <button type="button" data-bs-dismiss="modal" class="btn rounded-8 px-4 py-2 btn-light" translate="cancel"
+      (click)="selectedShift = null"></button>
+    <button translate="yes_delete" (click)="delete()" type="button" class="btn rounded-8 px-4 py-2 btn-danger"></button>
+  </div>
+</public-api-modal>

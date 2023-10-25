@@ -1,0 +1,30 @@
+<button
+  hidden
+  [id]="id + '-open'"
+  data-bs-toggle="modal"
+  [attr.data-bs-target]="'#' + id + '-modal-element'"
+></button>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  [id]="id + '-modal-element'"
+  tabindex="-1"
+  role="dialog"
+  aria-hidden="true"
+  data-bs-backdrop="static"
+>
+  <div class="modal-dialog {{ classList }}" role="document">
+    <div class="modal-content">
+      <button
+        data-bs-dismiss="modal"
+        aria-label="Close"
+        hidden
+        [id]="id + '-close'"
+      ></button>
+      <div class="modal-body">
+        <ng-content></ng-content>
+      </div>
+    </div>
+  </div>
+</div>

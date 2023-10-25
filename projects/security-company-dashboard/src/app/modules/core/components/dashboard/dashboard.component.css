@@ -1,0 +1,13 @@
+::ng-deep .map-container {
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: 0px;
+  border-start-start-radius: 10px;
+  border-start-end-radius: 10px;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}/*# sourceMappingURL=dashboard.component.css.map */

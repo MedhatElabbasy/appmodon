@@ -1,0 +1,38 @@
+<div class="position-relative header">
+  <div class="bg-primary fixed-top w-100">
+    <app-navbar>
+
+    </app-navbar>
+  </div>
+</div>
+<div class="h-100 bg-info-o  py-5">
+  <div class="container py-5 mt-5">
+    <div class="row mt-4">
+      <div class="d-flex mb-4 flex-wrap flex-row-reverse flex-md-row justify-content-center align-items-center gap-3">
+
+
+        <div class="h-100 py-3 container d-flex flex-column">
+          <div class="mt-4 flex-grow-1 d-flex flex-column">
+            <ul class="nav sub-nav nav-tabs mb-3">
+              <ng-container *ngFor="let link of links">
+                <li class="nav-item">
+                  <a
+                    [routerLink]="[link.link]"
+                    routerLinkActive="router-link-active"
+                    class="nav-link"
+                    routerLinkActive="active">{{ "reports." + link.name | translate
+                    }}
+                  </a>
+                </li>
+              </ng-container>
+            </ul>
+        
+            <div class="flex-grow-1">
+              <router-outlet></router-outlet>
+            </div>
+          </div>
+        </div>
+        
+</div>
+  </div>
+  </div>

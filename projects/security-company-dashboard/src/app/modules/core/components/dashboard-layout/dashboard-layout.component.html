@@ -1,0 +1,210 @@
+<section *ngIf="userInfo" class="vh-100 d-flex flex-column overflow-auto">
+  <nav class="header flex-grow-0">
+    <div class="bg-primary bottom-border py-1">
+      <div class="container">
+        <div
+          class="d-flex align-items-center top-nav justify-content-between text-white"
+        >
+          <div class="flex-grow-0 nav-block end-border">
+            <div>
+              <a>
+                <img
+                  src="assets/images/logo.png"
+                  height="45"
+                  alt="logo"
+                  title="takid"
+                />
+              </a>
+            </div>
+          </div>
+          <div
+            class="nav-block flex-fill d-flex justify-content-end justify-content-md-between align-items-center end-border"
+          >
+            <div class="d-none d-md-block">
+              <p
+                class="text-info mb-1"
+                translate="welcome_to_your_dashboard"
+              ></p>
+              <h5 class="m-0">
+                {{ userInfo.firstName }} {{ userInfo.lastName }}
+              </h5>
+            </div>
+            <div class="d-flex gap-2">
+              <div class="alert-icon" (click)="onLanguageChange()">
+                <ion-icon name="language" class="fs-5"></ion-icon>
+              </div>
+             <!--<ng-content select="selector"></ng-content><div class="alert-icon">
+                <i class="fa-solid fa-bell active"></i>
+              </div>-->
+            </div>
+          </div>
+          <div class="nav-block flex-grow-0 p-0 px-md-2">
+            <div class="dropdown my-1">
+              <button
+                class="btn no-focus rounded-12 px-2 d-flex gap-md-3 p-0 align-items-center"
+                type="button"
+                id="dropdownMenuButton"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <div class="d-flex align-items-center gap-md-3">
+                  <div>
+                    <img
+                      [src]="userInfo.profileImage?.fullLink"
+                      class="profile-image"
+                      alt="profile image"
+                      onerror="this.src = 'assets/images/icons/earth.png'"
+                    />
+                  </div>
+                  <div class="text-align-start d-none d-md-block">
+                    <h6 class="text-white lh-sm m-0 fw-600 text-capitalize">
+                      {{ userInfo.firstName }} {{ userInfo.lastName }}
+                    </h6>
+                    <div class="text-info fs-14 text-capitalize">
+                      {{ userInfo.email }}
+                    </div>
+                  </div>
+                </div>
+              </button>
+
+              <ul
+                class="dropdown-menu text-capitalize p-0 overflow-hidden w-100 mt-2 rounded-12"
+                aria-labelledby="dropdownMenuButton"
+              >
+                <ng-container *ngFor="let item of accountList">
+                  <li>
+                    <a
+                      [routerLink]="[
+                        '/' +
+                          routing.dashboard +
+                          '/' +
+                          routing.account.module +
+                          '/' +
+                          item.link
+                      ]"
+                      routerLinkActive="active"
+                      class="dropdown-item"
+                    >
+                      <div class="icon flex-grow-0">
+                        <i class="{{ item.icon }} fs-5 text-info"></i>
+                      </div>
+                      {{ "security_dashboard.dash." + item.name | translate }}
+                    </a>
+                  </li>
+                  <hr class="col-10 mis-auto m-0" />
+                </ng-container>
+
+                <li>
+                  <a class="dropdown-item" (click)="logout()">
+                    <div class="icon bg-danger-o">
+                      <i class="fa-solid fa-power-off text-danger"></i>
+                    </div>
+                    {{ "logout" | translate }}
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="bg-primary position-sticky">
+    <ul
+      class="nav text-nowrap nav-bottom gap-3 container flex-nowrap px-4 overflow-auto"
+    >
+      <ng-container *ngFor="let item of menu" class="nav-item">
+        <ng-container *ngIf="!item.children">
+          <li *appRole="item.role!">
+            <a
+              class="nav-link"
+              [routerLink]="item.link"
+              routerLinkActive="active"
+            >
+              <img
+                *ngIf="item.image"
+                [src]="item.image"
+                [alt]="item.name"
+                class="menu_icon"
+              />
+              <ion-icon *ngIf="item.icon" [name]="item.icon"></ion-icon>
+              <span class="link-name">{{
+                "security_dashboard.dash." + item.name | translate
+              }}</span>
+            </a>
+          </li>
+        </ng-container>
+
+        <ng-container *ngIf="item.children">
+          <li *appRole="item.role!">
+            <a
+              cdkOverlayOrigin
+              #trigger="cdkOverlayOrigin"
+              class="nav-link dropdown-toggle"
+              routerLinkActive="active"
+              (click)="isOpen = true"
+            >
+              <img
+                *ngIf="item.image"
+                [src]="item.image"
+                [alt]="item.name"
+                class="menu_icon"
+              />
+              <ion-icon *ngIf="item.icon" [name]="item.icon"></ion-icon>
+              <span class="link-name">{{
+                "security_dashboard.dash." + item.name | translate
+              }}</span>
+            </a>
+
+            <ng-template
+              [dir]="(lang.isAr | async) ? 'rtl' : 'ltr'"
+              cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
+              (detach)="isOpen = false"
+              (backdropClick)="isOpen = false"
+              [cdkConnectedOverlayHasBackdrop]="true"
+              cdkConnectedOverlay
+              [cdkConnectedOverlayOrigin]="trigger"
+              [cdkConnectedOverlayOpen]="isOpen"
+            >
+              <ul class="dropdown-menu border-0 shadow show">
+                <li
+                  (click)="isOpen = false"
+                  *ngFor="let subLink of item.children; let e = last"
+                >
+                  <a
+                    class="dropdown-item text-info border-1 d-flex gap-3 align-items-center"
+                    [routerLink]="item.link + '/' + subLink.link"
+                    routerLinkActive="active"
+                    [class.border-bottom]="!e"
+                  >
+                    <ion-icon
+                      *ngIf="subLink.icon"
+                      [name]="subLink.icon"
+                      size="small"
+                    ></ion-icon>
+                    <img
+                      *ngIf="subLink.image"
+                      [src]="subLink.image"
+                      [alt]="subLink.name"
+                      class="menu_icon"
+                    />
+                    <span>
+                      {{
+                        "security_dashboard.dash." + subLink.name | translate
+                      }}
+                    </span>
+                  </a>
+                </li>
+              </ul>
+            </ng-template>
+          </li>
+        </ng-container>
+      </ng-container>
+    </ul>
+  </div>
+
+  <div class="content flex-grow-1 bg-info-o overflow-auto">
+    <router-outlet></router-outlet>
+  </div>
+</section>

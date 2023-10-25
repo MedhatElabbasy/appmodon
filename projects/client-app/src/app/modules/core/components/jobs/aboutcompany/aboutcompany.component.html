@@ -1,0 +1,27 @@
+<div class="mt-4">
+  <h6 class="fw-bold"> {{'aboutCompany'|translate}}</h6>
+  <p class="mt-3 text-secondary">
+    {{
+    data?.securityCompany?.businessDescription
+    }}
+
+  </p>
+  <hr>
+</div>
+<div>
+  <h6 class="fw-bold"> {{'location'|translate}}</h6>
+  <p class="mt-3 text-secondary">
+    {{data?.securityCompany?.address}}
+  </p>
+  <div>
+    <google-map height="400px" width="100%" [options]="{ styles: style }"
+      [center]="{lat: +this.data?.securityCompany?.locationLat, lng: +this.data?.securityCompany?.locationLng }">
+      <map-marker-clusterer
+        imagePath="https://raw.githubusercontent.com/googlearchive/js-marker-clusterer/gh-pages/images/m">
+        <map-marker
+          [position]="{ lat: +this.data?.securityCompany?.locationLat, lng: +this.data?.securityCompany?.locationLng }">
+        </map-marker>
+      </map-marker-clusterer>
+    </google-map>
+  </div>
+</div>
