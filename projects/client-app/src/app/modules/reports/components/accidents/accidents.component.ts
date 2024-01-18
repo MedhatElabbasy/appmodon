@@ -319,7 +319,7 @@ export class AccidentsComponent implements OnInit {
         reason: this.report[i].reason ? this.report[i].reason : 'لا يوجد',
         // phoneNumber:
         //   this.report[i].companySecurityGuard.securityGuard?.appUser?.userName,
-        createdDateTime: this.report[i].createdDateTime,
+        createdDateTime: this.report[i].created,
         description: this.report[i].description
           ? this.report[i].description
           : 'لا يوجد',

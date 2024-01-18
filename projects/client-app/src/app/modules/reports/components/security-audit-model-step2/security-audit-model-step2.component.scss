@@ -1,0 +1,53 @@
+.resultTitle{
+
+    background-color: #006996;
+}
+
+.resultCard{
+    background-color: #F0F6F9;
+}
+.points{
+    font-size: 30px;
+    font-weight: 600;
+    text-align: center;
+}
+
+#test{
+    box-sizing: border-box;
+    display:block;
+}
+
+.canvasjs-chart-canvas{
+    height: 300px !important;
+    // width: 100% !important;
+}
+
+.percent{
+    background-color: #F4F4F7;
+    padding: 20px;
+    text-align: center;
+}
+
+.red{
+    background-color: red;
+    color:#fff;
+    display: block;
+    border-radius: 10px;
+}
+.yellow{
+    background-color: yellow;
+    color:#fff;
+    display: block;
+    border-radius: 10px;
+}
+.green{
+    background-color: green;
+    color:#fff;
+    display: block;
+    border-radius: 10px;
+}
+
+.pervious{
+    background-color: #F0F6F9;
+    color:#707070;
+}

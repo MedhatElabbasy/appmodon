@@ -12,6 +12,12 @@ export class DashGuardCardComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    console.log(this.data);
+    console.log(this.time)
+    this.data.breakLoggers.filter((ele)=>{
+      ele.isActiveBreak==true
+      this.time=ele.startTime
+    })
   }
 
 }

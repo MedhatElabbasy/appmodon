@@ -10,6 +10,7 @@ export const environment = {
   registerLink: 'http://localhost:4200/#/auth/register-number',
   hub: 'https://takidapp.net:8008/SecuritySupervisorHub',
   chatHub: 'https://takidapp.net:8008/chathub',
+  imgSize: 5000000
 };
 
 /*

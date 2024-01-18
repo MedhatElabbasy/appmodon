@@ -1,0 +1,99 @@
+<!-- <div class="position-relative header">
+    <div class="bg-primary fixed-top w-100">
+        <app-navbar>
+
+        </app-navbar>
+    </div>
+</div>
+<div class="h-100 bg-info-o  py-5">
+    <div class="container py-5 mt-5">
+        <div class="row mt-4">
+
+            <div class="container h-100 d-flex flex-column py-4">
+                <div class="mb-3">
+                    <h4 class="m-0 fw-600 my-3" translate="">نموذج تدقيق الأمن الجديد مع الاشراف</h4>
+
+                </div> -->
+<div class="card border-0 flex-fill rounded-10">
+    <div class="card-body">
+        <div class="h-100 d-flex flex-column">
+            <div class="col-12">
+                <div class="row mb-3">
+                    <div class="col-5">
+                        <h5 class="m-0 fw-600 my-3" translate="">صور الملاحظات المرصودة
+                        </h5>
+                    </div>
+                </div>
+            </div>
+            <div class="table-responsive flex-fill text-primary my-5 p-5">
+                <form [formGroup]="photosForm">
+                    <div class="file bg-info-o rounded-8 text-info" [style.backgroundImage]="'url('+ profileImage +')'"
+                        (change)="onImageUpload($event)" (click)="contractimage.click()">
+                        <input type="file" #contractimage hidden accept="image/x-png,image/gif,image/jpeg" />
+
+                        <div class="container" *ngIf="!profileImage">
+                            <img src="assets/images/image-.png" class="" style="width:120px; height:100px;" />
+                            <div class="fs-14 mt-3 ">
+                                {{ "reports.click_to_upload_security_audit_photos" | translate }}
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <ngx-dropzone 
+                                (change)="onImageUpload($event)"
+                                class=" position-relative dropZone">
+                                <ngx-dropzone-label *ngIf="!profileImage" class="w-100">
+                                    <img
+                                        src="assets\images\image-.png"
+                                        alt="upload image"
+                                        class=" mt-3 d-block m-auto">
+                                    <p class="mt-2 fs-5 text-muted text-center mb-4"
+                                        translate="uploadImage.notification"></p>
+                                    <a class="btn btn-color button rounded-4 d-block
+                                        m-auto w-xl-50 w-75" translate="selectImage"></a>
+                                </ngx-dropzone-label>
+                                <img *ngIf="profileImage" [src]="sanitize(profileImage)"
+                                    alt="user_image" class="user_image">
+                                <div *ngIf="imgIsLoading"
+                                    class="position-absolute overlay top-0 start-0 end-0 bottom-0">
+                                    <i class="fa-solid fa-spinner fa-spin fa-3x"></i>
+                                </div>
+                            </ngx-dropzone> -->
+                    <!-- <p
+                                *ngIf="photosControls['notificationPhotoId'].touched&&!profileImage"
+                                class="alert alert-danger text-center mt-1"
+                                translate="uploadImageRequired"></p>
+                            <p *ngIf="message.includes('Only images')"
+                                class="alert alert-danger text-center mt-1"
+                                translate="uploadImage.onlyImgs"></p>
+                            <p *ngIf="message.includes('5 Megabyte')"
+                                class="alert alert-danger text-center mt-1"
+                                translate="uploadImage.maxSize"></p> -->
+                </form>
+            </div>
+        </div>
+        <div class="row my-5">
+            <div class="col-12 d-flex justify-content-end">
+                <div>
+                    <button class="btn pervious px-4 rounded-10 mx-2" (click)="pervious()">السابق</button>
+                    <button class="btn btn-primary px-4 text-white rounded-10 mx-2" (click)="collect()">حفظ</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- </div>
+        </div>
+    </div>        
+</div>  -->
+
+<public-api-modal [id]="finish" classList="modal-dialog-centered">
+    <img width="50" src="assets/images/icons/checked.png" alt="" class="mb-3" />
+    <h5 class="fw-600">{{'reports.finish_security_audit'|translate}}</h5>
+
+    <div class="d-flex justify-content-end gap-2">
+        <button translate="continue" (click)="continue()"
+            type="button"
+            class="btn rounded-8 px-4 py-2 btn-primary text-white"></button>
+    </div>
+</public-api-modal>

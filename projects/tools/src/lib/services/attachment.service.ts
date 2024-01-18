@@ -12,12 +12,12 @@ export class AttachmentService {
   uploadFile(name: string, file: File) {
     console.log(file);
     
-    let imgSize = 200000
+    let imgSize = 2000000
     let fileSize = file.size
     if(fileSize <= imgSize){
     const formData = new FormData();
     formData.append('file', file);
-   console.log(formData);
+    console.log(formData);
    
     return this.http.post(this.url + `api/Attachment/uploadFormFile`, formData);
   }else{

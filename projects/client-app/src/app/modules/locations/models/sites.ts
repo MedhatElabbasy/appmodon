@@ -67,6 +67,9 @@ export interface companySecurityGuard{
         firstName: string,
         middleName: string,
         lastName: string,
+        lastNameEn:string,
+        middleNameEn:string,
+        firstNameEN:string,
         email: string,
         nationalID: string,
         bloodType: {

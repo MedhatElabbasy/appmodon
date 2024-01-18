@@ -34,7 +34,28 @@ export class ReportsComponent implements OnInit {
               description: 'reports.visitors_report_description',
               image: 'assets/images/svg/visitors.svg',
               roles: [Roles.VirtualClientAdmin],
-            }
+            },
+            {
+                name: 'reports.Security_audit_model',
+                link: `/${Routing.reports.module}/${Routing.reports.children.securityAuditView}`,
+                description: 'reports.Security_audit_model_description',
+                image: 'assets/images/svgs/guard.svg',
+                roles: [Roles.VirtualClientAdmin],
+            },
+           {
+            name: 'reports.missions',
+            link: `/${Routing.reports.module}/${Routing.reports.children.missions}`,
+            description: 'reports.missions_report_description',
+            image: 'assets/images/svg/visitors.svg',
+            roles: [Roles.SecurityCompanyUser, Roles.SecuritCompany],
+          },
+          {
+            name: 'reports.tours',
+            link: `/${Routing.reports.module}/${Routing.reports.children.tours}`,
+            description: 'reports.tours_report_description',
+            image: 'assets/images/svg/visitors.svg',
+            roles: [Roles.SecurityCompanyUser, Roles.SecuritCompany],
+          }
           );
         
  

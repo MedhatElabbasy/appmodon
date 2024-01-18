@@ -14,9 +14,22 @@ import { environment } from 'projects/client-app/src/environments/environment';
 })
 export class ReportsService {
   private readonly url = environment.api;
+  stepNumber = new BehaviorSubject<number>(0);
   clientId = new BehaviorSubject<number>(0)
   statisticData = new BehaviorSubject<any>(null)
-  constructor(private http: HttpClient, private auth: AuthService) { }
+  private formDataSubject = new BehaviorSubject<any[]>([]);
+  formData$ = this.formDataSubject.asObservable();
+
+
+  constructor(private http: HttpClient, private auth: AuthService) {
+    this.stepNumber.next(0);
+    console.log(this.stepNumber);
+   }
+
+   setFormData(data: any) {
+    const currentData = this.formDataSubject.value;
+    this.formDataSubject.next([...currentData, data]);
+  }
 
   attendanceReportForClient(clientId: number, date: string) {
     //let clientId = this.auth.snapshot.userInfo?.id;
@@ -239,4 +252,32 @@ export class ReportsService {
 
     );
   }
+
+  GetSecurityAuditForm()
+{
+  return this.http.get(this.url + `api/SecurityAuditForm/GetSecurityAuditForm`);
+}
+
+setSecurityAuditForm(model:object){
+  return this.http.post(this.url+`api/SecurityAuditForm/Add`,model)
+}
+
+GetSecurityAuditFormByClientCompanyID(ClientCompanyId:number){
+  return this.http.get(this.url + `api/SecurityAuditForm/GetAllByClientCompanyId?ClientCompanyId=${ClientCompanyId}`);
+}
+
+getAllReceivingDeliveringVehicles(securityCompanyId:number){
+  return this.http.get(environment.api +`api/ReceivingDeliveringVehicles/GetAllBySecurtityCompanyId?SecurtityCompanyId=${securityCompanyId}`)
+}
+
+getAllMissionsByClientCompanyId(clientId:number){
+return this.http.get<any[]>(
+  this.url + `api/GuardTask/GetAllClientCompanyId?ClientCompanyId=${clientId}`)
+}
+
+getAllToursByClientCompanyId(clientId:number){
+
+return this.http.get<any[]>(
+  this.url + `api/GuardTour/GetByClientCompanyId?ClientCompanyId=${clientId}`)
+}
 }

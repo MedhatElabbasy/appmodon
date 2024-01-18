@@ -143,6 +143,9 @@ import { FileObject } from "projects/tools/src/public-api";
     firstName: string;
     middleName: null | string;
     lastName: string;
+    lastNameEn:string,
+    middleNameEn:string,
+    firstNameEN:string,
     email: string;
     nationalID: string;
     bloodType: Lookup;

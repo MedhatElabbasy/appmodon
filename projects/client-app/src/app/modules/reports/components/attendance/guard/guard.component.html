@@ -59,14 +59,13 @@
                     <input type="text" class="form-control" (keyup)="search()" [placeholder]="'search' | translate"
                       aria-label="search" aria-describedby="search" [(ngModel)]="searchKey" />
                   </div>
-                  <div class="bd-dark col">
+                  <div class="bd-dark col d-flex justify-content-end align-items-center">
+                    <h6 class="fw-bold ms-3"><span class="fw-bolder">إجمالي وقت العمل الفعلي: </span> {{totalWorkTime}}</h6>
                     <button class="btn btn-success text-white  mx-2 mb-3 float-end" (click)="getData()"
                       translate="dowenloadCvs">
-
+      
                     </button>
-                    <!-- <button class="btn btn-danger text-white mx-2 float-end" (click)="exportPDF()" translate="dowenloadPdf">
-
-              </button>-->
+      
                   </div>
                 </div>
               </div>

@@ -50,6 +50,9 @@ import { AddButtonComponent } from './components/add-button/add-button.component
 import { LineAddButtonComponent } from './components/line-add-button/line-add-button.component';
 import { TimePipe } from './pipes/time.pipe';
 import { TimeDetailsPipe } from './pipes/time-details.pipe';
+import { CanvasJSChart } from 'projects/client-app/src/assets/canvasjs.angular.component';
+import { NgxDropzoneModule } from 'ngx-dropzone';
+
 
 const declarations = [
   FooterComponent,
@@ -62,7 +65,8 @@ const declarations = [
   TimePipe,
   TimeDetailsPipe,
   AddButtonComponent,
-  LineAddButtonComponent
+  LineAddButtonComponent,
+  CanvasJSChart
 ];
 
 const ref = [
@@ -90,6 +94,7 @@ const ref = [
   NgxPaginationModule,
   Ng2SearchPipeModule,
   InfiniteScrollModule,
+  NgxDropzoneModule
 ];
 
 @NgModule({

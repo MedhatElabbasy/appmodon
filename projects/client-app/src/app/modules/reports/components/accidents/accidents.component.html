@@ -124,7 +124,7 @@
                   <td class="text-nowrap">
                     {{ accident.companySecurityGuard.securityGuard?.appUser?.userName }}
                   </td>
-                  <td>{{ accident.createdDateTime }}</td>
+                  <td>{{ accident.created.split(' ')[0] }}</td>
                   <td>{{ accident.description }}</td>
                   <td>{{ accident.siteLocation?.name }}</td>
                   <td>{{ accident.actionToken }}</td>

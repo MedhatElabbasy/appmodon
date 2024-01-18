@@ -30,7 +30,7 @@ import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 })
 export class GuardComponent implements OnInit {
   private _hubConnection!: HubConnection;
-
+  totalWorkTime!:any;
   id!: any;
   delete!: boolean;
   data: any;
@@ -157,8 +157,9 @@ export class GuardComponent implements OnInit {
               this.report = res;
               this.allData = res;
               console.log(res);
-
+              this.updatearrShowedInTable(this.report)
             });
+            
         }
       });
     } else {
@@ -175,7 +176,9 @@ export class GuardComponent implements OnInit {
               this.report = res;
               this.allData = res;
               console.log(res);
+              this.updatearrShowedInTable(this.report)
             })
+            
             // })
 
           }
@@ -186,8 +189,9 @@ export class GuardComponent implements OnInit {
                 this.report = res;
                 this.allData = res;
                 console.log(res);
-
+                this.updatearrShowedInTable(this.report)
               });
+              
           }
         }
       })
@@ -221,6 +225,7 @@ export class GuardComponent implements OnInit {
       this.report = this.allData;
       console.log(this.report);
     }
+    this.updatearrShowedInTable(this.report)
   }
 
 
@@ -237,7 +242,9 @@ export class GuardComponent implements OnInit {
         .subscribe((res) => {
           this.report = res;
           console.log(res);
+          this.updatearrShowedInTable(this.report)
         });
+        
     } else {
       console.log(this.auth.snapshot.userInfo);
       this.auth.userInfo.subscribe((res: any) => {
@@ -253,8 +260,10 @@ export class GuardComponent implements OnInit {
               if (res) {
                 this.report = res;
                 console.log(res);
+                this.updatearrShowedInTable(this.report)
               }
             })
+          
             // })
           }
           else if (res.clientCompanyBranch.isMainBranch) {
@@ -265,6 +274,7 @@ export class GuardComponent implements OnInit {
               .subscribe((res) => {
                 this.report = res;
                 console.log(res);
+                this.updatearrShowedInTable(this.report)
               });
           }
         }
@@ -530,5 +540,79 @@ export class GuardComponent implements OnInit {
     // Save the file using FileSaver.js
     saveAs(blob, 'guardReport.xlsx');
   }
+
+  
+  private _arrShowedInTable: any = [];
+
+  set arrShowedInTable(value: any) {
+    if (this._arrShowedInTable !== value) {
+      // Prop value has changed, perform actions here
+    }
+    this._arrShowedInTable = value;
+    console.log(this._arrShowedInTable);
+    console.log(this.calcTotalWorkTime(this._arrShowedInTable));
+
+
+  }
+
+  get arrShowedInTable(): any {
+    return this._arrShowedInTable;
+  }
+
+  // You can also change the value of arrShowedInTable through a method, which will trigger the setter.
+  updatearrShowedInTable(newValue: any) {
+    this.arrShowedInTable = newValue;
+  }
+
+  calcTotalWorkTime(arrShowedInTable: any) {
+    let totalMilliseconds = 0;
+
+    for (const timeString of arrShowedInTable) {
+      if (timeString.totalWorkTime) {
+        const parts = timeString.totalWorkTime.split(':');
+        const hours = parseInt(parts[0], 10);
+        const minutes = parseInt(parts[1], 10);
+        // const timeSeconds = parts[2].split('.');
+        // const seconds = parseInt(timeSeconds[0], 10);
+        // const fractions = parseInt(timeSeconds[1], 10);
+
+        totalMilliseconds += (hours * 3600000) + (minutes * 60000);
+      }
+
+    }
+
+    const hours = Math.floor(totalMilliseconds / 3600000);
+    const minutes = Math.floor((totalMilliseconds % 3600000) / 60000);
+    // const seconds = Math.floor((totalMilliseconds % 60000) / 1000);
+
+    this.totalWorkTime = this.convertToArabicNumbers(`${hours} ساعة, ${minutes} دقيقة`)
+    return `${hours} ساعة, ${minutes} دقيقة`;
+  }
+
+
+  convertToArabicNumbers(text: any) {
+    const englishNumbers = '0123456789';
+    const arabicNumbers = '٠١٢٣٤٥٦٧٨٩';
+
+    // Create a mapping for English to Arabic numerals
+    const numeralMap: any = {};
+    for (let i = 0; i < englishNumbers.length; i++) {
+      numeralMap[englishNumbers[i]] = arabicNumbers[i];
+    }
+
+    // Replace English numerals with Arabic numerals
+    let result = '';
+    for (let i = 0; i < text.length; i++) {
+      const char = text[i];
+      if (numeralMap[char] !== undefined) {
+        result += numeralMap[char];
+      } else {
+        result += char;
+      }
+    }
+
+    return result;
+  }
+
 
 }

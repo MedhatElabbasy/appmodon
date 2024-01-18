@@ -1,0 +1,31 @@
+<div class="position-relative header">
+    <div class="bg-primary fixed-top w-100">
+        <app-navbar>
+
+        </app-navbar>
+    </div>
+</div>
+<div class="h-100 bg-info-o  py-5">
+    <div class="container py-5 mt-5">
+        <div class="row mt-4">
+            <div class="container h-100 d-flex flex-column py-4">
+                <div class="mb-3">
+                    <h4 class="m-0 fw-600 my-3" translate="">نموذج تدقيق الأمن الجديد مع الاشراف</h4>
+
+                    <div class="card border-0 flex-fill rounded-10">
+                        <div class="card-body">
+                            <div class="h-100 d-flex flex-column">
+                                <app-security-audit-model *ngIf="stepIndex==1"></app-security-audit-model>
+                                <app-security-audit-model-step2 *ngIf="stepIndex==2"></app-security-audit-model-step2>
+                                <app-security-audit-model-step3 *ngIf="stepIndex==3"></app-security-audit-model-step3>
+                                <app-security-audit-form-notes *ngIf="stepIndex==4"></app-security-audit-form-notes>
+                                <app-security-audit-photos *ngIf="stepIndex==5"></app-security-audit-photos>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

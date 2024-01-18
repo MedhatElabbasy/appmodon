@@ -23,6 +23,29 @@ export const completeForm = {
   },
 };
 
+export const securityAudit={
+securityAuditModel:{
+  title:'model1',
+  order: 1
+},
+securityAuditModelstep2:{
+  title:'model2',
+  order:2
+},
+securityAuditModelstep3:{
+  title:'model3',
+  order:3
+},
+securityAuditForm:{
+  title:'model4',
+  order:3
+},
+securityAuditPhotos:{
+  title:'model4',
+  order:4
+}
+}
+
 
 export function convertConfigurationsToArray(obj: any): FormStep[] {
   let result = Object.keys(obj).map(function (index) {
@@ -36,4 +59,8 @@ export function convertConfigurationsToArray(obj: any): FormStep[] {
 
 export function numberOfSteps() {
   return Object.keys(completeForm).length;
+}
+
+export function numberSteps() {
+  return Object.keys(securityAudit).length;
 }
