@@ -38,10 +38,12 @@
     "@nrwl/angular": "14.4.3",
     "@popperjs/core": "^2.11.5",
     "@types/crypto-js": "^4.1.1",
+    "@types/file-saver": "^2.0.5",
     "@types/long-timeout": "^0.1.0",
     "angular-svg-icon": "^14.0.0",
     "bootstrap": "^5.1.8",
     "crypto-js": "^4.1.1",
+    "file-saver": "^2.0.5",
     "jquery": "^3.6.0",
     "long-timeout": "^0.1.1",
     "moment-hijri": "^2.1.2",
@@ -59,8 +61,7 @@
     "tslib": "^2.3.0",
     "xlsx": "^0.18.5",
     "zone.js": "~0.11.4",
-    "@types/file-saver": "^2.0.5",
-    "file-saver": "^2.0.5"
+    "ngx-dropzone": "^3.1.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^14.0.5",

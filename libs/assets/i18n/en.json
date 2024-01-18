@@ -680,7 +680,21 @@
     "days_number": "No. of Days",
     "guard":"guards",
     "supervisors":"supervisors",
-    "attendance_From":"Attendance by"
+    "attendance_From":"Attendance by",
+    "Security_audit_model":"Security audit model",
+    "Security_audit_model_description":"Security audit model description",
+    "employee_name":"Employee name",
+    "east_district":"District",
+    "industrial_city":"City",
+    "interviewer_evaluation":"Interviewer Evaluation",
+    "evaluation_mechanism":"Evaluation Mechanism",
+    "category":"Category",
+    "degree":"Degree",
+    "recommendations":"Recommendations",
+    "observation":"observation",
+    "finish_security_audit":"Your request has been sent",
+    "click_to_upload_security_audit_photos":"click to upload security audit photos",
+    "add_new_form":"Add new Form"
   },
   "RasdComplaints": {
     "Monitoring_complaints": "Monitoring complaints",
@@ -851,5 +865,26 @@
   },
   "ordersManagement": {
     "allOffers": "all available offers"
+  },
+  "missions":{
+    "mission_name":"Task Name",
+    "mission_description":"Task Description",
+    "mission_startDate":"Task start time",
+    "mission_endDate":"Task end time",
+    "mission_tourState":"Task state",
+    "mission_tourSecurityGuard":"Security Guard",
+    "mission_taskPriority":"Task Priority",
+    "missions_site":"Task Site",
+    "missions_site_address":"Task Site Address",
+    "missions_securityGuard":"Security Guard",
+    "missions_securitySuperVisor":"SuperVisor",
+    "mission_tourImages":"Task Images"
+  },
+  "tours":{
+    "tour_name":"Tour Name",
+    "tour_description":"Tour Description",
+    "tour_startDate":"Tour Start Date",
+    "tour_site_name":"Tour Site Name",
+    "tour_site_address":"Tour Site Address"
   }
 }
