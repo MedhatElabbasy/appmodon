@@ -29,9 +29,9 @@ const routes: Routes = [
   {
     path: ReportsRoutes.accidents,
     component: AccidentsComponent,
-    resolve: {
-      report: AccidentsResolver,
-    },
+    // resolve: {
+    //   report: AccidentsResolver,
+    // },
   },
   {
     path: ReportsRoutes.attendance,
@@ -63,9 +63,9 @@ const routes: Routes = [
   {
     path: ReportsRoutes.visitors,
     component: VisitorsComponent,
-    resolve: {
-      report: VisitorsReportsResolver,
-    },
+    // resolve: {
+    //   report: VisitorsReportsResolver,
+    // },
   },
   {
        path: ReportsRoutes.securityAudit,
@@ -103,7 +103,7 @@ const routes: Routes = [
   //   path: ReportsRoutes.securityAuditPhotos,
   //   component: SecurityAuditPhotosComponent
   // },
-  
+
 ];
 
 

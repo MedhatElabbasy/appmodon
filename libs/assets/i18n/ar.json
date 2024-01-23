@@ -15,11 +15,12 @@
     "for_page": " للصفحة ",
     "active": "نشط",
     "not_active": "غير نشط",
-    "number_of_guards":"عدد المراقب"
+    "number_of_guards": "عدد المراقب"
   },
-  "First_Name" : "الاسم الأول",
-  "nationalID" : "الرقم القومي",
-  "person_phoneNumber" : "رقم الجوال",
+  "Branches": "الفروع",
+  "First_Name": "الاسم الأول",
+  "nationalID": "الرقم القومي",
+  "person_phoneNumber": "رقم الجوال",
   "acceptOffer": "تم قبول عرض السعر",
   "negotiation": "مفاوضة",
   "negotiate": "المفاوضة",
@@ -506,6 +507,7 @@
     "status": "الحالة"
   },
   "validation": {
+    "select_branch": "الفرع",
     "clientName_required": "<i class='fa-solid fa-circle-exclamation'></i>اسم العميل مطلوب ",
     "clientName_pattern": "<i class='fa-solid fa-circle-exclamation'></i>اسم العميل غير صالح",
     "select_client": "برجاء اختيار عميل",
@@ -645,10 +647,10 @@
     "attendance_report_description": "تقرير بحضور وإنصراف مراقبين الأمن والمشرفين .",
     "accident_report_description": "تقرير عن الحوادث في مواقع الحراسة المبلغ عنها من قبل مراقبين الأمن",
     "visitors_report_description": "تقرير عن زوار المناطق التي يشرف عليها المراقب",
-    "missions":"تقرير المهام",
-    "missions_report_description":"تقرير المهام",
-    "tours_report_description":"تقرير الجولات",
-    "tours":"تقرير الجولات",
+    "missions": "تقرير المهام",
+    "missions_report_description": "تقرير المهام",
+    "tours_report_description": "تقرير الجولات",
+    "tours": "تقرير الجولات",
     "date": "بتاريخ",
     "entry_time": "وقت الدخول",
     "leave_time": "وقت المغادرة",
@@ -687,21 +689,21 @@
     "days_number": "عدد الأيام",
     "guard": "مراقبين",
     "supervisors": "المشرفون",
-    "attendance_From":"تم التسجيل بواسطة",
-    "Security_audit_model":"نموذج تدقيق الأمن مع الاشراف",
-    "Security_audit_model_description":"تقرير عن تدقيق الأمن مع الاشراف",
-    "employee_name":"أسم الموظف",
-    "east_district":"القطاع",
-    "industrial_city":"المدينة",
-    "interviewer_evaluation":"محاور التقييم",
-    "evaluation_mechanism":"آلية التقييم",
-    "category":"التصنيف",
-    "degree":"الدرجة",
-    "observation":"الملاحظات",
-    "recommendations":"توصيات",
-    "finish_security_audit":"لقد تم تقديم طلب الأستبعاد",
-    "click_to_upload_security_audit_photos":"اضغط هنا لإضافة صور الملاحظات المرصودة",
-    "add_new_form":"إنشاء نموذج جديد"
+    "attendance_From": "تم التسجيل بواسطة",
+    "Security_audit_model": "نموذج تدقيق الأمن مع الاشراف",
+    "Security_audit_model_description": "تقرير عن تدقيق الأمن مع الاشراف",
+    "employee_name": "أسم الموظف",
+    "east_district": "القطاع",
+    "industrial_city": "المدينة",
+    "interviewer_evaluation": "محاور التقييم",
+    "evaluation_mechanism": "آلية التقييم",
+    "category": "التصنيف",
+    "degree": "الدرجة",
+    "observation": "الملاحظات",
+    "recommendations": "توصيات",
+    "finish_security_audit": "لقد تم تقديم طلب الأستبعاد",
+    "click_to_upload_security_audit_photos": "اضغط هنا لإضافة صور الملاحظات المرصودة",
+    "add_new_form": "إنشاء نموذج جديد"
   },
   "RasdComplaints": {
     "Monitoring_complaints_management": "اداره ملاحظات رصد",
@@ -878,25 +880,25 @@
   "ordersManagement": {
     "allOffers": "كل العروض المتاحه"
   },
-  "missions":{
-    "mission_name":"أسم المهمة",
-    "mission_description":"وصف المهمة",
-    "mission_startDate":"وقت بدأ المهمة",
-    "mission_endDate":"وقت أنتهاء المهمة",
-    "mission_tourState":"حالة المهمة",
-    "mission_tourSecurityGuard":"مراقب الأمن",
-    "mission_taskPriority":"أولوية المهمة",
-    "missions_site":"موقع المهمة",
-    "missions_site_address":"عنوان موقع المهمة",
-    "missions_securityGuard":"مراقب الأمن",
-    "missions_securitySuperVisor":"مشرف الأمن",
-    "mission_tourImages":"صور المهمة"
+  "missions": {
+    "mission_name": "أسم المهمة",
+    "mission_description": "وصف المهمة",
+    "mission_startDate": "وقت بدأ المهمة",
+    "mission_endDate": "وقت أنتهاء المهمة",
+    "mission_tourState": "حالة المهمة",
+    "mission_tourSecurityGuard": "مراقب الأمن",
+    "mission_taskPriority": "أولوية المهمة",
+    "missions_site": "موقع المهمة",
+    "missions_site_address": "عنوان موقع المهمة",
+    "missions_securityGuard": "مراقب الأمن",
+    "missions_securitySuperVisor": "مشرف الأمن",
+    "mission_tourImages": "صور المهمة"
   },
-  "tours":{
-    "tour_name":"أسم الجولة",
-    "tour_description":"تفاصيل الجولة",
-    "tour_startDate":"وقت بدأ الجولة",
-    "tour_site_name":"موقع الجولة",
-    "tour_site_address":"عنوان موقع الجولة"
+  "tours": {
+    "tour_name": "أسم الجولة",
+    "tour_description": "تفاصيل الجولة",
+    "tour_startDate": "وقت بدأ الجولة",
+    "tour_site_name": "موقع الجولة",
+    "tour_site_address": "عنوان موقع الجولة"
   }
 }

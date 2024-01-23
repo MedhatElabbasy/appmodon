@@ -12,18 +12,38 @@
 
     <div class="card h-100 mt-5 border-0 rounded-10">
 
-      <div class="d-flex justify-content-end">
-        <button class="btn rounded-m rounded-8 btn-primary d-flex gap-2 align-items-center ml-2 mt-2"
+      <div class="d-flex justify-content-end align-items-end gap-3 mt-2">
+
+        <div class="form-floating" *ngIf="data">
+          <p-dropdown class="py-2" id="data" [filter]="true" filterBy="name" styleClass="w-100" [optionLabel]="'name'"
+            optionValue="id" [options]="data" [placeholder]="'validation.select_company' | translate"
+            (onChange)="display($event)"></p-dropdown>
+        </div>
+        <div class="form-floating" *ngIf="sites">
+          <p-dropdown [filter]="true" filterBy="name" styleClass="w-100" [optionLabel]="'name'" optionValue="id"
+            [options]="sites" [placeholder]="'validation.select_site' | translate"
+            (onChange)="display2($event)"></p-dropdown>
+        </div>
+        <div class="dropdown menue2">
+          <button class="btn myPadding rounded-m rounded-8 btn-primary d-flex gap-2 align-items-center dropdown-toggle"
+            type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fa-solid fa-sliders"></i>
+            {{ "filtration" | translate }}
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+            <li class="dropdown-item cursor-pointer text-align-center" (click)="getDataFilter('client')">
+              {{ "companies" | translate }}
+            </li>
+            <li class="dropdown-item cursor-pointer text-align-center" (click)="getDataFilter('site')">
+              {{ "site" | translate }}
+            </li>
+          </ul>
+        </div>
+        <button class="btn rounded-m rounded-8 btn-secondary d-flex gap-2 align-items-center ml-2 mt-2"
           style="height:53px;" (click)="clear()" type="button">
 
           {{ "global.clear"| translate }}
         </button>
-        <div class="form-floating mx-2 mt-2" *ngIf="companies">
-          <p-dropdown [(ngModel)]="selectedValue" class="py-2" id="data" [filter]="true" filterBy="name" styleClass="w-100"
-            [optionLabel]="'securityCompany.name'" [options]="companies"
-            [placeholder]="'validation.select_company' | translate" (onChange)="display($event)"></p-dropdown>
-        </div>
-
       </div>
 
       <div class="card-body">

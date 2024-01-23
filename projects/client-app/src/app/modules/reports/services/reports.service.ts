@@ -24,9 +24,9 @@ export class ReportsService {
   constructor(private http: HttpClient, private auth: AuthService) {
     this.stepNumber.next(0);
     console.log(this.stepNumber);
-   }
+  }
 
-   setFormData(data: any) {
+  setFormData(data: any) {
     const currentData = this.formDataSubject.value;
     this.formDataSubject.next([...currentData, data]);
   }
@@ -253,31 +253,78 @@ export class ReportsService {
     );
   }
 
-  GetSecurityAuditForm()
-{
-  return this.http.get(this.url + `api/SecurityAuditForm/GetSecurityAuditForm`);
-}
+  GetSecurityAuditForm() {
+    return this.http.get(this.url + `api/SecurityAuditForm/GetSecurityAuditForm`);
+  }
 
-setSecurityAuditForm(model:object){
-  return this.http.post(this.url+`api/SecurityAuditForm/Add`,model)
-}
+  setSecurityAuditForm(model: object) {
+    return this.http.post(this.url + `api/SecurityAuditForm/Add`, model)
+  }
 
-GetSecurityAuditFormByClientCompanyID(ClientCompanyId:number){
-  return this.http.get(this.url + `api/SecurityAuditForm/GetAllByClientCompanyId?ClientCompanyId=${ClientCompanyId}`);
-}
+  GetSecurityAuditFormByClientCompanyID(ClientCompanyId: number) {
+    return this.http.get(this.url + `api/SecurityAuditForm/GetAllByClientCompanyId?ClientCompanyId=${ClientCompanyId}`);
+  }
 
-getAllReceivingDeliveringVehicles(securityCompanyId:number){
-  return this.http.get(environment.api +`api/ReceivingDeliveringVehicles/GetAllBySecurtityCompanyId?SecurtityCompanyId=${securityCompanyId}`)
-}
+  getAllReceivingDeliveringVehicles(securityCompanyId: number) {
+    return this.http.get(environment.api + `api/ReceivingDeliveringVehicles/GetAllBySecurtityCompanyId?SecurtityCompanyId=${securityCompanyId}`)
+  }
 
-getAllMissionsByClientCompanyId(clientId:number){
-return this.http.get<any[]>(
-  this.url + `api/GuardTask/GetAllClientCompanyId?ClientCompanyId=${clientId}`)
-}
+  getAllMissionsByClientCompanyId(clientId: number) {
+    return this.http.get<any[]>(
+      this.url + `api/GuardTask/GetAllClientCompanyId?ClientCompanyId=${clientId}`)
+  }
 
-getAllToursByClientCompanyId(clientId:number){
+  getAllToursByClientCompanyId(clientId: number) {
 
-return this.http.get<any[]>(
-  this.url + `api/GuardTour/GetByClientCompanyId?ClientCompanyId=${clientId}`)
-}
+    return this.http.get<any[]>(
+      this.url + `api/GuardTour/GetByClientCompanyId?ClientCompanyId=${clientId}`)
+  }
+  getAllToursByClientCompanyIdAndBranchId(clientId: number, BranchId: string) {
+
+    return this.http.get<any[]>(
+      this.url + `api/GuardTour/GetByClientCompanyIdAndBranchId?ClientCompanyId=${clientId}&BranchId=${BranchId}`)
+  }
+
+
+  getAllSiteLocationByClientCompanyBranchId(securityCompanyClientId: string, ClientBranchId: string) {
+    return this.http.get<any[]>(
+      this.url + `api/ClientSite/GetAllSiteLocationBySecurityCompanyClientIdAndClientBranchId?SecurityCompanyClientId=${securityCompanyClientId}&ClientBranchId=${ClientBranchId}`)
+  }
+
+  GlobalApiFilterGetAllSecurityCompanyClientForUserClient(clientId: any) {
+    return this.http.get(this.url + `api/GlobalApiFilter/GetAllSecurityCompanyClientForUserClient?clientId=${clientId}`)
+  }
+
+  GlobalApiFilterGetAllSiteLocationByUserAndSCForUserClient(SecurityCompanyClientId: string, AppUserId: any) {
+    return this.http.get(this.url + `api/GlobalApiFilter/GetAllSiteLocationByUserAndSCForUserClient?SecurityCompanyClientId=${SecurityCompanyClientId}&AppUserId=${AppUserId}`)
+  }
+
+
+  GuardTasksReportGetAllForClientFilter(model: object) {
+    return this.http.post(this.url + `api/GuardTasksReport/GetAllForClientCompanyFilter`, model)
+  }
+
+  GuardTourReportGetAllForClientFilter(model: object) {
+    return this.http.post(this.url + `api/GuardTourReport/GetAllForClientCompanyFilter`, model)
+  }
+
+  AttendanceReportGetAllForClientCompanyFilter(model: object) {
+    return this.http.post(this.url + `api/AttendanceReport/GetAllForClientCompanyFilter`, model)
+  }
+
+  VisitorReportGetAllForClientCompanyFilter(model: object) {
+    return this.http.post(this.url + `api/VisitorReport/GetAllForClientCompanyFilter`, model)
+  }
+
+  IncidentsReportGetAllForClientCompanyFilter(model: object) {
+    return this.http.post(this.url + `api/IncidentsReport/GetAllForClientCompanyFilter`, model)
+  }
+
+  SupervisorAttendanceReportGetAllForClientCompanyFilter(model: object) {
+    return this.http.post(this.url + `api/SupervisorAttendanceReport/GetAllForClientCompanyFilter`, model)
+  }
+
+  GlobalApiFilterGetAllClientBranch(clientId: number) {
+    return this.http.get(this.url + `api/GlobalApiFilter/GetAllClientBranch?ClientCompanyId=${clientId}`)
+  }
 }

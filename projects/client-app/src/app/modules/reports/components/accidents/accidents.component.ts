@@ -36,12 +36,12 @@ export class AccidentsComponent implements OnInit {
   clientFilter: boolean = false;
   myFile!: any;
   pageNumber = 1;
-  pageSize = 10;
+  pageSize = 5;
   total!: number;
   sizes = [...PAGINATION_SIZES];
   date = new FormControl({ 0: new Date(), 1: new Date() });
-  report!: Incident[];
-  allData!: Incident[];
+  report!: any[];
+  allData!: any[];
   maxDate = new Date();
   yesterday!: Date;
   display: boolean = false;
@@ -49,7 +49,16 @@ export class AccidentsComponent implements OnInit {
   searchKey = '';
   myEnv: any = environment
   dowenload: any[] = [];
-
+  securityCompanyClientId!: any;
+  newsecurityCompanyClientID!: string;
+  clientID!: any;
+  dateFilter: boolean = false;
+  Sites!: any;
+  locationId!: any;
+  start!: any;
+  end!: any;
+  branches!: any;
+  branchId!: any;
   constructor(
     private reports: ReportsService,
     private auth: AuthService,
@@ -58,71 +67,69 @@ export class AccidentsComponent implements OnInit {
     private localeService: BsLocaleService,
     private _reports: ReportsService
   ) {
-    this.yesterday = new Date();
-    this.yesterday.setDate(this.yesterday.getDate() - 1);
-    this.initDatePiker();
-    this.connectHub();
+
   }
 
   ngOnInit(): void {
-    this.onDateChange();
-    this.route.data.subscribe((res) => {
-      this.report = res['report'];
-      console.log(this.report);
-    });
-  }
 
-  getIncident(startDate: string, endDate: string) {
+    this.yesterday = new Date();
+    this.yesterday.setDate(this.yesterday.getDate() - 1);
+    this.initDatePiker();
     let user = this.auth.snapshot.userIdentity;
-    let clientID: any
-    if (user?.roles.includes(Roles.Company)) {
-      clientID = this.auth.snapshot.userInfo?.id;
-      if (clientID) {
-        this.reports
-          .getAllAccidentByClientCompany(clientID, startDate, endDate)
-          ?.subscribe((res) => {
-            this.report = res;
-            this.allData = res;
-            console.log(this.report);
 
-          });
-      }
+    if (user?.roles.includes(Roles.Company)) {
+      console.log("فرع رئيسي");
+      this.auth.userInfo.subscribe((res) => {
+        this.clientID = res?.id;
+        this.connectHub();
+        this.onDateChange();
+        this.getAllReports();
+      })
     } else {
       console.log(this.auth.snapshot.userInfo);
       this.auth.userInfo.subscribe((res: any) => {
         if (res) {
+          console.log(res);
           if (!res.clientCompanyBranch.isMainBranch) {
-            this._reports.getSecurityCompanyBranchIdByClientCompanyBranchId(res.clientCompanyBranch.id).subscribe((res2) => {
-              this.reports.GetAllByClientCompanyAndDateAndBranchId(startDate, endDate, res2.securityCompanyBranchId)
-                ?.subscribe((res) => {
-                  this.report = res;
-                  this.allData = res;
-                  console.log(this.report);
-
-                });
+            console.log("!!!!res.clientCompanyBranch.isMainBranch");
+            this.auth.userInfo.subscribe((res2) => {
+              if (res2) {
+                this.clientID = res2?.clientCompanyBranch.clientCompanyId
+                this.connectHub();
+                this.onDateChange();
+                this.getAllReports();
+              }
             })
-          } else if (res.clientCompanyBranch.isMainBranch) {
-            this.reports
-              .getAllAccidentByClientCompany(res.clientCompany.id, startDate, endDate)
-              ?.subscribe((res) => {
-                this.report = res;
-                this.allData = res;
-                console.log(this.report);
-
-              });
           }
+          else if (res.clientCompanyBranch.isMainBranch) {
 
+
+            this.auth.userInfo.subscribe((res2) => {
+              if (res2) {
+
+                this.clientID = res2?.clientCompanyId
+                this.connectHub();
+                this.onDateChange();
+                this.getAllReports();
+              }
+            })
+          }
         }
       })
     }
+
   }
+
+
 
   onPageSizeChange(number: any) {
     this.pageSize = +number.target.value;
+    this.getAllReports();
   }
 
   onPageNumberChange(event: number) {
     this.pageNumber = event;
+    this.getAllReports();
   }
 
   initDatePiker() {
@@ -149,7 +156,7 @@ export class AccidentsComponent implements OnInit {
         );
 
         this._hubConnection.on('ReceiveMessage', (x, y) => {
-          this.getReports();
+          this.getAllReports();
         });
       })
       .catch((err) =>
@@ -157,26 +164,52 @@ export class AccidentsComponent implements OnInit {
       );
   }
 
-  getReports() {
-    let date: any;
-    let start;
-    let end;
-    date = this.date.value;
-    start = convertDateToString(date[0]);
-    end = convertDateToString(date[1]);
-    if (this.delete) {
-      date = convertDateToString(new Date());
-      start = date;
-      end = date;
-    }
-    if (!this.clientFilter) {
-      this.getIncident(start, end);
-    } else {
-      console.log("client");
+  getAllSites() {
+    let AppUserId = this.auth.snapshot.userIdentity?.['userId']
+    this._reports.GlobalApiFilterGetAllSiteLocationByUserAndSCForUserClient(this.securityCompanyClientId, AppUserId).subscribe((res: any) => {
+      this.Sites = res
+    })
+  }
 
-      this.getByClient();
+  getClients() {
+    if (this.clientID) {
+      this._reports.GlobalApiFilterGetAllSecurityCompanyClientForUserClient(this.clientID).subscribe((res) => {
+        this.data = res;
+        console.log(this.data);
+
+      });
     }
   }
+
+
+  getBySiteId({ value }: any) {
+    this.locationId = [value.id]
+    this.pageNumber = 1
+    this.pageSize = 5
+    this.getAllReports();
+    this.getBranches()
+  }
+
+
+  selectSecurity({ value }: any) {
+    console.log(value);
+    this.locationId = []
+    this.securityCompanyClientId = [value.id]
+    this.pageNumber = 1
+    this.pageSize = 5
+    this.getAllReports();
+    this.getAllSites();
+  }
+
+  deleteFilter() {
+    this.filter = false;
+    this.data = null
+    this.Sites = null
+    this.pageNumber = 1;
+    this.pageSize = 5
+    this.getAllReports();
+  }
+
 
   onDateChange() {
     this.date.valueChanges
@@ -184,65 +217,66 @@ export class AccidentsComponent implements OnInit {
         map((val: any) => ({
           start: convertDateToString(val[0]),
           end: convertDateToString(val[1]),
+
         }))
       )
       .subscribe((val) => {
-        this.getIncident(val.start, val.end);
-        if (this.clientFilter) {
-          this.getAllSecurityCompanies();
-        }
+        this.pageNumber = 1
+        this.pageSize = 5
+        this.getAllReports();
       });
+    console.log(this.date);
   }
 
-  openGallery(gallery: any[]) {
-    this.selectedGallery = gallery;
+  getAllReports() {
+    let date: any;
+    // let start;
+    // let end;
+    let AppUserId = this.auth.snapshot.userIdentity?.['userId']
+    let model
+    if (this.filter == false) {
+      date = convertDateToString(new Date());
+      this.start = date;
+      this.end = date;
+      this.securityCompanyClientId = []
+      this.locationId = []
+      this.branchId = []
+    } else {
+      date = this.date.value;
+      this.start = convertDateToString(date[0]);
+      this.end = convertDateToString(date[1]);
+      if (this.clientFilter) {
+        this.getClients();
+      }
+    }
+
+    model = {
+      "clientCompanyId": this.clientID,
+      "appUserId": AppUserId,
+      "securityCompanyClientList": this.securityCompanyClientId,
+      "securityCompanyBranchList": this.branchId,
+      "clientSitesList": this.locationId,
+      "startDate": this.start,
+      "endDate": this.end,
+      "page": this.pageNumber,
+      "pageSize": this.pageSize,
+      "searchKeyWord": this.searchKey
+    }
+    this.reports.IncidentsReportGetAllForClientCompanyFilter(model).subscribe((res: any) => {
+      this.report = res.data
+      this.total = res.totalCount;
+    })
+  }
+
+
+
+  openGallery(gallery: any) {
+    this.selectedGallery = [gallery.fullLink];
     this.display = true;
   }
 
-  getAllSecurityCompanies() {
-    let user = this.auth.snapshot.userIdentity;
-    let clientID: any
-    if (user?.roles.includes(Roles.Company)) {
-      clientID = this.auth.snapshot.userInfo?.id
-    } else {
-      console.log(this.auth.snapshot.userInfo);
-      this.auth.userInfo.subscribe((res: any) => {
-        if (res) {
-          console.log(res);
-          if (!res.clientCompanyBranch.isMainBranch) {
-            clientID = this.auth.snapshot.userInfo?.clientCompanyBranch.clientCompanyId
-          }
-          else if (res.clientCompanyBranch.isMainBranch) {
-            clientID = this.auth.snapshot.userInfo?.clientCompanyId
-          }
-        }
-      })
-    }
 
-    if (clientID) {
-      this._reports.getAllSecurityCompanyClients(clientID, 1, 20000).subscribe((res: any) => {
-        this.data = res.data;
-        console.log(this.data);
 
-      });
-    }
-  }
-
-  getDataFilter(filter: string) {
-    this.filter = true;
-    this.clientFilter = false;
-    this.data = null;
-    if (filter == 'client') {
-      this.clientFilter = true;
-    }
-  }
-  displayFilter(event: any) {
-    this.id = event.value;
-    console.log(this.id);
-
-    this.delete = false;
-    this.getReports();
-  }
   options = {
     fieldSeparator: ',',
     quoteStrings: '"',
@@ -266,113 +300,132 @@ export class AccidentsComponent implements OnInit {
     ],
   };
 
-  
-  getData() {
-    this.dowenload = []
-    for (let i = 0; i < this.report?.length; i++) {
-      //   let incidentType = '';
-      //   let reason = '';
-      //   let isComplete = '';
-      //   let totalWorkTime = '';
-      //   let totalMustWorkTime = '';
-      //   let toTalBreakTime = '';
-      //   let totalExtraTime = '';
-      //   if (this.report[i].incidentType) {
-      //     incidentType = this.report[i].incidentType?.nameAr;
-      //   } else {
-      //     incidentType = 'لا يوجد';
-      //   }
-      //   if (this.report[i].reason) {
-      //     reason = this.report[i].reason
-      //   } else {
-      //     reason = 'لا يوجد سبب';
-      //   }
-      //   if (this.report[i].isComplete) {
-      //     isComplete = 'نعم';
-      //   } else {
-      //     isComplete = 'لا';
-      //   }
-      //   if (this.report[i].toTalBreakTime) {
-      //     toTalBreakTime = this.report[i].toTalBreakTime;
-      //   } else {
-      //     toTalBreakTime = 'ليس في استراحة';
-      //   }
-      //   if (this.report[i].totalWorkTime) {
-      //     totalWorkTime = this.report[i].totalWorkTime;
-      //   } else {
-      //     totalWorkTime = 'لا يوجد';
-      //   }
-      //   if (this.report[i].totalExtraTime) {
-      //     totalExtraTime = this.report[i].totalExtraTime;
-      //   } else {
-      //     totalExtraTime = 'لم يتم العمل لوقت إضافي';
-      //   }
-      //   if (this.report[i].totalMustWorkTime) {
-      //     totalMustWorkTime = this.report[i].totalMustWorkTime;
-      //   } else {
-      //     totalMustWorkTime = 'لا يوجد';
-      //   }
-      let field = {
-        incidentType: this.report[i].incidentType?.nameAr
-          ? this.report[i].incidentType?.nameAr
-          : 'لا يوجد',
-        reason: this.report[i].reason ? this.report[i].reason : 'لا يوجد',
-        // phoneNumber:
-        //   this.report[i].companySecurityGuard.securityGuard?.appUser?.userName,
-        createdDateTime: this.report[i].created,
-        description: this.report[i].description
-          ? this.report[i].description
-          : 'لا يوجد',
-        siteLocation: this.report[i].siteLocation
-          ? this.report[i].siteLocation?.name
-          : 'لا يوجد',
-        actionToken: this.report[i].actionToken
-          ? this.report[i].actionToken
-          : 'لا يوجد',
-        securityGuard: this.report[i]?.companySecurityGuard.securityGuard.firstName
-          ? this.report[i]?.companySecurityGuard.securityGuard.firstName +
-          ' ' + this.report[i]?.companySecurityGuard.securityGuard.middleName + ' ' +
-          this.report[i]?.companySecurityGuard?.securityGuard?.lastName
-          : 'لا يوجد',
-        siteSupervisorShift: this.report[i].siteSupervisorShift?.companySecurityGuard
-          .securityGuard.firstName
-          ? this.report[i].siteSupervisorShift?.companySecurityGuard
-            .securityGuard.firstName +
-          ' ' + this.report[i].siteSupervisorShift?.companySecurityGuard
-            .securityGuard.middleName + ' ' +
-          this.report[i].siteSupervisorShift?.companySecurityGuard
-            .securityGuard.lastName
-          : 'لا يوجد',
-        siteShift: (this.report[i].siteSupervisorShift?.clientShiftSchedule?.companyShift
-          .shiftType) ?
-          this.report[i].siteSupervisorShift?.clientShiftSchedule?.companyShift
-            .shiftType?.name : 'لا يوجد',
-        // GuardCode: this.report[i].companySecurityGuard.securityGuard.id,
-        // Name:
-        //   this.report[i].companySecurityGuard.securityGuard.firstName +
-        //   ' ' +
-        //   this.report[i].companySecurityGuard.securityGuard.lastName,
-        // phoneNumber:
-        //   this.report[i].companySecurityGuard?.securityGuard?.appUser[
-        //     'userName'
-        //   ],
-        // StartTime: this.report[i].startTime,
-        // MustStart: this.report[i].mustStartDateTime,
-        // incidentType: incidentType,
-        // MustEndIn: this.report[i].mustEndDateTime,
-        // breakComplete: reason,
-        // isComplete: isComplete,
-        // TotalWorkTime: totalWorkTime,
-        // TotalBreakTime: toTalBreakTime,
-        // TotalExtraTime: totalExtraTime,
-        // TotalMustWorkTime: totalMustWorkTime,
-        // TotalMustBreakTime: this.report[i].toTalMustBreakTime,
-      };
-      this.dowenload.push(field);
-    }
-    console.log(this.dowenload);
 
-    this.downloadData(this.dowenload)
+  getData() {
+    let AppUserId = this.auth.snapshot.userIdentity?.['userId']
+    let model = {
+      "clientCompanyId": this.clientID,
+      "appUserId": AppUserId,
+      "securityCompanyClientList": this.securityCompanyClientId,
+      "securityCompanyBranchList": [
+      ],
+      "clientSitesList": this.locationId,
+      "startDate": this.start,
+      "endDate": this.end,
+      "page": 1,
+      "pageSize": this.total,
+      "searchKeyWord": this.searchKey
+    }
+    this.reports.IncidentsReportGetAllForClientCompanyFilter(model).subscribe((res: any) => {
+      if (res) {
+        this.allData = res.data;
+        this.dowenload = []
+        for (let i = 0; i < this.allData?.length; i++) {
+          //   let incidentType = '';
+          //   let reason = '';
+          //   let isComplete = '';
+          //   let totalWorkTime = '';
+          //   let totalMustWorkTime = '';
+          //   let toTalBreakTime = '';
+          //   let totalExtraTime = '';
+          //   if (this.report[i].incidentType) {
+          //     incidentType = this.report[i].incidentType?.nameAr;
+          //   } else {
+          //     incidentType = 'لا يوجد';
+          //   }
+          //   if (this.report[i].reason) {
+          //     reason = this.report[i].reason
+          //   } else {
+          //     reason = 'لا يوجد سبب';
+          //   }
+          //   if (this.report[i].isComplete) {
+          //     isComplete = 'نعم';
+          //   } else {
+          //     isComplete = 'لا';
+          //   }
+          //   if (this.report[i].toTalBreakTime) {
+          //     toTalBreakTime = this.report[i].toTalBreakTime;
+          //   } else {
+          //     toTalBreakTime = 'ليس في استراحة';
+          //   }
+          //   if (this.report[i].totalWorkTime) {
+          //     totalWorkTime = this.report[i].totalWorkTime;
+          //   } else {
+          //     totalWorkTime = 'لا يوجد';
+          //   }
+          //   if (this.report[i].totalExtraTime) {
+          //     totalExtraTime = this.report[i].totalExtraTime;
+          //   } else {
+          //     totalExtraTime = 'لم يتم العمل لوقت إضافي';
+          //   }
+          //   if (this.report[i].totalMustWorkTime) {
+          //     totalMustWorkTime = this.report[i].totalMustWorkTime;
+          //   } else {
+          //     totalMustWorkTime = 'لا يوجد';
+          //   }
+          let field = {
+            incidentType: this.allData[i].incidentType?.nameAr
+              ? this.allData[i].incidentType?.nameAr
+              : 'لا يوجد',
+            reason: this.allData[i].reason ? this.allData[i].reason : 'لا يوجد',
+            // phoneNumber:
+            //   this.report[i].companySecurityGuard.securityGuard?.appUser?.userName,
+            createdDateTime: this.allData[i].createdDateTime,
+            description: this.allData[i].description
+              ? this.allData[i].description
+              : 'لا يوجد',
+            siteLocation: this.allData[i].siteLocation
+              ? this.allData[i].siteLocation?.name
+              : 'لا يوجد',
+            actionToken: this.allData[i].actionToken
+              ? this.allData[i].actionToken
+              : 'لا يوجد',
+            securityGuard: this.allData[i]?.companySecurityGuard.securityGuard.firstName
+              ? this.allData[i]?.companySecurityGuard.securityGuard.firstName +
+              ' ' + this.allData[i]?.companySecurityGuard.securityGuard.middleName + ' ' +
+              this.allData[i]?.companySecurityGuard?.securityGuard?.lastName
+              : 'لا يوجد',
+            siteSupervisorShift: this.allData[i].siteSupervisorShift?.companySecurityGuard
+              ?.securityGuard.firstName
+              ? this.allData[i].siteSupervisorShift?.companySecurityGuard
+                ?.securityGuard.firstName +
+              ' ' + this.allData[i].siteSupervisorShift?.companySecurityGuard
+                ?.securityGuard.middleName + ' ' +
+              this.allData[i].siteSupervisorShift?.companySecurityGuard
+                .securityGuard.lastName
+              : 'لا يوجد',
+            siteShift: (this.allData[i].siteSupervisorShift?.clientShiftSchedule?.companyShift
+              .shiftType) ?
+              this.allData[i].siteSupervisorShift?.clientShiftSchedule?.companyShift
+                .shiftType?.name : 'لا يوجد',
+            // GuardCode: this.report[i].companySecurityGuard.securityGuard.id,
+            // Name:
+            //   this.report[i].companySecurityGuard.securityGuard.firstName +
+            //   ' ' +
+            //   this.report[i].companySecurityGuard.securityGuard.lastName,
+            // phoneNumber:
+            //   this.report[i].companySecurityGuard?.securityGuard?.appUser[
+            //     'userName'
+            //   ],
+            // StartTime: this.report[i].startTime,
+            // MustStart: this.report[i].mustStartDateTime,
+            // incidentType: incidentType,
+            // MustEndIn: this.report[i].mustEndDateTime,
+            // breakComplete: reason,
+            // isComplete: isComplete,
+            // TotalWorkTime: totalWorkTime,
+            // TotalBreakTime: toTalBreakTime,
+            // TotalExtraTime: totalExtraTime,
+            // TotalMustWorkTime: totalMustWorkTime,
+            // TotalMustBreakTime: this.report[i].toTalMustBreakTime,
+          };
+          this.dowenload.push(field);
+        }
+        console.log(this.dowenload);
+
+        this.downloadData(this.dowenload)
+      }
+    })
   }
 
 
@@ -382,29 +435,8 @@ export class AccidentsComponent implements OnInit {
     this.dowenload = [];
   }
 
-  getByClient() {
-    this.report = this.allData
-    let myData: Incident[] = [];
-    this.report.filter((ele: any) => {
-      console.log(ele);
-      if (
-        ele.companySecurityGuard?.securityCompanyId ==
-        this.id
-      ) {
 
 
-        myData.push(ele);
-      }
-    });
-    this.report = myData;
-  }
-  deleteFilter() {
-    this.filter = false;
-    this.clientFilter = false;
-    this.data = null;
-    this.delete = true;
-    this.getReports();
-  }
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
@@ -490,29 +522,35 @@ export class AccidentsComponent implements OnInit {
 
 
   search() {
-    this.report = this.allData
-    let myData: Incident[] = [];
-    if (this.searchKey != '') {
-      this.report.filter((ele: any) => {
-        let name = ele.companySecurityGuard.securityGuard.firstName +
-          ele.companySecurityGuard.securityGuard.middleName +
-          ele.companySecurityGuard.securityGuard.lastName
-        let phone = ele.companySecurityGuard.securityGuard?.appUser?.userName
-        let reason = ele.reason
-        let location = ele.siteLocation?.name 
-
-        if (
-          name.includes(this.searchKey.replace(/\s/g, '')) || phone.includes(this.searchKey.replace(/\s/g, '')) || reason.includes(this.searchKey.replace(/\s/g, ''))|| location.includes(this.searchKey.replace(/\s/g, ''))
-        ) {
-          myData.push(ele);
-        }
-      });
-      this.report = myData;
-      console.log(this.report);
-      
+    this.pageNumber = 1;
+    this.pageSize = 5
+    this.getAllReports();
+  }
+  getByBranchId({ value }: any) {
+    this.branchId = [value.id]
+    this.pageNumber = 1
+    this.pageSize = 5
+    this.getAllReports();
+  }
+  getDataFilter(filter: string) {
+    this.filter = true;
+    if (filter == 'branch') {
+      this.clientFilter = true;
+    } else if (filter == 'client') {
+      this.clientFilter = true;
+      // this.getClients();
     } else {
-      this.report = this.allData;
-      console.log(this.report);
+      this.dateFilter = true;
+      this.clientFilter = false;
+    }
+  }
+  getBranches() {
+    if (this.clientID) {
+      this._reports.GlobalApiFilterGetAllClientBranch(this.clientID).subscribe((res) => {
+        this.branches = res;
+        console.log(this.branches);
+
+      });
     }
   }
 
