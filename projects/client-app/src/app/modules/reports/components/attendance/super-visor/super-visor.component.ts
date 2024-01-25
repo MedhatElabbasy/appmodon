@@ -50,7 +50,14 @@ export class SuperVisorComponent implements OnInit {
   yesterday!: Date;
   searchKey = '';
   dowenload: any[] = [];
-  allData!: AttendanceReport[];
+  allData!: any[];
+  securityCompanyClientId!: any;
+  clientID!: any;
+  dateFilter: boolean = false;
+  Sites!: any;
+  locationId!: any;
+  start!: any;
+  end!: any;
   constructor(
     private reports: ReportsService,
     private auth: AuthService,
@@ -60,38 +67,60 @@ export class SuperVisorComponent implements OnInit {
     // private PackagesService: PackagesService,
     // private client: ClientsService
   ) {
-    this.yesterday = new Date();
-    this.yesterday.setDate(this.yesterday.getDate() - 1);
-    this.initDatePiker();
-    this.connectHub();
 
 
-    let today = new Date();
-    let month = String(today.getMonth() + 1).padStart(2, '0'); // Months are zero-based
-    let day = String(today.getDate()).padStart(2, '0');
-    let year = today.getFullYear();
 
-    let formattedDate = month + ' ' + day + ' ' + year;
-    console.log(formattedDate);
-    this.getAttendance(formattedDate, formattedDate)
+    // let today = new Date();
+    // let month = String(today.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    // let day = String(today.getDate()).padStart(2, '0');
+    // let year = today.getFullYear();
+
+    // let formattedDate = month + ' ' + day + ' ' + year;
+    // console.log(formattedDate);
+    // this.getAttendance(formattedDate, formattedDate)
 
   }
 
   ngOnInit(): void {
-    this.onDateChange();
-    this.route.data.subscribe((res) => {
+    this.yesterday = new Date();
+    this.yesterday.setDate(this.yesterday.getDate() - 1);
 
-      this.report = res['report'];
+    this.initDatePiker();
+    let user = this.auth.snapshot.userIdentity;
+    if (user?.roles.includes(Roles.Company)) {
+      this.auth.userInfo.subscribe((res) => {
+        this.clientID = res?.id
+        this.connectHub();
+        this.onDateChange();
+        this.getAllReports();
+      })
+    } else {
 
-    });
+      this.auth.userInfo.subscribe((res: any) => {
+        if (res) {
+
+          if (!res.clientCompanyBranch.isMainBranch) {
+            this.clientID = res?.clientCompanyBranch.clientCompanyId
+          }
+          else if (res.clientCompanyBranch.isMainBranch) {
+            this.clientID = res?.clientCompanyId
+          }
+          this.connectHub();
+          this.onDateChange();
+          this.getAllReports();
+        }
+      })
+    }
   }
 
   onPageSizeChange(number: any) {
     this.pageSize = +number.target.value;
+    this.getAllReports();
   }
 
   onPageNumberChange(event: number) {
     this.pageNumber = event;
+    this.getAllReports();
   }
 
   initDatePiker() {
@@ -118,223 +147,128 @@ export class SuperVisorComponent implements OnInit {
         );
 
         this._hubConnection.on('ReceiveMessage', (x, y) => {
-          this.getReports();
+          this.getAllReports();
         });
       })
       .catch((err) =>
         console.log('error while establishing signalr connection')
       );
   }
-  getReports() {
-    let date: any;
-    let start;
-    let end;
-    date = this.date.value;
-    start = convertDateToString(date[0]);
-    end = convertDateToString(date[1]);
-    if (this.delete) {
-      date = convertDateToString(new Date());
-      start = date;
-      end = date;
-    }
-    if (!this.clientFilter) {
-      this.getAttendance(start, end);
-    } else {
-
-      this.getAttendanceByClient(start, end);
-    }
-  }
-  getAttendance(startDate: string, endDate: string) {
-    let user = this.auth.snapshot.userIdentity;
-
-    if (user?.roles.includes(Roles.Company)) {
-      console.log(user);
-      this.auth.userInfo.subscribe((res: any) => {
-        console.log(res);
-        this.reports
-          .getAttendanceSuperVisorReport(res.id, startDate, endDate)
-          .subscribe((res) => {
-            this.report = res;
-            this.allData=res;
-            console.log(this.report);
-          });
-      });
-    }
-    else {
-      this.auth.userInfo.subscribe((res: any) => {
-        console.log(res);
-
-        if (res) {
-          if (!res.clientCompanyBranch.isMainBranch) {
-            console.log(res);
-
-
-            this.reports.getSecurityCompanyBranchIdByClientCompanyBranchId(res.clientCompanyBranchId).subscribe((res2) => {
-              this.reports.GetAllBetweenTwoDatesAndBranch(res.clientCompanyBranch.clientCompanyId, startDate, endDate, res2.securityCompanyBranchId)
-              .subscribe((res) => {
-                this.report = res;
-                console.log(this.report);
-              });
-            })
-
-
-
-
-
-          }
-          else if (res.clientCompanyBranch.isMainBranch) {
-            this.reports
-              .getAttendanceSuperVisorReport(res.clientCompany.id, startDate, endDate)
-              .subscribe((res) => {
-                this.report = res;
-                this.allData=res;
-                console.log(this.report);
-              });
-          }
-
-        }
-      });
-    }
-  }
-
-  getAttendanceByClient(startDate: string, endDate: string) {
-    let user = this.auth.snapshot.userIdentity;
-
-    if (user?.roles.includes(Roles.Company)) {
-      console.log(user);
-      this.auth.userInfo.subscribe((res: any) => {
-        console.log("dina");
-
-        this.reports
-          .getAttendanceReportByClientandBySecurityCompany(res.id, startDate, endDate, this.id)
-          .subscribe((res) => {
-            this.report = res;
-            this.allData=res;
-            console.log(res);
-          });
-      })
-    }
-    else {
-
-      this.auth.userInfo.subscribe((res: any) => {
-        console.log(res);
-        if (res) {
-          if (!res.clientCompanyBranch.isMainBranch) {
-            console.log("mesh main");
-
-            let clientID = this.auth.snapshot.userInfo?.clientCompanyBranch.clientCompanyId
-            console.log(res.clientCompanyBranch.id);
-            this.reports.getSecurityCompanyBranchIdByClientCompanyBranchId(res.clientCompanyBranch.id).subscribe((res2) => {
-            this.reports.GetAllByCompanyAndBranchId(this.id, res2.securityCompanyBranchId)
-              .subscribe((res) => {
-                this.report = res;
-                this.allData=res;
-                console.log(res);
-              })
-            })
-          } else if (res.clientCompanyBranch.isMainBranch) {
-            console.log("main");
-
-            console.log(this.id, res.clientCompany.id);
-
-            this.reports
-              .getAttendanceReportByClientandBySecurityCompany(res.clientCompany.id, startDate, endDate, this.id)
-              .subscribe((res) => {
-                this.report = res;
-                this.allData=res;
-                console.log(res);
-              });
-
-          }
-
-        }
-      })
-
-    }
-  }
 
   search() {
-    this.report = this.allData
-    let myData: AttendanceReport[] = [];
-    if (this.searchKey != '') {
-      this.report.filter((ele: any) => {
-        let name = ele.siteSupervisorShift.companySecurityGuard.securityGuard.firstName +
-          ele.siteSupervisorShift.companySecurityGuard.securityGuard.middleName +
-          ele.siteSupervisorShift.companySecurityGuard.securityGuard.lastName
-        let phone = ele.siteSupervisorShift.companySecurityGuard.securityGuard?.appUser?.userName
-        let id = ele.siteSupervisorShift.companySecurityGuard.securityGuard.id.toString()
-
-        if (
-          name.includes(this.searchKey.replace(/\s/g, '')) || phone?.includes(this.searchKey.replace(/\s/g, '')) || id.includes(this.searchKey.replace(/\s/g, ''))
-        ) {
-          myData.push(ele);
-        }
-      });
-      this.report = myData;
-    } else {
-      this.report = this.allData;
-    }
+    this.pageNumber = 1
+    this.pageSize = 5
+    this.getAllReports();
   }
 
+  getClients() {
+    if (this.clientID) {
+      this.reports.GlobalApiFilterGetAllSecurityCompanyClientForUserClient(this.clientID).subscribe((res) => {
+        this.data = res;
+        console.log(this.data);
+
+      });
+    }
+  }
   onDateChange() {
     this.date.valueChanges
       .pipe(
         map((val: any) => ({
           start: convertDateToString(val[0]),
           end: convertDateToString(val[1]),
+
         }))
       )
       .subscribe((val) => {
-        this.getAttendance(val.start, val.end);
-        if (this.clientFilter) {
-          this.getAllSecurityCompanies()
-        }
+        this.pageNumber = 1
+        this.pageSize = 5
+        this.getAllReports();
       });
+    console.log(this.date);
   }
-  getAllSecurityCompanies() {
-    let user = this.auth.snapshot.userIdentity;
-    let clientID: any
-    if (user?.roles.includes(Roles.Company)) {
-      clientID = this.auth.snapshot.userInfo?.id
-    } else {
-      console.log(this.auth.snapshot.userInfo);
-      this.auth.userInfo.subscribe((res: any) => {
-        if (res) {
-          clientID = this.auth.snapshot.userInfo?.clientCompanyBranch.clientCompanyId
-        }
-      })
-    }
 
-    if (clientID) {
-      this.reports.getAllSecurityCompanyClients(clientID, 1, 20000).subscribe((res: any) => {
-        this.data = res.data;
-        console.log(this.data);
 
-      });
-    }
-  }
+
+
+
   getDataFilter(filter: string) {
     this.filter = true;
-    this.clientFilter = false;
-    this.data = null;
     if (filter == 'client') {
       this.clientFilter = true;
+      //this.getClients();
+    } else {
+      this.dateFilter = true;
+      this.clientFilter = false;
     }
   }
-  display(event: any) {
-    this.id = event.value;
-    console.log(this.id);
 
-    this.delete = false;
-    this.getReports();
+
+
+
+  selectSecurity({ value }: any) {
+    console.log(value);
+    this.locationId = []
+    this.securityCompanyClientId = [value.id]
+    this.pageNumber = 1
+    this.pageSize = 5
+    this.getAllReports();
   }
+
+
+
+
+
   deleteFilter() {
     this.filter = false;
-    this.clientFilter = false;
-    this.data = null;
-    this.delete = true;
-    this.getReports();
+    this.data = null
+    this.Sites = null
+    this.pageNumber = 1;
+    this.pageSize = 5
+    this.getAllReports();
   }
+
+  getAllReports() {
+    let date: any;
+    // let start;
+    // let end;
+    let AppUserId = this.auth.snapshot.userIdentity?.['userId']
+    let model
+    if (this.filter == false) {
+      date = convertDateToString(new Date());
+      this.start = date;
+      this.end = date;
+      this.securityCompanyClientId = []
+      this.locationId = []
+    } else {
+      date = this.date.value;
+      this.start = convertDateToString(date[0]);
+      this.end = convertDateToString(date[1]);
+      if (this.clientFilter) {
+        this.getClients();
+      }
+    }
+
+    model = {
+      "clientCompanyId": this.clientID,
+      "appUserId": AppUserId,
+      "securityCompanyClientList": this.securityCompanyClientId,
+      "securityCompanyBranchList": [
+      ],
+      "clientSitesList": [],
+      "startDate": this.start,
+      "endDate": this.end,
+      "page": this.pageNumber,
+      "pageSize": this.pageSize,
+      "searchKeyWord": this.searchKey
+    }
+    this.reports.SupervisorAttendanceReportGetAllForClientCompanyFilter(model).subscribe((res: any) => {
+      this.report = res.data
+      this.total = res.totalCount;
+    })
+  }
+
+
+
 
   options = {
     fieldSeparator: ',',
@@ -355,45 +289,66 @@ export class SuperVisorComponent implements OnInit {
     ],
   };
   getData() {
-    console.log('Aaaaaaa');
-    this.dowenload = []
-    for (let i = 0; i < this.report.length; i++) {
-      let totalWorkTime = '';
-      let endDateTime = '';
-      if (this.report[i].totalWorkTime) {
-        totalWorkTime = this.report[i].totalWorkTime;
-      } else {
-        totalWorkTime = 'لا يوجد';
-      }
-      if (this.report[i].endDateTime) {
-        endDateTime = this.report[i].endDateTime;
-      } else {
-        endDateTime = 'لا يوجد';
-      }
-      let field = {
-        GuardCode:
-          this.report[i].siteSupervisorShift.companySecurityGuard.securityGuard
-            .id,
-        Name:
-          this.report[i].siteSupervisorShift.companySecurityGuard.securityGuard
-            .firstName +
-          ' ' +
-          this.report[i].siteSupervisorShift.companySecurityGuard.securityGuard
-            .lastName,
-        // phoneNumber:
-        //   this.report[i].companySecurityGuard?.securityGuard?.appUser[
-        //     'userName'
-        //   ],
-        startDateTime: this.report[i].startDateTime,
-        endDateTime: endDateTime,
-        TotalWorkTime: totalWorkTime,
-      };
-      this.dowenload.push(field);
+    let AppUserId = this.auth.snapshot.userIdentity?.['userId']
+    let model = {
+      "clientCompanyId": this.clientID,
+      "appUserId": AppUserId,
+      "securityCompanyClientList": this.securityCompanyClientId,
+      "securityCompanyBranchList": [
+      ],
+      "clientSitesList": this.locationId,
+      "startDate": this.start,
+      "endDate": this.end,
+      "page": 1,
+      "pageSize": this.total,
+      "searchKeyWord": this.searchKey
     }
-    console.log(this.dowenload);
+    this.reports.SupervisorAttendanceReportGetAllForClientCompanyFilter(model).subscribe((res: any) => {
+      if (res) {
+        this.allData = res.data;
+        console.log('Aaaaaaa');
+        this.dowenload = []
+        for (let i = 0; i < this.allData.length; i++) {
+          let tolatWorkHoureTime = '';
+          let endDateTime = '';
+          if (this.allData[i].tolatWorkHoureTime) {
+            tolatWorkHoureTime = this.allData[i].tolatWorkHoureTime;
+          } else {
+            tolatWorkHoureTime = 'لا يوجد';
+          }
+          if (this.allData[i].endDateTime) {
+            endDateTime = this.allData[i].endDateTime;
+          } else {
+            endDateTime = 'لا يوجد';
+          }
+          let field = {
+            GuardCode:
+              this.allData[i].siteSupervisorShift.companySecurityGuard.securityGuard
+                .id,
+            Name:
+              this.allData[i].siteSupervisorShift.companySecurityGuard.securityGuard
+                .firstName +
+              ' ' +
+              this.allData[i].siteSupervisorShift.companySecurityGuard.securityGuard
+                .lastName,
+            // phoneNumber:
+            //   this.report[i].companySecurityGuard?.securityGuard?.appUser[
+            //     'userName'
+            //   ],
+            startDateTime: this.allData[i].startDateTime,
+            endDateTime: endDateTime,
+            TotalWorkTime: tolatWorkHoureTime,
+          };
+          this.dowenload.push(field);
+        }
+        console.log(this.dowenload);
 
-    this.downloadData(this.dowenload)
+        this.downloadData(this.dowenload)
+      }
+    })
   }
+
+
   exportCSV() {
     this.getData();
     new ngxCsv(this.dowenload, 'My Report', this.options);
@@ -425,7 +380,7 @@ export class SuperVisorComponent implements OnInit {
   //   const range = XLSX.utils.decode_range(ws['!ref']);
   //   const phoneNumberColumnIndex = 2; // Assuming the phone number column is the third column (index 2)
   //   for (let rowNum = range.s.r + 1; rowNum <= range.e.r; rowNum++) {
-     
+
   //     const cellAddress = XLSX.utils.encode_cell({ r: rowNum, c: phoneNumberColumnIndex });
   //     const cell = ws[cellAddress];
   //     if (cell && cell.t === 'n') {
@@ -441,20 +396,20 @@ export class SuperVisorComponent implements OnInit {
 
   downloadData(data: any[]) {
     console.log(data);
-  
+
     // Create a workbook and worksheet
     const workbook = XLSX.utils.book_new();
     const worksheet = XLSX.utils.json_to_sheet(data);
-  
+
     // Add the worksheet to the workbook
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
-  
+
     // Convert the workbook to an XLSX file
     const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-  
+
     // Create a Blob from the buffer
     const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-  
+
     // Save the file using FileSaver.js
     saveAs(blob, 'guardReport.xlsx');
   }

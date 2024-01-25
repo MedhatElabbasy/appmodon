@@ -17,7 +17,7 @@
     "not_active": "غير نشط",
     "number_of_guards": "عدد المراقب"
   },
-  "Branches": "الفروع",
+  "Branches": "المدن الصناعية",
   "First_Name": "الاسم الأول",
   "nationalID": "الرقم القومي",
   "person_phoneNumber": "رقم الجوال",
@@ -507,7 +507,7 @@
     "status": "الحالة"
   },
   "validation": {
-    "select_branch": "الفرع",
+    "select_branch": "المدن الصناعية",
     "clientName_required": "<i class='fa-solid fa-circle-exclamation'></i>اسم العميل مطلوب ",
     "clientName_pattern": "<i class='fa-solid fa-circle-exclamation'></i>اسم العميل غير صالح",
     "select_client": "برجاء اختيار عميل",

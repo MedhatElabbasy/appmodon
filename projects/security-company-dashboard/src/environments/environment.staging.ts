@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
-  api: 'https://takidapp.net:8008/',
-  hub: 'https://takidapp.net:8008/SecuritySupervisorHub',
+  api: 'https://takidapp.net:8007/',
+  hub: 'https://takidapp.net:8007/SecuritySupervisorHub',
   appLink: 'https://dev-app.takid.sa/#/home',
 };
 

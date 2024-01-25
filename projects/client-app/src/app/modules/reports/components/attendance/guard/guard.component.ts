@@ -61,6 +61,7 @@ export class GuardComponent implements OnInit {
   start!: any;
   end!: any;
   isMainBranch: boolean = false;
+  branchFilter: boolean = false;
   branches!: any;
   branchId!: any;
   constructor(
@@ -162,9 +163,9 @@ export class GuardComponent implements OnInit {
   getClients() {
     if (this.clientID) {
       this._reports.GlobalApiFilterGetAllSecurityCompanyClientForUserClient(this.clientID).subscribe((res) => {
-        this.data = res;
-        console.log(this.data);
-
+        if (res) {
+          this.data = res;
+        }
       });
     }
   }
@@ -209,12 +210,15 @@ export class GuardComponent implements OnInit {
     this.filter = true;
     if (filter == 'branch') {
       this.clientFilter = true;
+      this.branchFilter = true;
     } else if (filter == 'client') {
       this.clientFilter = true;
+      this.branchFilter = false;
       // this.getClients();
     } else {
       this.dateFilter = true;
       this.clientFilter = false;
+      this.branchFilter = false;
     }
   }
 
@@ -229,19 +233,31 @@ export class GuardComponent implements OnInit {
   selectSecurity({ value }: any) {
     this.branchId = []
     this.locationId = []
+    console.log(value);
+
     this.securityCompanyClientId = [value.id]
     this.pageNumber = 1
     this.pageSize = 5
     if (this.isMainBranch) {
-      this.getAllReports();
-      this.branches = []
-      this.getBranches();
-    } else if (!this.isMainBranch) {
+      if (this.branchFilter) {
+        this.getAllReports();
+        this.branches = []
+        this.getBranches();
+      } else {
+        this.getAllReports();
+        this.Sites = [];
+        this.getAllSites();
+      }
+
+    } else {
       console.log(this.isMainBranch);
       this.getAllReports();
+      this.Sites = [];
       this.getAllSites();
     }
   }
+
+
   getByBranchId({ value }: any) {
     this.branchId = [value.id]
     this.pageNumber = 1
@@ -272,6 +288,7 @@ export class GuardComponent implements OnInit {
       this.end = date;
       this.securityCompanyClientId = []
       this.locationId = []
+      this.branchId = []
     } else {
       date = this.date.value;
       this.start = convertDateToString(date[0]);
@@ -285,7 +302,7 @@ export class GuardComponent implements OnInit {
       "clientCompanyId": this.clientID,
       "appUserId": AppUserId,
       "securityCompanyClientList": this.securityCompanyClientId,
-      "securityCompanyBranchList": this.branchId,
+      "clientBranchList": this.branchId,
       "clientSitesList": this.locationId,
       "startDate": this.start,
       "endDate": this.end,
@@ -337,8 +354,7 @@ export class GuardComponent implements OnInit {
       "clientCompanyId": this.clientID,
       "appUserId": AppUserId,
       "securityCompanyClientList": this.securityCompanyClientId,
-      "securityCompanyBranchList": [
-      ],
+      "clientBranchList": this.branchId,
       "clientSitesList": this.locationId,
       "startDate": this.start,
       "endDate": this.end,
@@ -358,6 +374,7 @@ export class GuardComponent implements OnInit {
           let toTalBreakTime = ''
           let totalExtraTime = ''
           let attendanceFrom = ''
+          let attendanceNotes = '';
           if (this.allData[i].endTime) {
             LeaveTime = this.allData[i].endTime
           } else {
@@ -398,6 +415,13 @@ export class GuardComponent implements OnInit {
           } else {
             attendanceFrom = 'لا يوجد'
           }
+          if (this.allData[i].attendanceNotes && this.allData[i].attendanceNotes !== "null") {
+            attendanceNotes = this.allData[i].attendanceNotes
+          } else if (this.allData[i].attendanceNotes === "null") {
+            attendanceNotes = 'لا يوجد'
+          } else {
+            attendanceNotes = 'لا يوجد'
+          }
           let field = {
             GuardCode: this.allData[i].guardCode,
             Name:
@@ -417,6 +441,7 @@ export class GuardComponent implements OnInit {
             TotalExtraTime: totalExtraTime,
             TotalMustWorkTime: totalMustWorkTime,
             TotalMustBreakTime: this.allData[i].toTalMustBreakTime,
+            attendanceNotes: attendanceNotes
           };
           console.log(field);
 
