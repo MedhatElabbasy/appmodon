@@ -34,6 +34,7 @@ export class AccidentsComponent implements OnInit {
   data: any;
   filter: boolean = false;
   clientFilter: boolean = false;
+  branchFilter: boolean = false;
   myFile!: any;
   pageNumber = 1;
   pageSize = 5;
@@ -187,7 +188,7 @@ export class AccidentsComponent implements OnInit {
     this.pageNumber = 1
     this.pageSize = 5
     this.getAllReports();
-    this.getBranches()
+
   }
 
 
@@ -198,13 +199,19 @@ export class AccidentsComponent implements OnInit {
     this.pageNumber = 1
     this.pageSize = 5
     this.getAllReports();
-    this.getAllSites();
+    if (this.clientFilter && !this.branchFilter) {
+      this.getAllSites();
+    } else {
+      this.getBranches()
+    }
+
   }
 
   deleteFilter() {
     this.filter = false;
     this.data = null
     this.Sites = null
+    this.branches = null
     this.pageNumber = 1;
     this.pageSize = 5
     this.getAllReports();
@@ -536,12 +543,17 @@ export class AccidentsComponent implements OnInit {
     this.filter = true;
     if (filter == 'branch') {
       this.clientFilter = true;
+      this.branchFilter = true
     } else if (filter == 'client') {
       this.clientFilter = true;
+      this.branchFilter = false
+
       // this.getClients();
     } else {
       this.dateFilter = true;
       this.clientFilter = false;
+      this.branchFilter = false
+
     }
   }
   getBranches() {
