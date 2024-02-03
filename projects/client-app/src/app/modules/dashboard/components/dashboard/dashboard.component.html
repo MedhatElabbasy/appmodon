@@ -24,11 +24,6 @@
             [options]="sites" [placeholder]="'validation.select_site' | translate"
             (onChange)="display2($event)"></p-dropdown>
         </div>
-        <div class="form-floating " *ngIf="branches">
-          <p-dropdown class="py-2" id="branches" [filter]="true" filterBy="name" styleClass="w-100"
-            [optionLabel]="'name'" [options]="branches"
-            [placeholder]="'validation.select_branch'|translate" (onChange)="getByBranchId($event)"></p-dropdown>
-        </div>
         <div class="dropdown menue2">
           <button class="btn myPadding rounded-m rounded-8 btn-primary d-flex gap-2 align-items-center dropdown-toggle"
             type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
@@ -42,9 +37,6 @@
             <li class="dropdown-item cursor-pointer text-align-center" (click)="getDataFilter('site')">
               {{ "site" | translate }}
             </li>
-            <li *ngIf="isMainBranch" class="dropdown-item cursor-pointer text-align-center" (click)="getDataFilter('branch')">
-              {{"Branches"
-              |translate}}</li>
           </ul>
         </div>
         <button class="btn rounded-m rounded-8 btn-secondary d-flex gap-2 align-items-center ml-2 mt-2"
@@ -59,7 +51,7 @@
           <h5 class="fw-600 mt-2 mb-4" translate="reports.location_tracking"></h5>
         </div>
         <div style="height: 450px" class="">
-          <google-map [options]="{ styles: style }" [center]="mainLocation" [zoom]="5">
+          <google-map [options]="{ styles: style }" [center]="mainLocation" [zoom]="2">
             <map-marker-clusterer
               imagePath="https://raw.githubusercontent.com/googlearchive/js-marker-clusterer/gh-pages/images/m">
               <map-marker *ngFor="let marker of markers" [position]="{ lat: +marker.lat, lng: +marker.lng }" [label]="{

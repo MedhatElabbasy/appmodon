@@ -16,19 +16,19 @@ import { Roles } from 'projects/tools/src/public-api';
   styleUrls: ['./client-guard.component.scss']
 })
 export class ClientGuardComponent implements OnInit {
-  
+
    sites!:ClientSite[]|any
    ClientId:any;
-  constructor(private site:SiteService , private route: ActivatedRoute ,private auth: AuthService,  private router: Router, ) { 
+  constructor(private site:SiteService , private route: ActivatedRoute ,private auth: AuthService,  private router: Router, ) {
     console.log("dina");
-    
+
   }
 
   ngOnInit(): void {
 
     this.getData()
    // console.log(this.locationLink);
-    
+
   }
 
 
@@ -39,17 +39,17 @@ export class ClientGuardComponent implements OnInit {
     let user = this.auth.snapshot.userIdentity;
      this.ClientId = this.route.snapshot.params['id'];
     if (user?.roles.includes(Roles.Company)) {
-   
+
     console.log(this.ClientId);
 
     // this.site.GetAllByClientId(id).subscribe((res:any)=>{
     //   if(res){
     //     console.log(res);
-        
+
         this.site.getAllClientSites(this.ClientId).subscribe((res:any)=>{
           this.sites=res;
           console.log(this.sites);
-          
+
       //   })
       // }
     })
@@ -64,7 +64,7 @@ if(res){
     // this.site.GetAllByClientId(res.clientCompanyBranch.clientCompanyId).subscribe((response:any)=>{
     //   if(response){
     //     console.log(response);
-        
+
     //     let data=response.data[0]
     //     console.log(data);
         this.site.GetAllByClientIdSecurityCompanyBranch( this.ClientId,
@@ -72,25 +72,25 @@ if(res){
           console.log(result);
           this.sites=result;
          })
-        
-    
-    
-      
+
+
+
+
   }
   else if(res.clientCompanyBranch.isMainBranch){
     // this.site.GetAllByClientId(res.clientCompany.id).subscribe((res:any)=>{
     //   if(res){
     //     console.log(res);
-        
+
         this.site.getAllClientSites(this.ClientId).subscribe((res:any)=>{
           this.sites=res;
           console.log(this.sites);
-          
+
       //   })
       // }
     })
   }
-   
+
 }
     });
   }
@@ -98,11 +98,11 @@ if(res){
 
   Redirect(id:any , numberofGuards:number){
     console.log(id);
-    
+
     this.router.navigate([
       `/${Routing.clientGuard.module}/${Routing.clientGuard.children.clientGurad}/${this.ClientId}/${Routing.clientGuard.children.guardCard}`,id
     ]);
   }
 
-  
+
 }

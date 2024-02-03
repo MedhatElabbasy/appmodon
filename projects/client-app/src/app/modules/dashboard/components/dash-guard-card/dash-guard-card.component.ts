@@ -14,11 +14,10 @@ export class DashGuardCardComponent implements OnInit {
   ngOnInit(): void {
     // console.log(this.data);
     // console.log(this.time)
-    if (this.data.breakLoggers != null) {
-      console.log(this.data.breakLoggers);
-      this.time = this.data.breakLoggers.startTime;
-      console.log(this.time);
-    }
+    if(this.data.breakLogger!=null){
+      console.log(this.data.breakLogger);
+      this.time=this.data.breakLogger.startTime;
+      console.log(this.time);}
   }
 
 }

@@ -17,6 +17,7 @@ import { map } from 'rxjs';
 })
 export class DashboardComponent implements OnInit, AfterViewInit {
 
+
   selectedValue: any;
   message!: string;
   flag: boolean = true;
@@ -28,7 +29,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     lat: 23.8859,
     lng: 45.0792,
   });
-
   companyId!:any;
 
   data: any;
@@ -46,11 +46,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   mark!: boolean;
   chosenCompanyID: any;
   securityCompanyClientId: any;
-  branchFilter:boolean=false;
-  isMainBranch:boolean=false;
+
   clientID!: any;
-  branches!:any;
-  branchId!:any;
   constructor(
     private auth: AuthService,
     private _attendance: AttendanceService,
@@ -72,34 +69,19 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
         if (res?.id != undefined) {
           this.companyId = res?.id;
-          this.isMainBranch = true;
-          console.log("mainbranch");
-
           this.getMarker();
          // this.chooseCompany(this.companyId);
         }
       })
     } else {
-      this.auth.userInfo.subscribe((res:any) => {
+      this.auth.userInfo.subscribe((res) => {
         console.log(res);
-        // if (res?.clientCompanyBranch?.clientCompanyId != undefined) {
-        //   console.log("Yes");
-        //   console.log(res?.clientCompanyId);
-        //   this.companyId = res?.clientCompanyId;
-        //   this.getMarker();
-        // this.chooseCompany(res?.clientCompanyBranch.clientCompanyId);
-        // }
-        if (!res.clientCompanyBranch.isMainBranch) {
-          this.companyId = res?.clientCompanyBranch.clientCompanyId;
+        if (res?.clientCompanyBranch?.clientCompanyId != undefined) {
+          console.log("Yes");
+          console.log(res?.clientCompanyId);
+          this.companyId = res?.clientCompanyId;
           this.getMarker();
-          //this.chooseCompany();
-        }
-        else if (res.clientCompanyBranch.isMainBranch) {
-          console.log("usermainbranch");
-          this.companyId = res?.clientCompanyId
-          this.isMainBranch = true;
-          this.getMarker();
-         // this.chooseCompany();
+         // this.chooseCompany(res?.clientCompanyBranch.clientCompanyId);
         }
       })
     }
@@ -122,29 +104,13 @@ console.log(this.companyId);
   }
 
   getDataFilter(type: string) {
-    if(type == 'branch'){
-  this.branchFilter=true;
-  this.branches=null;
-  this.branchId=[];
-  this.siteFilter = false;
-  this.chooseCompany();
-    }else
     if (type == 'client') {
       this.siteFilter = false;
       this.siteId = [];
       this.sites = null;
-      this.branches=null;
-      this.branchId=[];
-      this.branchFilter = false;
-      console.log(this.siteFilter ,  this.branchFilter);
-
       this.chooseCompany();
-    } else if(type == 'site') {
-      this.branchFilter = false;
-      this.branches=null;
-      this.branchId=[];
+    } else {
       this.data = [];
-      this.sites=null;
       this.siteFilter = true;
       this.chooseCompany();
     }
@@ -193,7 +159,7 @@ console.log(this.companyId);
       "clientCompanyId":  this.companyId ,
       "appUserId": AppUserId,
       "securityCompanyClientList": this.securityCompanyClientId,
-      "clientBranchList": this.branchId,
+      "securityCompanyBranchList": [],
       "clientSitesList":this.siteId,
       "startDate": convertDateToString(new Date()),
       "endDate":  convertDateToString(new Date()),
@@ -216,6 +182,8 @@ console.log(this.companyId);
             lng: x.locationTracking.long,
           });
         }
+
+
       });
     })
   }
@@ -243,35 +211,15 @@ console.log(this.companyId);
       })
   }
 
-  getBranches() {
-    if (this.companyId) {
-      this._report.GlobalApiFilterGetAllClientBranch(this.companyId).subscribe((res) => {
-        this.branches = res;
-        console.log(this.branches);
-
-      });
-    }
-  }
-
 
   display({ value }: any) {
     this.securityCompanyClientId = [value]
     console.log(value);
     this.mark = true;
-    this.branchId = [];
-    this.branches=null;
     this.siteId=[];
-    this.sites=null;
+    this.getMarker();
     if(this.siteFilter==true){
-      console.log('sitefilter');
-      this.getMarker();
     this.getAllSites();
-    }else if(this.branchFilter==true){
-      console.log('branchfilter');
-      this.getMarker();
-      this.getBranches();
-    }else{
-      this.getMarker();
     }
   }
 
@@ -282,22 +230,13 @@ console.log(this.companyId);
 
   }
 
-  getByBranchId({ value }: any) {
-    this.branchId = [value.id]
-    this.getMarker();
-  }
-
   clear() {
     this.mark = false
     this.selectedValue = null;
     this.securityCompanyClientId=[];
     this.siteId=[];
-    this.branches = null
-    this.branchId=[];
     this.data=null;
     this.sites=null;
     this.getMarker();
   }
-
-
 }
