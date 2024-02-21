@@ -8,6 +8,7 @@ import { AttendanceReport } from '../models/attendance-report';
 import { Incident } from '../models/incident';
 import { VisitorsReport } from '../models/visitors-report';
 import { environment } from 'projects/client-app/src/environments/environment';
+import { Loader } from 'projects/security-company-dashboard/src/app/modules/core/enums/loader.enum';
 
 @Injectable({
   providedIn: 'root',

@@ -28,6 +28,8 @@ export class LoaderInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     this.requests.push(req);
+    console.log(req);
+    
     if (!req.url.includes('Notification') && !req.url.includes('GetAllApprovedSearch')&& !req.url.includes('SecuritySupervisorHub')) {
       this.loaderService.isLoading.next(true);
     }

@@ -10,6 +10,7 @@ import { numberSteps, securityAudit } from '../../../complete-profile/components
   styleUrls: ['./security-audit-form-notes.component.scss']
 })
 export class SecurityAuditFormNotesComponent implements OnInit {
+  error:boolean=false
   notesForm!:UntypedFormGroup;
   step!: any;
   length!: number;
@@ -47,7 +48,10 @@ export class SecurityAuditFormNotesComponent implements OnInit {
   }
 
   submit() {
-    if (this.notesForm.valid) {
+    this.error=false
+    console.log(this.notesForm);
+    
+   
       console.log(this.notesForm.value);
   
       const transformedData = this.notesForm.value.rows.reduce(
@@ -65,10 +69,24 @@ export class SecurityAuditFormNotesComponent implements OnInit {
       transformedData.recommendations = transformedData.recommendations.join('$');
   
       console.log(transformedData);
-      this._reports.setFormData(transformedData);
-      this._reports.stepNumber.next(5);
-    }
+      // this._reports.setFormData(transformedData);
+      // this._reports.stepNumber.next(5);
+    this.next(transformedData)
   }
+
+  next(transformedData:any){
+
+      if(transformedData.observation=='' || transformedData.recommendations==''){
+        this.error=true
+      }else{
+        this._reports.setFormData(transformedData);
+        this._reports.stepNumber.next(5);
+      }
+    
+  
+  }
+
+ 
   
 
   pervious(){

@@ -9,6 +9,7 @@ import { AuthService } from '../../../auth/services/auth.service';
 import { Xtb } from '@angular/compiler';
 import { arLocale, defineLocale, enGbLocale } from 'ngx-bootstrap/chronos';
 import { BsLocaleService } from 'ngx-bootstrap/datepicker';
+import { Loader } from 'projects/security-company-dashboard/src/app/modules/core/enums/loader.enum';
 
 @Component({
   selector: 'app-security-audit-model',
@@ -16,6 +17,8 @@ import { BsLocaleService } from 'ngx-bootstrap/datepicker';
   styleUrls: ['./security-audit-model.component.scss']
 })
 export class SecurityAuditModelComponent implements OnInit {
+  error:boolean=false
+  errorText:boolean=false
   searchKey = '';
   colorSet: string[] = ["#008000", "#fff"];
   sold: {}[] = [];
@@ -92,7 +95,14 @@ if (this.myForm.valid) {
   getInfo(){
     let user = this.auth.snapshot.userIdentity;
     if (user?.roles.includes(Roles.Company)) {
-      this.clientID = this.auth.snapshot.userInfo?.id
+      this.auth.userInfo.subscribe((res)=>{
+        if(res){
+          console.log(res);
+          
+          this.clientID=res.id
+        }
+      })
+      //this.clientID = this.auth.snapshot.userInfo?.id
       console.log(this.clientID);
       
     } else {
@@ -101,10 +111,20 @@ if (this.myForm.valid) {
         if (res) {
           console.log(res);
           if (!res.clientCompanyBranch.isMainBranch) {
-            this.clientID = this.auth.snapshot.userInfo?.clientCompanyBranch.clientCompanyId
+            this.auth.userInfo.subscribe((res)=>{
+              if(res){
+                this.clientID=res.clientCompanyBranch.clientCompanyId
+              }
+            })
+            //this.clientID = this.auth.snapshot.userInfo?.clientCompanyBranch.clientCompanyId
           }
           else if (res.clientCompanyBranch.isMainBranch) {
-            this.clientID = this.auth.snapshot.userInfo?.clientCompanyId
+            this.auth.userInfo.subscribe((res)=>{
+              if(res){
+                this.clientID=res.clientCompanyId
+              }
+            })
+           // this.clientID = this.auth.snapshot.userInfo?.clientCompanyId
           }
         }
       })
@@ -238,18 +258,47 @@ console.log('Audit Forms:', this.auditForms);
 }
 
 next(){
-  console.log(this.myForm.value);
-  this._reports.setFormData(this.myForm.value);
+  console.log(this.clientID);
+  this.error=false;
+  this.errorText=false
   let date = convertDateToString(this.visitDate.value);
   console.log(date);
   this.securityInfo.controls['visitDate'].setValue(date)
   this.securityInfo.controls['clientCompanyId'].setValue(this.clientID)
+  console.log(this.myForm.value);
+  console.log(this.securityInfo.value);
+  if(this.securityInfo.invalid){
+   this.errorText=true;
+   console.log(this.errorText);
+   
+  }
+  this.myForm.value.auditControls.forEach((ele:any)=>{
+    if(ele.category == "" || ele.degree == ""){
+    this.error=true;
+    console.log(this.error);
+    
+    }
+  })
+ this.submit();
+}
+
+submit(){
+  if(this.error==true || this.errorText==true){
+    console.log("false");
+    
+  }else{
+    console.log("true");
+    
+ this._reports.setFormData(this.myForm.value);
+  // let date = convertDateToString(this.visitDate.value);
+  // console.log(date);
+  // this.securityInfo.controls['visitDate'].setValue(date)
+  // this.securityInfo.controls['clientCompanyId'].setValue(this.clientID)
   console.log(this.securityInfo.value);
   this._reports.setFormData(this.securityInfo.value);
   this.visitDate.setValue(null);
   this._reports.stepNumber.next(2);
+  }
 }
-
-
   
   }

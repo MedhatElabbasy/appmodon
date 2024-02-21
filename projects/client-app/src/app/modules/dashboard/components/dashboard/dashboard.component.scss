@@ -37,3 +37,59 @@
     position: relative !important;
   }
 }
+
+
+::ng-deep{
+  .infoCardImg{
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+  }
+}
+
+.CardImg{
+  height: 130px;
+  width: 130px;
+}
+
+::ng-deep{
+  .gm-style-iw-d{
+    overflow-x: hidden !important;
+  }
+}
+
+::ng-deep{
+  .text-muted{
+    color:#6c757d;
+    font-size: 14px;
+  }
+}
+
+::ng-deep{
+  .gm-style .gm-style-iw-c{
+    max-width: 525px !important;
+  }
+}
+
+::ng-deep{
+  .modal-dialog{
+    width: 500px !important;
+  }
+}
+
+.checkIn{
+  color : green;
+}
+
+.checkOut{
+  color : red
+}
+
+.break{
+  color:orange
+}
+
+.mute{
+  background-color: #e2e0e0;
+  border-radius: 10px;
+}

@@ -1,29 +1,32 @@
+
+
 <div class="card">
   <div class="card-body">
-    <span
-      translate="shifts.break"
-      *ngIf="data.isOnBreak"
-      class="badge bg-warning text-white fs-14 p-2 fw-600 position-absolute id-card"
-    >
+    <span translate="shifts.break" *ngIf="data.isOnBreak"
+      class="badge bg-warning text-white fs-14 p-2 fw-600 position-absolute id-card">
     </span>
     <div class="d-flex">
       <div class="flex-shrink-0">
-        <img
-          [src]="data.guardImage"
-          onerror="this.src = 'assets/images/icons/earth.png'"
-          width="60"
-          height="60"
-          class="obj-cover rounded-3"
-        />
+        <img [src]="data.guardImage" onerror="this.src = 'assets/images/icons/earth.png'" width="60" height="60"
+          class="obj-cover rounded-3" />
       </div>
       <div class="flex-grow-1 mis-3">
         <h5 class="mt-0 fw-500">
           {{
-            data.name
+          data.name
           }}
         </h5>
-        <p class="fs-14 m-0 text-info">
-          {{ time }}
+        <p *ngIf="start" class="fs-14 m-0 text-info"><span>وقت الدخول</span>
+          {{start}}
+        </p>
+        <p *ngIf="end" class="fs-14 m-0 text-info"><span>وقت الخروج</span>
+          {{end}}
+        </p>
+        <p *ngIf="break" class="fs-14 m-0 text-info"><span>وقت الاستراحة</span>
+          {{break}}
+        </p>
+        <p *ngIf="totalwork" class="fs-14 m-0 text-info"><span>وقت العمل الفعلى</span>
+          {{totalwork}}
         </p>
       </div>
     </div>

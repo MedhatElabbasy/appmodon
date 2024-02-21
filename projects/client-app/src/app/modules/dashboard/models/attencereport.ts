@@ -20,7 +20,7 @@ import { FileObject } from "projects/tools/src/public-api";
     clientSiteId: string;
     clientSite: ClientSite;
     companySecurityGuard: CompanySecurityGuard;
-    breakLoggers: BreakLogger[];
+    breakLogger: BreakLogger;
     attendanceLogers: AttendanceLogers[];
     isComplete: boolean;
     isFirstLog: boolean;
@@ -29,6 +29,23 @@ import { FileObject } from "projects/tools/src/public-api";
     lat: string;
     long: string;
     locationTracking: any[];
+    name:string;
+    guardImage:string;
+    scheduleName:string;
+    supervisorName:string;
+    siteNumber:number;
+    siteLocationName:string;
+    clientName:string;
+    branchName:string;
+    securityCompanyName:string;
+    guardCode:number;
+    nationalId:number;
+    phoneNumber:number;
+    leaveTime:string;
+    shiftName:string;
+    totalBreakTime:string;
+    mustEndIn:string;
+    mustStart:string;
   }
 
   export interface JobType {

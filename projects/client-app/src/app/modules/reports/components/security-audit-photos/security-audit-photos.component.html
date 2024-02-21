@@ -26,7 +26,7 @@
                 </div>
             </div>
             <div class="table-responsive flex-fill text-primary my-5 p-5">
-                <form [formGroup]="photosForm">
+                <form [formGroup]="photosForm" #form="ngForm" (ngSubmit)="collect()">
                     <div class="file bg-info-o rounded-8 text-info" [style.backgroundImage]="'url('+ profileImage +')'"
                         (change)="onImageUpload($event)" (click)="contractimage.click()">
                         <input type="file" #contractimage hidden accept="image/x-png,image/gif,image/jpeg" />
@@ -58,28 +58,26 @@
                                     <i class="fa-solid fa-spinner fa-spin fa-3x"></i>
                                 </div>
                             </ngx-dropzone> -->
-                    <!-- <p
-                                *ngIf="photosControls['notificationPhotoId'].touched&&!profileImage"
-                                class="alert alert-danger text-center mt-1"
-                                translate="uploadImageRequired"></p>
-                            <p *ngIf="message.includes('Only images')"
-                                class="alert alert-danger text-center mt-1"
-                                translate="uploadImage.onlyImgs"></p>
-                            <p *ngIf="message.includes('5 Megabyte')"
-                                class="alert alert-danger text-center mt-1"
-                                translate="uploadImage.maxSize"></p> -->
+                    <div>
+                        <div class="error-message" *ngIf="photosControls['attachmentId'].invalid && form.submitted"
+                            [innerHtml]="'validation.image_required' | translate"></div>
+                        <div class="error-message" *ngIf="photosControls['attachmentId'].errors?.notValid"
+                            [innerHtml]="'validation.image_invalid' | translate"></div>
+                    </div>
+
+                    <div class="row my-5">
+                        <div class="col-12 d-flex justify-content-end">
+                            <div>
+                                <button class="btn pervious px-4 rounded-10 mx-2" (click)="pervious()">السابق</button>
+                                <button class="btn btn-primary px-4 text-white rounded-10 mx-2" type="submit">حفظ</button>
+            
+                            </div>
+                        </div>
+                    </div>
                 </form>
             </div>
         </div>
-        <div class="row my-5">
-            <div class="col-12 d-flex justify-content-end">
-                <div>
-                    <button class="btn pervious px-4 rounded-10 mx-2" (click)="pervious()">السابق</button>
-                    <button class="btn btn-primary px-4 text-white rounded-10 mx-2" (click)="collect()">حفظ</button>
-
-                </div>
-            </div>
-        </div>
+       
     </div>
 </div>
 <!-- </div>
@@ -92,8 +90,7 @@
     <h5 class="fw-600">{{'reports.finish_security_audit'|translate}}</h5>
 
     <div class="d-flex justify-content-end gap-2">
-        <button translate="continue" (click)="continue()"
-            type="button"
+        <button translate="continue" (click)="continue()" type="button"
             class="btn rounded-8 px-4 py-2 btn-primary text-white"></button>
     </div>
 </public-api-modal>

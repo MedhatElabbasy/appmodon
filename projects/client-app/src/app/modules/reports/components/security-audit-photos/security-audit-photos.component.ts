@@ -59,30 +59,30 @@ export class SecurityAuditPhotosComponent {
   //   reader.readAsDataURL(files[0]);
   //   reader.onload = (_event) => {
   //     this.url = reader.result;
-  //     //console.log(this.url, files[0]);
+  //     console.log(this.url, files[0]);
   //     this.message = '';
   //     this.uploadFile(this.url, files[0]);
   //   };
   // }
 
   // uploadFile(name: string, file: File) {
-  //   //console.log(file);
+  //   console.log(file);
   //   let url = `api/Attachment/uploadFormFile`;
   //   let imgSize = environment.imgSize;
   //   let fileSize = file.size;
   //   if (fileSize <= imgSize) {
   //     const formData = new FormData();
   //     formData.append('file', file);
-  //     //console.log(formData);
+  //     console.log(formData);
   //     this.imgIsLoading = true;
-  //    // this.global.addData(url, formData).subscribe((res) => {
-  //       //console.log(res);
+  //    this.attachment.uploadFile(url, formData).subscribe((res) => {
+  //       console.log(res);
   //       this.imgIsLoading = false;
   //       this.profileImage = URL.createObjectURL(file);
   //       console.log(this.profileImage);
 
-  //       //this.notificationsControls['notificationPhotoId'].setValue(res);
-  //   //  });
+  //       this.photosControls['attachmentId'].setValue(res);
+  //    });
   //   } else {
   //     this.message = 'Max image size that you can upload it is 5 Megabyte';
   //     //this.global.addData(url, {})
@@ -92,7 +92,6 @@ export class SecurityAuditPhotosComponent {
   onImageUpload(event: any) {
     let arr = event?.target?.files[0]?.name.split('.');
     const extension = arr[arr.length - 1].toLowerCase();
-
     if (!AcceptedFile.includes(extension)) {
       (this.photosControls['attachmentId'] as FormControl).setErrors({
         notValid: true,
@@ -121,6 +120,7 @@ export class SecurityAuditPhotosComponent {
   }
 
   collect(){
+    if( !this.photosForm.invalid){
     this._reports.formData$.subscribe((formData) => {
       // Combine form data from all components
       this.combinedFormData = {
@@ -156,7 +156,9 @@ export class SecurityAuditPhotosComponent {
       })
     });
   
-    
+  }else{
+    return;
+  }
   }
 
   pervious(){

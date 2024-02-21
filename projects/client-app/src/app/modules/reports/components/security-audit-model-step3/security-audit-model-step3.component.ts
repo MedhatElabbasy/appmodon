@@ -4,6 +4,7 @@ import { ReportsService } from '../../services/reports.service';
 import { CanvasJS } from 'projects/client-app/src/assets/canvasjs.angular.component';
 import { FormProvider } from '../../../auth/models/form-provider';
 import { numberSteps, securityAudit } from '../../../complete-profile/components/complete/form';
+import { Loader } from 'projects/security-company-dashboard/src/app/modules/core/enums/loader.enum';
 
 @Component({
   selector: 'app-security-audit-model-step3',
@@ -11,6 +12,7 @@ import { numberSteps, securityAudit } from '../../../complete-profile/components
   styleUrls: ['./security-audit-model-step3.component.scss']
 })
 export class SecurityAuditModelStep3Component implements OnInit {
+  error:boolean=false
   searchKey = '';
   colorSet: string[] = ["#008000", "#fff"];
   sold: {}[] = [];
@@ -182,9 +184,29 @@ pervious(){
   this._reports.stepNumber.next(2);
 }
 
+
 next(){
+  this.error=false
+  this.myFormstep3.value.auditControls.forEach((ele:any)=>{
+    if(ele.category == "" || ele.degree == ""){
+    this.error=true;
+    console.log(this.error);
+    
+    }
+  })
+  this.submit();
+  // console.log(this.myFormstep3.value);
+  // this._reports.setFormData(this.myFormstep3.value);
+  // this._reports.stepNumber.next(4);
+}
+
+submit(){
+  if(this.error==true){
+
+  }else{
   console.log(this.myFormstep3.value);
   this._reports.setFormData(this.myFormstep3.value);
   this._reports.stepNumber.next(4);
+  }
 }
 }

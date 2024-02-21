@@ -4,12 +4,12 @@
 
 export const environment = {
   production: false,
-  api: 'https://takidapp.net:8007/',
+  api: 'https://takidapp.net:8008/',
   securityCompanyLink: 'http://localhost:4200/',
   loginLink: 'http://localhost:4200/#/auth/login',
   registerLink: 'http://localhost:4200/#/auth/register-number',
-  hub: 'https://takidapp.net:8007/SecuritySupervisorHub',
-  chatHub: 'https://takidapp.net:8007/chathub',
+  hub: 'https://takidapp.net:8008/SecuritySupervisorHub',
+  chatHub: 'https://takidapp.net:8008/chathub',
   imgSize: 5000000
 };
 
