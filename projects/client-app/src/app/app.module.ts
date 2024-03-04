@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
 import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { AppRoutingModule } from './app-routing.module';
@@ -22,6 +22,7 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { ChatPageComponent } from './pages/chat-page/chat-page.component';
 import { CanDeactivateGuard } from './modules/auth/guards/guards/can-deactivate.guard';
 import { HomeGuard } from './modules/auth/guards/guards/home.guard';
+import { AddHeaderInterceptor } from './modules/core/interceptors/add-header.interceptor';
 
 const declarations = [
   AppComponent,
@@ -58,7 +59,7 @@ const declarations = [
     ProfileModule,
     IonicModule.forRoot(),
   ],
-  providers: [HomeGuard],
+  providers: [HomeGuard ,{ provide: HTTP_INTERCEPTORS, useClass: AddHeaderInterceptor, multi: true }],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
